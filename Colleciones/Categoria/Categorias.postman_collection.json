@@ -1,0 +1,335 @@
+{
+	"info": {
+		"_postman_id": "c813eec4-024f-49cd-83d6-3d0f85fb5bb0",
+		"name": "Categorias",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29550126"
+	},
+	"item": [
+		{
+			"name": "Obtener las categorias por id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/categories",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"categories"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Obtener categoria por id",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/categories/14f05d0e-1275-11ed-861d-0242ac120003",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categories",
+								"14f05d0e-1275-11ed-861d-0242ac120003"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"id\": \"14f05d0e-1275-11ed-861d-0242ac120003\",\r\n    \"name\": \"Grano\",\r\n    \"description\": \"Los granos son alimentos esenciales en muchas culturas debido a su alto valor nutritivo y su capacidad para ser almacenados durante largos periodos. Incluyen variedades como el maíz, la avena, la cebada y muchos otros, que pueden ser utilizados en una amplia gama de productos alimenticios.\"\r\n}\r\n"
+				},
+				{
+					"name": "Error en obtener categoria",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/categories/14f05d0e-1275-11ed-861d-0242ac120003",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"14f05d0e-1275-11ed-861d-0242ac120003"
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"error\":\"Internal Server Error\",\r\n    \"message\":\"Failed to get resource due to a server error.\"\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Crear una categoria",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Grano\",\r\n    \"description\": \"Los granos son alimentos esenciales en muchas culturas debido a su alto valor nutritivo y su capacidad para ser almacenados durante largos periodos. Incluyen variedades como el maíz, la avena, la cebada y muchos otros, que pueden ser utilizados en una amplia gama de productos alimenticios.\"\r\n   \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/categories",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"categories"
+					]
+				},
+				"description": "Crear una receta, dentro del cuerpo del request se incluyen los campos necesarios para crear una receta"
+			},
+			"response": [
+				{
+					"name": "Crear una categoria",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Grano\",\r\n    \"description\": \"Los granos son alimentos esenciales en muchas culturas debido a su alto valor nutritivo y su capacidad para ser almacenados durante largos periodos. Incluyen variedades como el maíz, la avena, la cebada y muchos otros, que pueden ser utilizados en una amplia gama de productos alimenticios.\"\r\n   \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/categories",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"14f05d0e-1275-11ed-861d-0242ac120003\",\n    \"name\": \"Grano\",\n    \"description\": \"Los granos son alimentos esenciales en muchas culturas debido a su alto valor nutritivo y su capacidad para ser almacenados durante largos periodos. Incluyen variedades como el maíz, la avena, la cebada y muchos otros, que pueden ser utilizados en una amplia gama de productos alimenticios.\"\n}\n"
+				},
+				{
+					"name": "Error en la creación de una categoria",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Grano\",\r\n    \"description\": \"Los granos son alimentos esenciales en muchas culturas debido a su alto valor nutritivo y su capacidad para ser almacenados durante largos periodos. Incluyen variedades como el maíz, la avena, la cebada y muchos otros, que pueden ser utilizados en una amplia gama de productos alimenticios.\"\r\n   \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/categories",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\":\"Internal Server Error\",\n    \"message\":\"Failed to create resource due to a server error.\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Borrar categoria",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/categories/819e7da4-96f4-4c45-81fc-1e5416544598",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"categories",
+						"819e7da4-96f4-4c45-81fc-1e5416544598"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Borrar categoria",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/819e7da4-96f4-4c45-81fc-1e5416544598",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"819e7da4-96f4-4c45-81fc-1e5416544598"
+							]
+						}
+					},
+					"code": 204,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\r\n    \"status\": \"success\",\r\n    \"message\": \"The record has been successfully deleted.\"\r\n}"
+				},
+				{
+					"name": "Error al borrar una categoria",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/categories/819e7da4-96f4-4c45-81fc-1e5416544598",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categories",
+								"819e7da4-96f4-4c45-81fc-1e5416544598"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"error\": \"Not Found\",\r\n    \"message\": \"No existe un producto con ese id\"\r\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://localhost:3000/api/v1"
+		}
+	]
+}
