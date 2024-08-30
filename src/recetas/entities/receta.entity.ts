@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Producto } from "src/productos/entities/producto.entity";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Receta {
@@ -19,4 +20,8 @@ export class Receta {
 
     @Column('text')
     video: string;
+
+    @ManyToMany(() => Producto, (producto) => producto.recetas)
+    @JoinTable()  // Define la tabla intermedia
+    productos: Producto[];
 }

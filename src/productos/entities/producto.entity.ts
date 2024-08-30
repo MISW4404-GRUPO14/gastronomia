@@ -1,6 +1,7 @@
 
 import { Categoria } from 'src/categorias/entities/categoria.entity';
-import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Receta } from 'src/recetas/entities/receta.entity';
+import { Column, Entity, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Producto {
@@ -18,5 +19,8 @@ export class Producto {
     
     @ManyToOne(() => Categoria, categoria => categoria.productos)
     idCategoria: string;
+
+    @ManyToMany(() => Receta, (receta) => receta.productos)
+    recetas: Receta[];
  
 }
