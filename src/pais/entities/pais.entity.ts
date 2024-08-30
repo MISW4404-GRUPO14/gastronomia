@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { CiudadEntity } from './ciudad.entity'; // Asegúrate de importar CiudadEntity
+import { CiudadEntity } from 'src/ciudad/entities/ciudad.entity';
 import { Cultura } from 'src/culturas/entities/cultura.entity';
 
 @Entity()

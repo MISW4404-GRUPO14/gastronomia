@@ -1,6 +1,6 @@
-import { PaisEntity } from 'src/pais/pais.entity/pais.entity';
+import { PaisEntity } from 'src/pais/entities/pais.entity';
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { RestauranteEntity } from 'src/restaurante/restaurante.entity/restaurante.entity';
+import { RestauranteEntity } from 'src/restaurante/entities/restaurante.entity';
 
 @Entity()
 export class CiudadEntity {

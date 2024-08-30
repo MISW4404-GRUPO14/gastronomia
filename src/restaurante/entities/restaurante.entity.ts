@@ -1,4 +1,6 @@
 import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { CiudadEntity } from "src/ciudad/entities/ciudad.entity";
+import { Cultura } from "src/culturas/entities/cultura.entity";
 
 @Entity()
 export class RestauranteEntity {
