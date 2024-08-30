@@ -49,13 +49,18 @@ export class RecetasService {
 
   async update(id: string, updateRecetaDto: UpdateRecetaDto) {
 
-    const recipe = await this.recetaRepository.preload({
-      id: id,
-      ...updateRecetaDto
-    })
-    if ( !recipe ) throw new NotFoundException(`The recipe with the given id ${id} was not found`)
-    await this.recetaRepository.save( recipe );
-    return recipe; 
+    try{  
+      const recipe = await this.recetaRepository.preload({
+        id: id,
+        ...updateRecetaDto
+      })
+      if ( !recipe ) throw new NotFoundException(`The recipe with the given id ${id} was not found`)
+      await this.recetaRepository.save( recipe );
+      return recipe; 
+    } catch(error){
+      this.logger.error(error)
+      throw new InternalServerErrorException('Failed to update recipe due to a server error.')
+    }
   }
 
   async remove(id: string) {
