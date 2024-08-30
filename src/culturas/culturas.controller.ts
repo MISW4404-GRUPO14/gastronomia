@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
 import { CulturasService } from './culturas.service';
 import { CreateCulturaDto } from './dto/create-cultura.dto';
 import { UpdateCulturaDto } from './dto/update-cultura.dto';
@@ -18,17 +18,17 @@ export class CulturasController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.culturasService.findOne(+id);
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.culturasService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCulturaDto: UpdateCulturaDto) {
-    return this.culturasService.update(+id, updateCulturaDto);
+  @Put(':id')
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateCulturaDto: UpdateCulturaDto) {
+    return this.culturasService.update(id, updateCulturaDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.culturasService.remove(+id);
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.culturasService.remove(id);
   }
 }

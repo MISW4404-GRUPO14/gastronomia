@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { CreateRecetaDto } from './dto/create-receta.dto';
 import { UpdateRecetaDto } from './dto/update-receta.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,28 +7,64 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class RecetasService {
+
+  private readonly logger = new Logger('RecetasService');
+
   constructor( 
     @InjectRepository(Receta)
     private readonly recetaRepository: Repository<Receta>
   ){}
 
-  create(createRecetaDto: CreateRecetaDto) {
-    return 'This action adds a new receta';
+  async create(createRecetaDto: CreateRecetaDto) {
+
+    try{
+      const recipe = this.recetaRepository.create(createRecetaDto);
+      await this.recetaRepository.save( recipe );
+      return recipe
+    } catch(error){
+      this.logger.error(error)
+      throw new InternalServerErrorException('Failed to create resource due to a server error.')
+    }
   }
 
-  findAll() {
-    return `This action returns all recetas`;
+  async findAll() {
+    try{
+      const recipes = this.recetaRepository.find();
+      return recipes;
+    } catch(error){
+      this.logger.error(error)
+      throw new InternalServerErrorException('Failed to create resource due to a server error.')
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} receta`;
+  async findOne(id:string) {
+   
+    const recipe = await this.recetaRepository.findOneBy({ id });
+    if(!recipe){
+      throw new NotFoundException(`The recipe with the given id ${id} was not found`)
+      }
+    return recipe;
+    
   }
 
-  update(id: number, updateRecetaDto: UpdateRecetaDto) {
-    return `This action updates a #${id} receta`;
+  async update(id: string, updateRecetaDto: UpdateRecetaDto) {
+
+    try{  
+      const recipe = await this.recetaRepository.preload({
+        id: id,
+        ...updateRecetaDto
+      })
+      if ( !recipe ) throw new NotFoundException(`The recipe with the given id ${id} was not found`)
+      await this.recetaRepository.save( recipe );
+      return recipe; 
+    } catch(error){
+      this.logger.error(error)
+      throw new InternalServerErrorException('Failed to update recipe due to a server error.')
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} receta`;
+  async remove(id: string) {
+    const recipe = await this.findOne( id );
+    await this.recetaRepository.remove( recipe );
   }
 }
