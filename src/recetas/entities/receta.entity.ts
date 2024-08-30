@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Cultura } from "src/culturas/entities/cultura.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Receta {
@@ -19,4 +20,7 @@ export class Receta {
 
     @Column('text')
     video: string;
+
+    @ManyToOne(() => Cultura, cultura => cultura.recetas)
+    cultura: Cultura; 
 }
