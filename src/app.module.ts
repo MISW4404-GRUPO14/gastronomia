@@ -5,6 +5,9 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CulturasModule } from './culturas/culturas.module';
 import { RecetasModule } from './recetas/recetas.module';
+import { PaisModule } from './pais/pais.module';
+import { CiudadModule } from './ciudad/ciudad.module';
+import { RestauranteModule } from './restaurante/restaurante.module';
 
 @Module({
   imports: [
@@ -21,6 +24,9 @@ import { RecetasModule } from './recetas/recetas.module';
     }),
     CulturasModule,
     RecetasModule,
+    PaisModule,
+    CiudadModule,
+    RestauranteModule,
   ],
   controllers: [AppController],
   providers: [AppService],
