@@ -1,6 +1,6 @@
 
-import { Categoria } from 'src/categorias/entities/categoria.entity';
 import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Categoria } from '../../categorias/entities/categoria.entity';
 
 @Entity()
 export class Producto {
