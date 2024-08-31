@@ -1,6 +1,6 @@
 
-import { Categoria } from 'src/categorias/entities/categoria.entity';
-import { Receta } from 'src/recetas/entities/receta.entity';
+import { Categoria } from '../../categorias/entities/categoria.entity';
+import { Receta } from '../../recetas/entities/receta.entity';
 import { Column, Entity, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

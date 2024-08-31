@@ -4,8 +4,8 @@ import { UpdateRecetaDto } from './dto/update-receta.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Receta } from './entities/receta.entity';
 import { In, Repository } from 'typeorm';
-import { Producto } from 'src/productos/entities/producto.entity';
-import { BusinessLogicException } from 'src/shared/errors/business-errors';
+import { Producto } from '../productos/entities/producto.entity';
+import { BusinessLogicException } from '../shared/errors/business-errors';
 
 @Injectable()
 export class RecetasService {
@@ -27,8 +27,9 @@ export class RecetasService {
       await this.recetaRepository.save( recipe );
       return recipe
     } catch(error){
+      console.log(error);
       this.logger.error(error)
-      throw new BusinessLogicException("Failed to create resource due to a server error", HttpStatus.INTERNAL_SERVER_ERROR )
+      throw new BusinessLogicException(error, HttpStatus.INTERNAL_SERVER_ERROR )
     }
   }
 
@@ -51,7 +52,7 @@ export class RecetasService {
       }
     );
     if(!recipe){
-      throw new BusinessLogicException(`The recipe with the given id ${id} was not found`, HttpStatus.NOT_FOUND);
+      throw new BusinessLogicException(`The recipe with the given id was not found`, HttpStatus.NOT_FOUND);
       }
     return recipe;
     
@@ -116,7 +117,7 @@ export class RecetasService {
     if (productos.length !== productoIds.length) {
       const productosExistentesIds = productos.map(producto => producto.id);
       const productosNoEncontrados = productoIds.filter(id => !productosExistentesIds.includes(id));
-      throw new BusinessLogicException(`Los siguientes productos no existen: ${productosNoEncontrados.join(', ')}`, HttpStatus.NOT_FOUND);
+      throw new BusinessLogicException(`Alguno de los productos no existe`, HttpStatus.NOT_FOUND);
     }
   }
 

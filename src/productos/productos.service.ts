@@ -4,8 +4,8 @@ import { UpdateProductoDto } from './dto/update-producto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Producto } from './entities/producto.entity';
-import { BusinessLogicException } from 'src/shared/errors/business-errors';
-import { Categoria } from 'src/categorias/entities/categoria.entity';
+import { BusinessLogicException } from '../shared/errors/business-errors';
+import { Categoria } from '../categorias/entities/categoria.entity';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
 
