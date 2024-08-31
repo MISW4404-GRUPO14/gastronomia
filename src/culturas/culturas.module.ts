@@ -3,12 +3,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CulturasService } from './culturas.service';
 import { CulturasController } from './culturas.controller';
 import { Cultura } from './entities/cultura.entity';
+import { PaisEntity } from '../pais/entities/pais.entity';
 
 @Module({
   controllers: [CulturasController],
   providers: [CulturasService],
   imports: [
-    TypeOrmModule.forFeature([ Cultura ])
+    TypeOrmModule.forFeature([ Cultura, PaisEntity ])
   ]
 })
 export class CulturasModule {}
