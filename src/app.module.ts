@@ -10,19 +10,20 @@ import { CiudadModule } from './ciudad/ciudad.module';
 import { RestauranteModule } from './restaurante/restaurante.module';
 import { CategoriasModule } from './categorias/categorias.module';
 import { ProductosModule } from './productos/productos.module';
+import { Cultura } from './culturas/entities/cultura.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
-      type: 'postgres', 
+      type: 'postgres',
       host: process.env.DB_HOST,
       port: +process.env.DB_PORT,
       database: process.env.DB_NAME,
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
-      synchronize: true
+      synchronize: true,
     }),
     CulturasModule,
     RecetasModule,
@@ -36,4 +37,3 @@ import { ProductosModule } from './productos/productos.module';
   providers: [AppService],
 })
 export class AppModule {}
-
