@@ -1,4 +1,5 @@
 import { IsOptional, IsString, IsUUID, MinLength } from "class-validator";
+import { Receta } from "../../recetas/entities/receta.entity";
 
 export class UpdateProductoDto {    
    
@@ -17,4 +18,7 @@ export class UpdateProductoDto {
     @IsUUID()
     @IsOptional()
     idCategoria: string;
+
+    @IsOptional()
+    recetas: Receta[];
 }
