@@ -1,5 +1,6 @@
-import { Cultura } from "src/culturas/entities/cultura.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Cultura } from "../../culturas/entities/cultura.entity";
+import { Producto } from '../../productos/entities/producto.entity'; 
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Receta {
@@ -23,4 +24,8 @@ export class Receta {
 
     @ManyToOne(() => Cultura, cultura => cultura.recetas)
     cultura: Cultura; 
+    
+    @ManyToMany(() => Producto, (producto) => producto.recetas)
+    @JoinTable()  // Define la tabla intermedia
+    productos: Producto[];
 }
