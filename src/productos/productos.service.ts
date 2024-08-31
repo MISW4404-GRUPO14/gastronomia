@@ -6,33 +6,28 @@ import { Repository } from 'typeorm';
 import { Producto } from './entities/producto.entity';
 import { BusinessLogicException } from '../shared/errors/business-errors';
 import { Categoria } from '../categorias/entities/categoria.entity';
-import { HttpService } from '@nestjs/axios';
-import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class ProductosService {
   constructor( 
     @InjectRepository(Producto)
     private productoRepository: Repository<Producto>,
-    private httpService: HttpService,
+   
+    @InjectRepository(Categoria)
+    private readonly categoriaRepository: Repository<Categoria>
 
   ){}
 
   async create(createProductoDto: CreateProductoDto) {
     const categoriaId = createProductoDto.idCategoria;
     
-    if (categoriaId) 
-      try {
-        const response = await lastValueFrom(
-          this.httpService.get(`http://localhost:3000/api/v1/categorias/${categoriaId}`)
-        );
+    if (categoriaId) {
+      const cate: Categoria = await this.categoriaRepository.findOne({where: {id: categoriaId}});
         
-        if (response.status !== HttpStatus.OK) {
-          throw new BusinessLogicException("La categoría no existe", HttpStatus.BAD_REQUEST);
-        }
-      } catch (error) {
+      if (!cate){
         throw new BusinessLogicException("La categoría no existe", HttpStatus.BAD_REQUEST);
       }
+    }
     
     return this.productoRepository.save(createProductoDto);
   }
@@ -58,19 +53,13 @@ export class ProductosService {
       
     const categoriaId = updateProductoDto.idCategoria;
     
-    if (categoriaId) 
-      try {
-        const response = await lastValueFrom(
-          this.httpService.get(`http://localhost:3000/api/v1/categorias/${categoriaId}`)
-        );
+    if (categoriaId) {
+      const cate: Categoria = await this.categoriaRepository.findOne({where: {id: categoriaId}});
         
-        if (response.status !== HttpStatus.OK) {
-          throw new BusinessLogicException("La categoría no existe", HttpStatus.BAD_REQUEST);
-        }
-      } catch (error) {
+      if (!cate){
         throw new BusinessLogicException("La categoría no existe", HttpStatus.BAD_REQUEST);
       }
-
+    } 
     return await this.productoRepository.save(updateProductoDto);
 
 }
@@ -79,7 +68,7 @@ export class ProductosService {
     const producto: Producto = await this.productoRepository.findOne({where:{id}});
     if (!producto)
       throw new BusinessLogicException("No existe un producto con ese id", HttpStatus.NOT_FOUND);
- 
-    throw new BusinessLogicException("The record has been successfully deleted.", HttpStatus.NO_CONTENT);
+   
+    await this.productoRepository.remove(producto);
   }
 }
