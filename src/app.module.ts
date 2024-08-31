@@ -8,6 +8,8 @@ import { RecetasModule } from './recetas/recetas.module';
 import { PaisModule } from './pais/pais.module';
 import { CiudadModule } from './ciudad/ciudad.module';
 import { RestauranteModule } from './restaurante/restaurante.module';
+import { CategoriasModule } from './categorias/categorias.module';
+import { ProductosModule } from './productos/productos.module';
 
 @Module({
   imports: [
@@ -27,6 +29,8 @@ import { RestauranteModule } from './restaurante/restaurante.module';
     PaisModule,
     CiudadModule,
     RestauranteModule,
+    CategoriasModule,
+    ProductosModule,
   ],
   controllers: [AppController],
   providers: [AppService],

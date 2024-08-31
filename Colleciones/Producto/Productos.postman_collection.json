@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "9ace6104-9f17-49ee-8c85-c94df5ed32cc",
+		"_postman_id": "e2845b5d-d594-4673-b6f5-2c9cc9cc3586",
 		"name": "Productos",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "29550126"
@@ -12,12 +12,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/products",
+					"raw": "{{baseURL}}/productos",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"products"
+						"productos"
 					]
 				}
 			},
@@ -28,12 +28,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/products",
+							"raw": "{{baseURL}}/productos",
 							"host": [
-								"{{baseUrl}}"
+								"{{baseURL}}"
 							],
 							"path": [
-								"products"
+								"productos"
 							]
 						}
 					},
@@ -49,7 +49,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "[\r\n   {\r\n       \"id\": \"819e7da4-96f4-4c45-81fc-1e5416544598\",\r\n       \"name\": \"Arroz\",\r\n       \"description\": \"El arroz es un cereal básico en la dieta de muchas culturas alrededor del mundo. Es conocido por su versatilidad en la cocina, pudiéndose preparar en una amplia variedad de platos, desde acompañamientos hasta platillos principales.\",\r\n       \"history\": \"El arroz ha sido cultivado durante más de 8,000 años, con orígenes en Asia. A lo largo de la historia, ha sido un alimento esencial para diversas civilizaciones, especialmente en Asia, donde sigue siendo un alimento primordial en la dieta diaria.\",\r\n       \"idCategorie\": \"14f05d0e-1275-11ed-861d-0242ac120003\"\r\n   },\r\n   {\r\n       \"id\": \"14f05d0e-1275-11ed-861d-0242ac120002\",\r\n       \"name\": \"Mariscos\",\r\n       \"description\": \"Los mariscos incluyen una amplia variedad de organismos marinos como camarones, mejillones, y cangrejos. Son una fuente importante de proteínas y nutrientes, y son altamente apreciados en la gastronomía por su sabor único y su capacidad de adaptarse a diversas preparaciones culinarias.\",\r\n       \"history\": \"El consumo de mariscos se remonta a tiempos prehistóricos, cuando las comunidades costeras los recolectaban para su alimentación. Hoy en día, los mariscos son una delicadeza global, presente en las cocinas de todo el mundo, con una fuerte tradición en países con acceso a costas ricas en biodiversidad marina.\",\r\n       \"idCategorie\": \"14f05d0e-1275-11ed-861d-0242ac120004\"\r\n   }\r\n]\r\n"
+					"body": "[\r\n   {\r\n       \"id\": \"819e7da4-96f4-4c45-81fc-1e5416544598\",\r\n       \"nombre\": \"Arroz\",\r\n       \"descripcion\": \"El arroz es un cereal básico en la dieta de muchas culturas alrededor del mundo. Es conocido por su versatilidad en la cocina, pudiéndose preparar en una amplia variedad de platos, desde acompañamientos hasta platillos principales.\",\r\n       \"historia\": \"El arroz ha sido cultivado durante más de 8,000 años, con orígenes en Asia. A lo largo de la historia, ha sido un alimento esencial para diversas civilizaciones, especialmente en Asia, donde sigue siendo un alimento primordial en la dieta diaria.\",\r\n       \"idCategoria\": \"14f05d0e-1275-11ed-861d-0242ac120003\"\r\n   },\r\n   {\r\n       \"id\": \"14f05d0e-1275-11ed-861d-0242ac120002\",\r\n       \"nombre\": \"Mariscos\",\r\n       \"descripcion\": \"Los mariscos incluyen una amplia variedad de organismos marinos como camarones, mejillones, y cangrejos. Son una fuente importante de proteínas y nutrientes, y son altamente apreciados en la gastronomía por su sabor único y su capacidad de adaptarse a diversas preparaciones culinarias.\",\r\n       \"historia\": \"El consumo de mariscos se remonta a tiempos prehistóricos, cuando las comunidades costeras los recolectaban para su alimentación. Hoy en día, los mariscos son una delicadeza global, presente en las cocinas de todo el mundo, con una fuerte tradición en países con acceso a costas ricas en biodiversidad marina.\",\r\n       \"idCategoria\": \"14f05d0e-1275-11ed-861d-0242ac120004\"\r\n   }\r\n]\r\n"
 				},
 				{
 					"name": "Error en obtener todos los productos",
@@ -63,12 +63,12 @@
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/products",
+							"raw": "{{baseURL}}/productos",
 							"host": [
-								"{{base_url}}"
+								"{{baseURL}}"
 							],
 							"path": [
-								"products"
+								"productos"
 							]
 						}
 					},
@@ -94,13 +94,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/products/id",
+					"raw": "{{baseURL}}/productos/72af512f-2468-45d3-a501-ac6b46fac437",
 					"host": [
-						"{{baseUrl}}"
+						"{{baseURL}}"
 					],
 					"path": [
-						"products",
-						"id"
+						"productos",
+						"72af512f-2468-45d3-a501-ac6b46fac437"
 					]
 				}
 			},
@@ -111,12 +111,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/products/819e7da4-96f4-4c45-81fc-1e5416544598",
+							"raw": "{{baseURL}}/productos/819e7da4-96f4-4c45-81fc-1e5416544598",
 							"host": [
-								"{{baseUrl}}"
+								"{{baseURL}}"
 							],
 							"path": [
-								"products",
+								"productos",
 								"819e7da4-96f4-4c45-81fc-1e5416544598"
 							]
 						}
@@ -133,7 +133,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"name\": \"Arroz\",\n    \"description\": \"El arroz es un cereal básico en la dieta de muchas culturas alrededor del mundo. Es conocido por su versatilidad en la cocina, pudiéndose preparar en una amplia variedad de platos, desde acompañamientos hasta platillos principales.\",\n    \"history\": \"El arroz ha sido cultivado durante más de 8,000 años, con orígenes en Asia. A lo largo de la historia, ha sido un alimento esencial para diversas civilizaciones, especialmente en Asia, donde sigue siendo un alimento primordial en la dieta diaria.\",\n    \"idCategorie\": \"14f05d0e-1275-11ed-861d-0242ac120003\"\n}"
+					"body": "{\n    \"nombre\": \"Arroz\",\n    \"descripcion\": \"El arroz es un cereal básico en la dieta de muchas culturas alrededor del mundo. Es conocido por su versatilidad en la cocina, pudiéndose preparar en una amplia variedad de platos, desde acompañamientos hasta platillos principales.\",\n    \"historia\": \"El arroz ha sido cultivado durante más de 8,000 años, con orígenes en Asia. A lo largo de la historia, ha sido un alimento esencial para diversas civilizaciones, especialmente en Asia, donde sigue siendo un alimento primordial en la dieta diaria.\",\n    \"idCategoria\": \"14f05d0e-1275-11ed-861d-0242ac120003\"\n}"
 				},
 				{
 					"name": "Error en obtener un producto",
@@ -147,12 +147,12 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/products/819e7da4-96f4-4c45-81fc-1e5416544598",
+							"raw": "{{baseURL}}/productos/819e7da4-96f4-4c45-81fc-1e5416544598",
 							"host": [
-								"{{baseUrl}}"
+								"{{baseURL}}"
 							],
 							"path": [
-								"products",
+								"productos",
 								"819e7da4-96f4-4c45-81fc-1e5416544598"
 							]
 						}
@@ -183,12 +183,12 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/products/819e7da4-96f4-4c45-81fc-1e5416544598",
+							"raw": "{{baseURL}}/productos/819e7da4-96f4-4c45-81fc-1e5416544598",
 							"host": [
-								"{{baseUrl}}"
+								"{{baseURL}}"
 							],
 							"path": [
-								"products",
+								"productos",
 								"819e7da4-96f4-4c45-81fc-1e5416544598"
 							]
 						}
@@ -212,20 +212,13 @@
 			"name": "Crear un producto",
 			"request": {
 				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token}}",
-							"type": "string"
-						}
-					]
+					"type": "noauth"
 				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Arroz\",\r\n    \"description\": \"El arroz es un cereal básico en la dieta de muchas culturas alrededor del mundo. Es conocido por su versatilidad en la cocina, pudiéndose preparar en una amplia variedad de platos, desde acompañamientos hasta platillos principales.\",\r\n    \"history\": \"El arroz ha sido cultivado durante más de 8,000 años, con orígenes en Asia. A lo largo de la historia, ha sido un alimento esencial para diversas civilizaciones, especialmente en Asia, donde sigue siendo un alimento primordial en la dieta diaria.\",\r\n    \"idCategorie\": \"14f05d0e-1275-11ed-861d-0242ac120003\"\r\n}",
+					"raw": "{\r\n    \"nombre\": \"Arroz\",\r\n    \"descripcion\": \"El arroz es un cereal básico en la dieta de muchas culturas alrededor del mundo. Es conocido por su versatilidad en la cocina, pudiéndose preparar en una amplia variedad de platos, desde acompañamientos hasta platillos principales.\",\r\n    \"historia\": \"El arroz ha sido cultivado durante más de 8,000 años, con orígenes en Asia. A lo largo de la historia, ha sido un alimento esencial para diversas civilizaciones, especialmente en Asia, donde sigue siendo un alimento primordial en la dieta diaria.\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -233,12 +226,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{base_url}}/products",
+					"raw": "{{baseURL}}/productos",
 					"host": [
-						"{{base_url}}"
+						"{{baseURL}}"
 					],
 					"path": [
-						"products"
+						"productos"
 					]
 				},
 				"description": "Crear una receta, dentro del cuerpo del request se incluyen los campos necesarios para crear una receta"
@@ -258,7 +251,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Arroz\",\r\n    \"description\": \"El arroz es un cereal básico en la dieta de muchas culturas alrededor del mundo. Es conocido por su versatilidad en la cocina, pudiéndose preparar en una amplia variedad de platos, desde acompañamientos hasta platillos principales.\",\r\n    \"history\": \"El arroz ha sido cultivado durante más de 8,000 años, con orígenes en Asia. A lo largo de la historia, ha sido un alimento esencial para diversas civilizaciones, especialmente en Asia, donde sigue siendo un alimento primordial en la dieta diaria.\",\r\n    \"idCategorie\": \"14f05d0e-1275-11ed-861d-0242ac120003\"\r\n}",
+							"raw": "{\r\n    \"nombre\": \"Arroz\",\r\n    \"descripcion\": \"El arroz es un cereal básico en la dieta de muchas culturas alrededor del mundo. Es conocido por su versatilidad en la cocina, pudiéndose preparar en una amplia variedad de platos, desde acompañamientos hasta platillos principales.\",\r\n    \"historia\": \"El arroz ha sido cultivado durante más de 8,000 años, con orígenes en Asia. A lo largo de la historia, ha sido un alimento esencial para diversas civilizaciones, especialmente en Asia, donde sigue siendo un alimento primordial en la dieta diaria.\",\r\n    \"idCategoria\": \"14f05d0e-1275-11ed-861d-0242ac120003\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -266,12 +259,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/products",
+							"raw": "{{baseURL}}/productos",
 							"host": [
-								"{{base_url}}"
+								"{{baseURL}}"
 							],
 							"path": [
-								"products"
+								"productos"
 							]
 						}
 					},
@@ -286,7 +279,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"id\": \"819e7da4-96f4-4c45-81fc-1e5416544598\",\n    \"name\": \"Arroz\",\n    \"description\": \"El arroz es un cereal básico en la dieta de muchas culturas alrededor del mundo. Es conocido por su versatilidad en la cocina, pudiéndose preparar en una amplia variedad de platos, desde acompañamientos hasta platillos principales.\",\n    \"history\": \"El arroz ha sido cultivado durante más de 8,000 años, con orígenes en Asia. A lo largo de la historia, ha sido un alimento esencial para diversas civilizaciones, especialmente en Asia, donde sigue siendo un alimento primordial en la dieta diaria.\",\n    \"idCategorie\": \"14f05d0e-1275-11ed-861d-0242ac120003\"\n}"
+					"body": "{\n    \"id\": \"819e7da4-96f4-4c45-81fc-1e5416544598\",\n    \"nombre\": \"Arroz\",\n    \"descripcion\": \"El arroz es un cereal básico en la dieta de muchas culturas alrededor del mundo. Es conocido por su versatilidad en la cocina, pudiéndose preparar en una amplia variedad de platos, desde acompañamientos hasta platillos principales.\",\n    \"historia\": \"El arroz ha sido cultivado durante más de 8,000 años, con orígenes en Asia. A lo largo de la historia, ha sido un alimento esencial para diversas civilizaciones, especialmente en Asia, donde sigue siendo un alimento primordial en la dieta diaria.\",\n    \"idCategoria\": \"14f05d0e-1275-11ed-861d-0242ac120003\"\n}"
 				},
 				{
 					"name": "Error categoria al crear un producto",
@@ -302,7 +295,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Arroz\",\r\n    \"description\": \"El arroz es un cereal básico en la dieta de muchas culturas alrededor del mundo. Es conocido por su versatilidad en la cocina, pudiéndose preparar en una amplia variedad de platos, desde acompañamientos hasta platillos principales.\",\r\n    \"history\": \"El arroz ha sido cultivado durante más de 8,000 años, con orígenes en Asia. A lo largo de la historia, ha sido un alimento esencial para diversas civilizaciones, especialmente en Asia, donde sigue siendo un alimento primordial en la dieta diaria.\",\r\n    \"idCategorie\": \"14f05d0e-1275-11ed-861d-0242ac120005\"\r\n}",
+							"raw": "{\r\n    \"nombre\": \"Arroz\",\r\n    \"descripcion\": \"El arroz es un cereal básico en la dieta de muchas culturas alrededor del mundo. Es conocido por su versatilidad en la cocina, pudiéndose preparar en una amplia variedad de platos, desde acompañamientos hasta platillos principales.\",\r\n    \"historia\": \"El arroz ha sido cultivado durante más de 8,000 años, con orígenes en Asia. A lo largo de la historia, ha sido un alimento esencial para diversas civilizaciones, especialmente en Asia, donde sigue siendo un alimento primordial en la dieta diaria.\",\r\n    \"idCategoria\": \"14f05d0e-1275-11ed-861d-0242ac120005\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -310,12 +303,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/products",
+							"raw": "{{baseURL}}/productos",
 							"host": [
-								"{{base_url}}"
+								"{{baseURL}}"
 							],
 							"path": [
-								"products"
+								"productos"
 							]
 						}
 					},
@@ -347,7 +340,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Arroz\",\r\n    \"description\": \"El arroz es un cereal básico en la dieta de muchas culturas alrededor del mundo. Es conocido por su versatilidad en la cocina, pudiéndose preparar en una amplia variedad de platos, desde acompañamientos hasta platillos principales.\",\r\n    \"history\": \"El arroz ha sido cultivado durante más de 8,000 años, con orígenes en Asia. A lo largo de la historia, ha sido un alimento esencial para diversas civilizaciones, especialmente en Asia, donde sigue siendo un alimento primordial en la dieta diaria.\",\r\n    \"idCategorie\": \"14f05d0e-1275-11ed-861d-0242ac120003\"\r\n}",
+							"raw": "{\r\n    \"nombre\": \"Arroz\",\r\n    \"descripcion\": \"El arroz es un cereal básico en la dieta de muchas culturas alrededor del mundo. Es conocido por su versatilidad en la cocina, pudiéndose preparar en una amplia variedad de platos, desde acompañamientos hasta platillos principales.\",\r\n    \"historia\": \"El arroz ha sido cultivado durante más de 8,000 años, con orígenes en Asia. A lo largo de la historia, ha sido un alimento esencial para diversas civilizaciones, especialmente en Asia, donde sigue siendo un alimento primordial en la dieta diaria.\",\r\n    \"idCategoria\": \"14f05d0e-1275-11ed-861d-0242ac120003\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -355,12 +348,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/products",
+							"raw": "{{baseURL}}/productos",
 							"host": [
-								"{{base_url}}"
+								"{{baseURL}}"
 							],
 							"path": [
-								"products"
+								"productos"
 							]
 						}
 					},
@@ -383,20 +376,13 @@
 			"name": "Actualizar producto",
 			"request": {
 				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token}}",
-							"type": "string"
-						}
-					]
+					"type": "noauth"
 				},
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Arroz\",\r\n    \"description\": \"El arroz es un cereal básico en la dieta de muchas culturas alrededor del mundo. Es conocido por su versatilidad en la cocina, pudiéndose preparar en una amplia variedad de platos, desde acompañamientos hasta platillos principales.\",\r\n    \"history\": \"El arroz ha sido cultivado durante más de 8,000 años, con orígenes en Asia. A lo largo de la historia, ha sido un alimento esencial para diversas civilizaciones, especialmente en Asia, donde sigue siendo un alimento primordial en la dieta diaria.\",\r\n    \"idCategorie\": \"14f05d0e-1275-11ed-861d-0242ac120003\"\r\n}",
+					"raw": "{\r\n    \"nombre\": \"Arroz2\",\r\n    \"descripcion\": \"2El arroz es un cereal básico en la dieta de muchas culturas alrededor del mundo. Es conocido por su versatilidad en la cocina, pudiéndose preparar en una amplia variedad de platos, desde acompañamientos hasta platillos principales.\",\r\n    \"historia\": \"2El arroz ha sido cultivado durante más de 8,000 años, con orígenes en Asia. A lo largo de la historia, ha sido un alimento esencial para diversas civilizaciones, especialmente en Asia, donde sigue siendo un alimento primordial en la dieta diaria.\",\r\n    \"idCategoria\": \"01f0fcae-e37b-4fe1-a152-a07e4b83cc14\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -404,13 +390,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{base_url}}/products/819e7da4-96f4-4c45-81fc-1e5416544598",
+					"raw": "{{baseURL}}/productos/f5d7d7b0-0684-46e5-a8ec-e40326445d2a",
 					"host": [
-						"{{base_url}}"
+						"{{baseURL}}"
 					],
 					"path": [
-						"products",
-						"819e7da4-96f4-4c45-81fc-1e5416544598"
+						"productos",
+						"f5d7d7b0-0684-46e5-a8ec-e40326445d2a"
 					]
 				},
 				"description": "Actualizar una receta usando el id de la receta"
@@ -431,12 +417,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/products/819e7da4-96f4-4c45-81fc-1e5416544598",
+							"raw": "{{baseURL}}/productos/819e7da4-96f4-4c45-81fc-1e5416544598",
 							"host": [
-								"{{base_url}}"
+								"{{baseURL}}"
 							],
 							"path": [
-								"products",
+								"productos",
 								"819e7da4-96f4-4c45-81fc-1e5416544598"
 							]
 						}
@@ -452,7 +438,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"id\": \"819e7da4-96f4-4c45-81fc-1e5416544598\",\n    \"name\": \"Arroz\",\n    \"description\": \"El arroz es un cereal básico en la dieta de muchas culturas alrededor del mundo. Es conocido por su versatilidad en la cocina, pudiéndose preparar en una amplia variedad de platos, desde acompañamientos hasta platillos principales.\",\n    \"history\": \"El arroz ha sido cultivado durante más de 8,000 años, con orígenes en Asia. A lo largo de la historia, ha sido un alimento esencial para diversas civilizaciones, especialmente en Asia, donde sigue siendo un alimento primordial en la dieta diaria.\",\n    \"idCategorie\": \"14f05d0e-1275-11ed-861d-0242ac120003\"\n}"
+					"body": "{\n    \"id\": \"819e7da4-96f4-4c45-81fc-1e5416544598\",\n    \"nombre\": \"Arroz\",\n    \"descripcion\": \"El arroz es un cereal básico en la dieta de muchas culturas alrededor del mundo. Es conocido por su versatilidad en la cocina, pudiéndose preparar en una amplia variedad de platos, desde acompañamientos hasta platillos principales.\",\n    \"historia\": \"El arroz ha sido cultivado durante más de 8,000 años, con orígenes en Asia. A lo largo de la historia, ha sido un alimento esencial para diversas civilizaciones, especialmente en Asia, donde sigue siendo un alimento primordial en la dieta diaria.\",\n    \"idCategoria\": \"14f05d0e-1275-11ed-861d-0242ac120003\"\n}"
 				},
 				{
 					"name": "Error en actualizar un producto",
@@ -466,12 +452,12 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/products/819e7da4-96f4-4c45-81fc-1e5416544598",
+							"raw": "{{baseURL}}/productos/819e7da4-96f4-4c45-81fc-1e5416544598",
 							"host": [
-								"{{baseUrl}}"
+								"{{baseURL}}"
 							],
 							"path": [
-								"products",
+								"productos",
 								"819e7da4-96f4-4c45-81fc-1e5416544598"
 							]
 						}
@@ -502,12 +488,12 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/products/819e7da4-96f4-4c45-81fc-1e5416544598",
+							"raw": "{{baseURL}}/productos/819e7da4-96f4-4c45-81fc-1e5416544598",
 							"host": [
-								"{{baseUrl}}"
+								"{{baseURL}}"
 							],
 							"path": [
-								"products",
+								"productos",
 								"819e7da4-96f4-4c45-81fc-1e5416544598"
 							]
 						}
@@ -544,13 +530,13 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{base_url}}/products/819e7da4-96f4-4c45-81fc-1e5416544598",
+					"raw": "{{baseURL}}/productos/72af512f-2468-45d3-a501-ac6b46fac437",
 					"host": [
-						"{{base_url}}"
+						"{{baseURL}}"
 					],
 					"path": [
-						"products",
-						"819e7da4-96f4-4c45-81fc-1e5416544598"
+						"productos",
+						"72af512f-2468-45d3-a501-ac6b46fac437"
 					]
 				}
 			},
@@ -561,12 +547,12 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/products/819e7da4-96f4-4c45-81fc-1e5416544598",
+							"raw": "{{baseURL}}/productos/819e7da4-96f4-4c45-81fc-1e5416544598",
 							"host": [
-								"{{base_url}}"
+								"{{baseURL}}"
 							],
 							"path": [
-								"products",
+								"productos",
 								"819e7da4-96f4-4c45-81fc-1e5416544598"
 							]
 						}
@@ -589,12 +575,12 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/products/819e7da4-96f4-4c45-81fc-1e5416544598",
+							"raw": "{{baseURL}}/productos/819e7da4-96f4-4c45-81fc-1e5416544598",
 							"host": [
-								"{{baseUrl}}"
+								"{{baseURL}}"
 							],
 							"path": [
-								"products",
+								"productos",
 								"819e7da4-96f4-4c45-81fc-1e5416544598"
 							]
 						}
