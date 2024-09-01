@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCiudadDto } from './dto/create-ciudad.dto';
 import { UpdateCiudadDto } from './dto/update-ciudad.dto';
 import { Logger } from '@nestjs/common';
@@ -6,8 +6,8 @@ import { BusinessLogicException } from '../shared/errors/business-errors';
 import { HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Ciudad } from './entities/ciudad.entity';
-import { Repository } from 'typeorm';
-
+import { In, Repository } from 'typeorm';
+import { Restaurante } from '../restaurantes/entities/restaurante.entity';
 
 
 @Injectable()
@@ -17,7 +17,10 @@ export class CiudadesService {
 
   constructor(
     @InjectRepository(Ciudad)
-    private readonly ciudadRepository: Repository<Ciudad>
+    private readonly ciudadRepository: Repository<Ciudad>,
+
+    @InjectRepository(Restaurante)
+    private readonly restauranteRepository: Repository<Restaurante>
   ){}
 
   async create(createCiudadDto: CreateCiudadDto) {
@@ -75,4 +78,64 @@ export class CiudadesService {
     const ciudad = await this.findOne( id );
     await this.ciudadRepository.remove( ciudad );
   }
+
+  // Método para asociar un restaurante a una ciudad
+  async asociarRestauranteACiudad(ciudadId: string, restauranteId: string) {
+    // Buscar la ciudad por ID con sus relaciones
+    const ciudad = await this.ciudadRepository.findOne({
+      where: { id: ciudadId },
+      relations: ['restaurantes'],
+    });
+    if (!ciudad) {
+      throw new NotFoundException(`Ciudad con ID ${ciudadId} no encontrada`);
+    }
+
+    // Buscar el restaurante por ID
+    const restaurante = await this.restauranteRepository.findOne({
+      where: { id: restauranteId },
+    });
+    if (!restaurante) {
+      throw new NotFoundException(`Restaurante con ID ${restauranteId} no encontrado`);
+    }
+
+    // Verificar si el restaurante ya está asociado para evitar duplicados
+    if (ciudad.restaurantes.some(r => r.id === restauranteId)) {
+      throw new Error(`El restaurante con ID ${restauranteId} ya está asociado a la ciudad`);
+    }
+
+    // Asociar el restaurante a la ciudad
+    ciudad.restaurantes.push(restaurante);
+
+    // Guardar la ciudad con el restaurante asociado
+    return await this.ciudadRepository.save(ciudad);
+  }
+
+  // Método para eliminar un restaurante de una ciudad
+  async eliminarRestauranteDeCiudad(ciudadId: string, restauranteId: string) {
+    // Buscar la ciudad por ID con sus relaciones
+    const ciudad = await this.ciudadRepository.findOne({
+      where: { id: ciudadId },
+      relations: ['restaurantes'],
+    });
+
+    if (!ciudad) {
+      throw new NotFoundException(`Ciudad con ID ${ciudadId} no encontrada`);
+    }
+
+    // Buscar el restaurante en la lista de restaurantes de la ciudad
+    const restauranteIndex = ciudad.restaurantes.findIndex(
+      (restaurante) => restaurante.id === restauranteId,
+    );
+
+    if (restauranteIndex === -1) {
+      throw new NotFoundException(`Restaurante con ID ${restauranteId} no está asociado a la ciudad`);
+    }
+
+    // Eliminar el restaurante de la lista de la ciudad
+    ciudad.restaurantes.splice(restauranteIndex, 1);
+
+    // Guardar la ciudad con la lista de restaurantes actualizada
+    await this.ciudadRepository.save(ciudad);
+  }
+
 }

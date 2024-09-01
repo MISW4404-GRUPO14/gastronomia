@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Put, Param, Delete, ParseUUIDPipe } from '
 import { CiudadesService } from './ciudades.service';
 import { CreateCiudadDto } from './dto/create-ciudad.dto';
 import { UpdateCiudadDto } from './dto/update-ciudad.dto';
+import { NotFoundException } from '@nestjs/common';
 
 @Controller('ciudades')
 export class CiudadesController {
@@ -32,5 +33,38 @@ export class CiudadesController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.ciudadesService.remove(id);
+  }
+
+  // Endpoint para asociar un restaurante a una ciudad
+  @Post(':ciudadId/restaurantes/:restauranteId')
+  async asociarRestauranteACiudad(
+    @Param('ciudadId', ParseUUIDPipe) ciudadId: string,
+    @Param('restauranteId', ParseUUIDPipe) restauranteId: string,
+  ) {
+    try {
+      return await this.ciudadesService.asociarRestauranteACiudad(ciudadId, restauranteId);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
+  }
+
+  // Endpoint para eliminar un restaurante de una ciudad
+  @Delete(':ciudadId/restaurantes/:restauranteId')
+  async eliminarRestauranteDeCiudad(
+    @Param('ciudadId', ParseUUIDPipe) ciudadId: string,
+    @Param('restauranteId', ParseUUIDPipe) restauranteId: string,
+  ) {
+    try {
+      await this.ciudadesService.eliminarRestauranteDeCiudad(ciudadId, restauranteId);
+      return { message: `Restaurante con ID ${restauranteId} eliminado de la ciudad con ID ${ciudadId}` };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
   }
 }
