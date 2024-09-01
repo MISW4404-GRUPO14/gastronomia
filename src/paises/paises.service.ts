@@ -1,26 +1,75 @@
-import { Injectable } from '@nestjs/common';
-import { CreatePaiseDto } from './dto/create-paise.dto';
-import { UpdatePaiseDto } from './dto/update-paise.dto';
+import { Injectable, Logger } from '@nestjs/common';
+import { CreatePaisDto } from './dto/create-pais.dto';
+import { UpdatePaisDto } from './dto/update-pais.dto';
+import { Pais } from './entities/pais.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { BusinessLogicException } from '../shared/errors/business-errors';
+import { HttpStatus } from '@nestjs/common';
+
 
 @Injectable()
 export class PaisesService {
-  create(createPaiseDto: CreatePaiseDto) {
-    return 'This action adds a new paise';
+
+  private readonly logger = new Logger('PaisesService')
+
+  constructor(
+    @InjectRepository(Pais)
+    private readonly paisRepository: Repository<Pais>
+  ){}
+  async create(createPaisDto: CreatePaisDto) {
+    try{
+      const pais = this.paisRepository.create(createPaisDto);
+      await this.paisRepository.save( pais );
+      return pais
+    } catch(error){
+      console.log(error);
+      this.logger.error(error)
+      throw new BusinessLogicException(error, HttpStatus.INTERNAL_SERVER_ERROR )
+    }
   }
 
-  findAll() {
-    return `This action returns all paises`;
+  async findAll() {
+    try{
+      const paises = this.paisRepository.find();
+      return paises;
+    } catch(error){
+      this.logger.error(error)
+      throw new BusinessLogicException('Failed to get paises due to a server error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} paise`;
+  async findOne(id: string) {
+    const pais = await this.paisRepository.findOne(
+      {
+        where: { id: id }
+      }
+    );
+    if(!pais){
+      throw new BusinessLogicException(`The pais with the given id was not found`, HttpStatus.NOT_FOUND);
+      }
+    return pais;
   }
 
-  update(id: number, updatePaiseDto: UpdatePaiseDto) {
-    return `This action updates a #${id} paise`;
+  async update(id: string, updatePaisDto: UpdatePaisDto) {
+    const pais = await this.paisRepository.preload({
+      id: id,
+      ...updatePaisDto
+    })
+    if(!pais) { 
+      throw new BusinessLogicException(`The pais with the given id was not found`, HttpStatus.NOT_FOUND);}
+    try{
+      
+      await this.paisRepository.save(pais);
+      return pais;
+    } catch(error){
+      this.logger.error(error)
+      throw new BusinessLogicException('Failed to update pais due to a server error.', HttpStatus.INTERNAL_SERVER_ERROR)
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} paise`;
+  async remove(id: string) {
+    const pais = await this.findOne( id );
+    await this.paisRepository.remove( pais );
   }
 }
