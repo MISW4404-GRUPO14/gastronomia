@@ -91,7 +91,8 @@ describe('ProductosService', () => {
       nombre: faker.company.companyName(), 
       descripcion: faker.lorem.sentence(), 
       historia: faker.lorem.sentence(), 
-      idCategoria:primerCategoria.id
+      idCategoria:primerCategoria.id, 
+      recetas:[],
     }
 
     const nuevoProducto: Producto = await controllers.create(producto);
@@ -113,7 +114,8 @@ describe('ProductosService', () => {
       nombre: faker.company.companyName(), 
       descripcion: faker.lorem.sentence(), 
       historia: faker.lorem.sentence(), 
-      idCategoria:'0'
+      idCategoria:'0', 
+      recetas:[]
     }
 
     await expect(() => controllers.create(producto)).rejects.toHaveProperty("message", "La categoría no existe")
