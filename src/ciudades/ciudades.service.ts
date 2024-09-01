@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCiudadeDto } from './dto/create-ciudade.dto';
-import { UpdateCiudadeDto } from './dto/update-ciudade.dto';
+import { CreateCiudadDto } from './dto/create-ciudad.dto';
+import { UpdateCiudadDto } from './dto/update-ciudad.dto';
 
 @Injectable()
 export class CiudadesService {
-  create(createCiudadeDto: CreateCiudadeDto) {
+  create(createCiudadDto: CreateCiudadDto) {
     return 'This action adds a new ciudade';
   }
 
@@ -16,7 +16,7 @@ export class CiudadesService {
     return `This action returns a #${id} ciudade`;
   }
 
-  update(id: number, updateCiudadeDto: UpdateCiudadeDto) {
+  update(id: number, updateCiudadDto: UpdateCiudadDto) {
     return `This action updates a #${id} ciudade`;
   }
 
