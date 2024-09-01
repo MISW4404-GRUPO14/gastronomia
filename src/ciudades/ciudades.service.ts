@@ -36,11 +36,11 @@ export class CiudadesService {
   }
 
   async findAll() {
-    try{
-      const ciudades = this.ciudadRepository.find();
+    try {
+      const ciudades = await this.ciudadRepository.find(); // Añadido await para resolver la promesa
       return ciudades;
-    } catch(error){
-      this.logger.error(error)
+    } catch (error) {
+      this.logger.error(error);
       throw new BusinessLogicException('Failed to get ciudades due to a server error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -74,9 +74,20 @@ export class CiudadesService {
     }
   }
 
-  async remove(id: string) {
-    const ciudad = await this.findOne( id );
-    await this.ciudadRepository.remove( ciudad );
+  // async remove(id: string) {
+  //   const ciudad = await this.findOne( id );
+  //   await this.ciudadRepository.remove( ciudad );
+  // }
+
+  async remove(id: string){
+    try{
+      const ciudad = await this.findOne(id);
+      await this.ciudadRepository.remove(ciudad);
+      return ciudad;
+    } catch(error){
+      this.logger.error(error);
+      throw new BusinessLogicException('The ciudad with the given id was not found', HttpStatus.NOT_FOUND);
+    }
   }
 
   // Método para asociar un restaurante a una ciudad
