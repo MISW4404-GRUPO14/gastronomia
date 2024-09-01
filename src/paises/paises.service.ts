@@ -30,14 +30,15 @@ export class PaisesService {
   }
 
   async findAll() {
-    try{
-      const paises = this.paisRepository.find();
+    try {
+      const paises = await this.paisRepository.find(); // Usa await aquí
       return paises;
-    } catch(error){
-      this.logger.error(error)
+    } catch (error) {
+      this.logger.error(error);
       throw new BusinessLogicException('Failed to get paises due to a server error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  
 
   async findOne(id: string) {
     const pais = await this.paisRepository.findOne(
@@ -55,21 +56,28 @@ export class PaisesService {
     const pais = await this.paisRepository.preload({
       id: id,
       ...updatePaisDto
-    })
-    if(!pais) { 
-      throw new BusinessLogicException(`The pais with the given id was not found`, HttpStatus.NOT_FOUND);}
-    try{
-      
+    });
+    if (!pais) {
+      throw new BusinessLogicException('The pais with the given id was not found', HttpStatus.NOT_FOUND);
+    }
+    try {
       await this.paisRepository.save(pais);
       return pais;
-    } catch(error){
-      this.logger.error(error)
-      throw new BusinessLogicException('Failed to update pais due to a server error.', HttpStatus.INTERNAL_SERVER_ERROR)
+    } catch (error) {
+      this.logger.error(error);
+      throw new BusinessLogicException('Failed to update pais due to a server error.', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-  }
+  }  
 
   async remove(id: string) {
-    const pais = await this.findOne( id );
-    await this.paisRepository.remove( pais );
+    try {
+      const pais = await this.findOne(id);
+      await this.paisRepository.remove(pais);
+      return pais;
+    } catch (error) {
+      this.logger.error(error);
+      throw new BusinessLogicException('The pais with the given id was not found', HttpStatus.NOT_FOUND);
+    }
   }
+  
 }
