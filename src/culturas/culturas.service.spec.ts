@@ -48,14 +48,14 @@ describe('CulturasService', () => {
 
   describe('create', () => {
     it('debería crear una cultura', async () => {
-      const createRecetaDto = {
+      const createCulturaDto = {
         nombre: "Japonesa",
         descripcion:"La gastronomía japonesa es conocida por su equilibrio, frescura y estética. En ella se destacan ingredientes como el pescado crudo (sushi y sashimi), arroz, algas marinas, y una variedad de vegetales y salsas como la soja y el miso. Los platos japoneses tienden a estar elaborados con cuidado, buscando resaltar los sabores naturales de los ingredientes.",
     };
-      culturaRepositoryMock.create.mockReturnValue(createRecetaDto as any);
-      culturaRepositoryMock.save.mockResolvedValue(createRecetaDto as any);
-      const result = await culturaservice.create(createRecetaDto);
-      expect(result).toEqual(createRecetaDto);
+      culturaRepositoryMock.create.mockReturnValue(createCulturaDto as any);
+      culturaRepositoryMock.save.mockResolvedValue(createCulturaDto as any);
+      const result = await culturaservice.create(createCulturaDto);
+      expect(result).toEqual(createCulturaDto);
     });
   });
 
@@ -84,7 +84,7 @@ describe('CulturasService', () => {
   //       .toHaveProperty("message", `The recipe with the given id was not found`);
   //   });
 
-  //   it('debería lanzar BadRequestException si un producto no existe', async () => {
+  //   it('debería lanzar BadRequestException si un pais no existe', async () => {
   //     const recetaMock = new Cultura();
   //     recetaMock.id = 'recetaId';
   //     jest.spyOn(culturaRepository, 'findOne').mockResolvedValueOnce(recetaMock);
@@ -92,7 +92,7 @@ describe('CulturasService', () => {
 
   //     await expect(culturaservice.agregarPaisesACultura('culturaId', ['paisId']))
   //       .rejects
-  //       .toHaveProperty("message", `Alguno de los productos no existe`);
+  //       .toHaveProperty("message", `Alguno de los paises no existe`);
   //   });
 
   

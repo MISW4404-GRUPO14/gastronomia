@@ -38,7 +38,7 @@ export class CulturasController {
   // Paises de una cultura
 
   @Post(':id/paises')
-  async agregarProductos(
+  async agregarPaises(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() agregarPaisesDto: AgregarPaisesDto
   ){
@@ -46,14 +46,14 @@ export class CulturasController {
   }
 
   @Get(':id/paises')
-  async obtenerProductos(
+  async obtenerPaises(
     @Param('id', ParseUUIDPipe) id: string
   ){
     return this.culturasService.obtenerPaisesDecultura(id);
   }
 
   @Put(':id/paises')
-  async actualizarProductos(
+  async actualizarPais(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() agregarPaisesDto: AgregarPaisesDto
   ){
@@ -61,7 +61,7 @@ export class CulturasController {
   }
 
   @Delete(':culturaId/paises/:paisId')
-  async eliminarProducto(
+  async eliminarPais(
     @Param() params: EliminarPaisDto
   ){
     const {culturaId, paisId} = params
