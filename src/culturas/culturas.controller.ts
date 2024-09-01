@@ -2,6 +2,9 @@ import { Controller, Get, Post, Body, Put, Param, Delete, ParseUUIDPipe } from '
 import { CulturasService } from './culturas.service';
 import { CreateCulturaDto } from './dto/create-cultura.dto';
 import { UpdateCulturaDto } from './dto/update-cultura.dto';
+import { AgregarPaisesDto } from './dto/agregar-paises.dto';
+import { EliminarPaisDto } from './dto/eliminar-paises.dto';
+import { AgregarRestaurantesDto } from './dto/agregar-restaurantes.dto';
 
 @Controller('culturas')
 export class CulturasController {
@@ -30,5 +33,48 @@ export class CulturasController {
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.culturasService.remove(id);
+  }
+
+  // Paises de una cultura
+
+  @Post(':id/paises')
+  async agregarProductos(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() agregarPaisesDto: AgregarPaisesDto
+  ){
+    return this.culturasService.agregarPaisesACultura(id, agregarPaisesDto.paisesIds);
+  }
+
+  @Get(':id/paises')
+  async obtenerProductos(
+    @Param('id', ParseUUIDPipe) id: string
+  ){
+    return this.culturasService.obtenerPaisesDecultura(id);
+  }
+
+  @Put(':id/paises')
+  async actualizarProductos(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() agregarPaisesDto: AgregarPaisesDto
+  ){
+    return this.culturasService.actualizarPaisesEnCultura(id, agregarPaisesDto.paisesIds);
+  }
+
+  @Delete(':culturaId/paises/:paisId')
+  async eliminarProducto(
+    @Param() params: EliminarPaisDto
+  ){
+    const {culturaId, paisId} = params
+    return this.culturasService.eliminarPaisDeCultura(culturaId, paisId);
+  }
+
+  // Restaurante de una cultura
+
+  @Post(':id/paises')
+  async agregarRestaurantes(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() agregarRestaurantesDto: AgregarRestaurantesDto
+  ){
+    return this.culturasService.agregarRestaurantesACultura(id, agregarRestaurantesDto.restaurantesIds);
   }
 }
