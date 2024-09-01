@@ -1,8 +1,7 @@
-import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Receta } from 'src/recetas/entities/receta.entity';
-import { Res } from '@nestjs/common';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Receta } from '../../recetas/entities/receta.entity';
 import { Restaurante } from '../../restaurantes/entities/restaurante.entity';
-import { Pais } from 'src/paises/entities/pais.entity';
+import { Pais } from '../../paises/entities/pais.entity';
 
     @Entity()
     export class Cultura {
@@ -15,12 +14,14 @@ import { Pais } from 'src/paises/entities/pais.entity';
         @Column('text')
         descripcion: String;
 
-    @ManyToMany(()=> Pais, (pais) => pais.culturas)
-    paises: Pais[];
-
-    @ManyToMany(()=> Restaurante, (restaurante) => restaurante.culturas)
-    restaurantes: Restaurante[];
-    
-    @OneToMany(() => Receta, (receta) => receta.cultura)
-    recetas: Receta[]; 
+        @ManyToMany(() => Pais, (pais) => pais.culturas)
+        @JoinTable()
+        paises: Pais[];
+      
+        @ManyToMany(() => Restaurante, (restaurante) => restaurante.culturas)
+        @JoinTable()
+        restaurantes: Restaurante[];
+      
+        @OneToMany(() => Receta, (receta) => receta.cultura)
+        recetas: Receta[];
 }

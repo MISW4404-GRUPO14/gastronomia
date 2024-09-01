@@ -4,9 +4,9 @@ import { UpdateCulturaDto } from './dto/update-cultura.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cultura } from './entities/cultura.entity';
 import { In, Repository } from 'typeorm';
-import { PaisEntity } from 'src/pais/entities/pais.entity';
-import { BusinessLogicException } from 'src/shared/errors/business-errors';
-import { RestauranteEntity } from 'src/restaurante/entities/restaurante.entity';
+import { Pais } from '../paises/entities/pais.entity';
+import { BusinessLogicException } from '../shared/errors/business-errors';
+import { Restaurante } from '../restaurantes/entities/restaurante.entity';
 
 @Injectable()
 export class CulturasService {
@@ -17,11 +17,11 @@ export class CulturasService {
     @InjectRepository(Cultura)
     private culturaRepository: Repository<Cultura>,
 
-    @InjectRepository(PaisEntity)
-    private readonly paisRepository: Repository<PaisEntity>,
+    @InjectRepository(Pais)
+    private readonly paisRepository: Repository<Pais>,
 
-    @InjectRepository(RestauranteEntity)
-    private readonly restauranteRepository: Repository<RestauranteEntity>
+    @InjectRepository(Restaurante)
+    private readonly restauranteRepository: Repository<Restaurante>
   ){}
   
   async create(createCulturaDto: CreateCulturaDto) {
@@ -90,7 +90,7 @@ export class CulturasService {
     const paises = await this.paisRepository.findBy({ id: In(paisIds) });
     this.validateArrayPaises(paises, paisIds)
     culture.paises.push(...paises);
-    return await this.paisRepository.save(culture);
+    return await this.culturaRepository.save(culture);
   }
 
   //Método para obtener paises de una cultura
@@ -133,7 +133,7 @@ export class CulturasService {
     const restaurantes = await this.restauranteRepository.findBy({ id: In(restaurantesIds) });
     this.validateArrayRestaurantes(restaurantes, restaurantesIds)
     culture.restaurantes.push(...restaurantes);
-    return await this.paisRepository.save(culture);
+    return await this.culturaRepository.save(culture);
   }
 
   //Método para obtener restaurantes de una cultura
