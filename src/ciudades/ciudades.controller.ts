@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
 import { CiudadesService } from './ciudades.service';
 import { CreateCiudadDto } from './dto/create-ciudad.dto';
 import { UpdateCiudadDto } from './dto/update-ciudad.dto';
@@ -19,16 +19,18 @@ export class CiudadesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.ciudadesService.findOne(+id);
+    return this.ciudadesService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCiudadDto: UpdateCiudadDto) {
-    return this.ciudadesService.update(+id, updateCiudadDto);
+  @Put(':id')
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateCiudadDto: UpdateCiudadDto) {
+    return this.ciudadesService.update(id, updateCiudadDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.ciudadesService.remove(+id);
+    return this.ciudadesService.remove(id);
   }
 }
