@@ -138,4 +138,21 @@ export class CiudadesService {
     await this.ciudadRepository.save(ciudad);
   }
 
+  // Método para traer los restaurantes de una ciudad
+  async obtenerRestaurantesDeCiudad(ciudadId: string) {
+    // Buscar la ciudad por ID con sus relaciones
+    const ciudad = await this.ciudadRepository.findOne({
+      where: { id: ciudadId },
+      relations: ['restaurantes'], // Asegúrate de incluir la relación con restaurantes
+    });
+
+    // Verificar si la ciudad existe
+    if (!ciudad) {
+      throw new NotFoundException(`Ciudad con ID ${ciudadId} no encontrada`);
+    }
+
+    // Retornar la lista de restaurantes asociados a la ciudad
+    return ciudad.restaurantes;
+  }
+
 }

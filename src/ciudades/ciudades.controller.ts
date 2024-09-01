@@ -67,4 +67,12 @@ export class CiudadesController {
       throw error;
     }
   }
+
+  // Endpoint para obtener los restaurantes de una ciudad
+  @Get(':ciudadId/restaurantes')
+  async obtenerRestaurantesDeCiudad(
+    @Param('ciudadId', ParseUUIDPipe) ciudadId: string,
+  ) {
+    return await this.ciudadesService.obtenerRestaurantesDeCiudad(ciudadId);
+  }
 }
