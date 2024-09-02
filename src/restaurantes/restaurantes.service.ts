@@ -1,12 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpStatus, Logger } from '@nestjs/common';
 import { CreateRestauranteDto } from './dto/create-restaurante.dto';
 import { UpdateRestauranteDto } from './dto/update-restaurante.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Restaurante } from './entities/restaurante.entity';
 import { Repository } from 'typeorm';
 import { BusinessLogicException } from '../shared/errors/business-errors';
-import { Logger } from '@nestjs/common';
-import { HttpStatus } from '@nestjs/common';
 
 @Injectable()
 export class RestaurantesService {
@@ -30,7 +28,7 @@ export class RestaurantesService {
 
   async findAll() {
     try{
-      const restaurantes = this.restauranteRepository.find();
+      const restaurantes = await this.restauranteRepository.find();
       return restaurantes;
     } catch(error){
       throw new BusinessLogicException('Failed to get restaurantes due to a server error', HttpStatus.INTERNAL_SERVER_ERROR);

@@ -91,6 +91,18 @@ describe('CiudadesService', () => {
     });
   });
 
+  describe('update', () => {
+    it('should update and return the pais', async () => {
+      jest.spyOn(ciudadRepository, 'preload').mockResolvedValue(mockCiudad);
+      jest.spyOn(ciudadRepository, 'save').mockResolvedValue(mockCiudad);
+
+      const result = await service.update('1', updatedCiudadDto);
+      expect(result).toEqual(mockCiudad);
+      expect(ciudadRepository.preload).toHaveBeenCalledWith({ id: '1', ...updatedCiudadDto });
+      expect(ciudadRepository.save).toHaveBeenCalledWith(mockCiudad);
+    });
+  });
+
   describe('remove', () => {
     it('should remove a ciudad', async () => {
       jest.spyOn(service, 'findOne').mockResolvedValue(mockCiudad);
@@ -107,5 +119,4 @@ describe('CiudadesService', () => {
     });
   });
 
-  // Add more tests here for your service methods
 });

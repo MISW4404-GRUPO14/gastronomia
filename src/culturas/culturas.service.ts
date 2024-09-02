@@ -1,4 +1,4 @@
-import { HttpStatus, Inject, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { CreateCulturaDto } from './dto/create-cultura.dto';
 import { UpdateCulturaDto } from './dto/update-cultura.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -33,18 +33,16 @@ export class CulturasService {
       this.logger.error(error)
       throw new InternalServerErrorException('Failed to create resource due to a server error.')
     }
-    //return 'This action adds a new cultura';
   }
 
   async findAll() {
     try{
-      const culturas = this.culturaRepository.find();
+      const culturas = await this.culturaRepository.find();
       return culturas;
     } catch(error){
       this.logger.error(error)
       throw new InternalServerErrorException('Failed to find a resource due to a server error.')
     }
-    //return `This action returns all culturas`;
   }
 
   async findOne(id:string) {
@@ -53,7 +51,6 @@ export class CulturasService {
       throw new NotFoundException(`The culture with the given id ${id} was not found`)
       }
     return cultura;
-    //return `This action returns a #${id} cultura`;
   }
 
   async update(id:string, updateCulturaDto: UpdateCulturaDto) {
@@ -69,7 +66,6 @@ export class CulturasService {
       this.logger.error(error)
       throw new InternalServerErrorException('Failed to update culture due to a server error.')
     }
-    //return `This action updates a #${id} cultura`;
   }
 
   async remove(id:string) {
@@ -79,7 +75,6 @@ export class CulturasService {
     }else{
       throw new NotFoundException(`The culture with the given id ${id} was not found`)
     }
-    //return `This action removes a #${id} cultura`;
   }
 
 //-----------------------------Paises de una cultura---------------------------------------------------//
@@ -122,8 +117,6 @@ export class CulturasService {
 
   validateArrayPaises(paises, paisIds){
     if (paises.length !== paisIds.length) {
-      const paisesExistentesIds = paises.map(pais => pais.id);
-      const paisesNoEncontrados = paisIds.filter(id => !paisesExistentesIds.includes(id));
       throw new BusinessLogicException(`Alguno de los paises no existe`, HttpStatus.NOT_FOUND);
     }
   }

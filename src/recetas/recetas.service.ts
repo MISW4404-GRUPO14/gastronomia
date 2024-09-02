@@ -1,4 +1,4 @@
-import { HttpStatus ,Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { HttpStatus ,Injectable, Logger } from '@nestjs/common';
 import { CreateRecetaDto } from './dto/create-receta.dto';
 import { UpdateRecetaDto } from './dto/update-receta.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -34,7 +34,7 @@ export class RecetasService {
 
   async findAll() {
     try{
-      const recipes = this.recetaRepository.find({relations: ['productos']});
+      const recipes = await this.recetaRepository.find({relations: ['productos']});
       return recipes;
     } catch(error){
       this.logger.error(error)
@@ -109,8 +109,6 @@ export class RecetasService {
 
   validateArrayProductos(productos, productoIds){
     if (productos.length !== productoIds.length) {
-      const productosExistentesIds = productos.map(producto => producto.id);
-      const productosNoEncontrados = productoIds.filter(id => !productosExistentesIds.includes(id));
       throw new BusinessLogicException(`Alguno de los productos no existe`, HttpStatus.NOT_FOUND);
     }
   }
