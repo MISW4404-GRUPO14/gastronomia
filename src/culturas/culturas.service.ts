@@ -100,14 +100,16 @@ export class CulturasService {
   }
 
   //Método para actualizar el listado de paises de una cultura
-  async actualizarPaisesEnCultura(culturaId: string, paisesIds: string[]){
-    const culture = await this.findOne(culturaId);
-    const nuevosPaises =  await this.paisRepository.findBy({ id: In(paisesIds) });
-    // Validar que todos los paises existan
-    this.validateArrayPaises(nuevosPaises, paisesIds)
-    culture.paises = nuevosPaises;
-    return await this.culturaRepository.save(culture);
+  async actualizarPaisesEnCultura(culturaId: string, paisesIds: string[]): Promise<Cultura> {
+    const cultura = await this.findOne(culturaId);
+    const nuevosPaises = await this.paisRepository.findBy({ id: In(paisesIds) });
+    this.validateArrayPaises(nuevosPaises, paisesIds);
+    cultura.paises = Array.from(new Set(nuevosPaises.map(pais => pais.id)))
+      .map(id => nuevosPaises.find(pais => pais.id === id));
+    
+    return await this.culturaRepository.save(cultura);
   }
+  
 
   //Método para eliminar un pais de una cultura
   async eliminarPaisDeCultura(culturaId: string, paisId: string){

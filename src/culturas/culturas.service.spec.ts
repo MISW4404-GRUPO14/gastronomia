@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { Pais } from '../paises/entities/pais.entity';
 import { Restaurante } from '../restaurantes/entities/restaurante.entity';
 import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BusinessLogicException } from '../shared/errors/business-errors';
 
 describe('CulturasService', () => {
   let culturaservice: CulturasService;
@@ -125,6 +126,7 @@ describe('CulturasService', () => {
   });
   
 
+
   describe('agregarPaisesACultura', () => {
     it('debería lanzar NotFoundException si la cultura no existe', async () => {
       culturaRepository.findOneBy.mockResolvedValueOnce(null); 
@@ -160,6 +162,34 @@ describe('CulturasService', () => {
       expect(result.paises).toContainEqual(paisesMock);
     });
   });
+
+  describe('actualizarPaisesEnCultura', () => {
+    it('debería actualizar países en una cultura', async () => {
+      const culturaMock = new Cultura();
+      culturaMock.id = 'culturaId';
+      const paisMock = new Pais();
+      paisMock.id = 'paisId';
+  
+      culturaRepository.findOneBy.mockResolvedValueOnce(culturaMock);
+      paisRepository.findBy.mockResolvedValueOnce([paisMock]);
+      culturaRepository.save.mockResolvedValueOnce({...culturaMock, paises: [paisMock]});
+  
+      const result = await culturaservice.actualizarPaisesEnCultura('culturaId', ['paisId']);
+      expect(result.paises).toEqual([paisMock]);
+    });
+  
+    it('debería lanzar BusinessLogicException si algunos países no existen', async () => {
+      const culturaMock = new Cultura();
+      culturaMock.id = 'culturaId';
+      culturaRepository.findOneBy.mockResolvedValueOnce(culturaMock);
+      paisRepository.findBy.mockResolvedValueOnce([]); 
+  
+      await expect(culturaservice.actualizarPaisesEnCultura('culturaId', ['paisId']))
+        .rejects
+        .toThrow(BusinessLogicException); 
+    });
+  });
+ 
 
   describe('eliminarPaisDeCultura', () => {
     it('debería lanzar NotFoundException si la cultura no existe', async () => {
