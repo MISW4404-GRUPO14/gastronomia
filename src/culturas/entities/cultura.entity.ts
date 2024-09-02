@@ -1,7 +1,7 @@
 import { Res } from '@nestjs/common';
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Restaurante } from '../../restaurantes/entities/restaurante.entity';
-import { Pais } from 'src/paises/entities/pais.entity';
+import { Pais } from '../../paises/entities/pais.entity';
 
     @Entity()
     export class Cultura {
