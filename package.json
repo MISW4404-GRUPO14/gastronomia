@@ -17,7 +17,15 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:culturaService": "jest src/culturas/culturas.service.spec.ts",
+    "test:culturaController": "jest src/culturas/culturas.controller.spec.ts",
+    "test:recetasService": "jest src/recetas/recetas.service.spec.ts",
+    "test:recetasController": "jest src/recetas/recetas.controller.spec.ts",
+    "test:productos": "jest src/productos/productos.service.spec.ts",
+    "test:categorias": "jest src/categorias/categorias.service.spec.ts",
+    "test:ciudades": "jest src/ciudades/ciudades.service.spec.ts",
+    "test:paises": "jest src/paises/paises.service.spec.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^8.4.1",

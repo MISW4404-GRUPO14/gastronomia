@@ -1,9 +1,12 @@
-import { Inject, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { CreateCulturaDto } from './dto/create-cultura.dto';
 import { UpdateCulturaDto } from './dto/update-cultura.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cultura } from './entities/cultura.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
+import { Pais } from '../paises/entities/pais.entity';
+import { BusinessLogicException } from '../shared/errors/business-errors';
+import { Restaurante } from '../restaurantes/entities/restaurante.entity';
 
 @Injectable()
 export class CulturasService {
@@ -12,7 +15,13 @@ export class CulturasService {
 
   constructor( 
     @InjectRepository(Cultura)
-    private culturaRepository: Repository<Cultura>
+    private culturaRepository: Repository<Cultura>,
+
+    @InjectRepository(Pais)
+    private readonly paisRepository: Repository<Pais>,
+
+    @InjectRepository(Restaurante)
+    private readonly restauranteRepository: Repository<Restaurante>
   ){}
   
   async create(createCulturaDto: CreateCulturaDto) {
@@ -71,5 +80,94 @@ export class CulturasService {
       throw new NotFoundException(`The culture with the given id ${id} was not found`)
     }
     //return `This action removes a #${id} cultura`;
+  }
+
+//-----------------------------Paises de una cultura---------------------------------------------------//
+
+  //Método para agregar paises a una cultura
+  async agregarPaisesACultura(culturaId: string, paisIds: string[]) {
+    const culture = await this.findOne(culturaId);
+    if (!culture.paises)
+      culture.paises = []
+    const paises = await this.paisRepository.findBy({ id: In(paisIds) });
+    this.validateArrayPaises(paises, paisIds)
+    culture.paises.push(...paises);
+    return await this.culturaRepository.save(culture);
+  }
+  
+
+  //Método para obtener paises de una cultura
+  async obtenerPaisesDecultura(culturaId: string) {
+    const culture = await this.findOne(culturaId);
+    return culture
+  }
+
+  //Método para actualizar el listado de paises de una cultura
+  async actualizarPaisesEnCultura(culturaId: string, paisesIds: string[]){
+    const culture = await this.findOne(culturaId);
+    const nuevosPaises =  await this.paisRepository.findBy({ id: In(paisesIds) });
+    // Validar que todos los paises existan
+    this.validateArrayPaises(nuevosPaises, paisesIds)
+    culture.paises = nuevosPaises;
+    return await this.culturaRepository.save(culture);
+  }
+
+  //Método para eliminar un pais de una cultura
+  async eliminarPaisDeCultura(culturaId: string, paisId: string){
+    const culture = await this.findOne(culturaId);
+    culture.paises = culture.paises.filter(pais => pais.id !== paisId);
+
+    return await this.culturaRepository.save(culture);
+  }
+
+  validateArrayPaises(paises, paisIds){
+    if (paises.length !== paisIds.length) {
+      const paisesExistentesIds = paises.map(pais => pais.id);
+      const paisesNoEncontrados = paisIds.filter(id => !paisesExistentesIds.includes(id));
+      throw new BusinessLogicException(`Alguno de los paises no existe`, HttpStatus.NOT_FOUND);
+    }
+  }
+
+  //-----------------------------Restaurantes de una cultura---------------------------------------------------//
+
+  //Método para agregar restaurentes a una cultura
+  async agregarRestaurantesACultura(culturaId: string, restaurantesIds: string[]) {
+    const culture = await this.findOne(culturaId);
+    const restaurantes = await this.restauranteRepository.findBy({ id: In(restaurantesIds) });
+    this.validateArrayRestaurantes(restaurantes, restaurantesIds)
+    culture.restaurantes.push(...restaurantes);
+    return await this.culturaRepository.save(culture);
+  }
+
+  //Método para obtener restaurantes de una cultura
+  async obtenerRestaurantesDecultura(culturaId: string) {
+    const culture = await this.findOne(culturaId);
+    return culture
+  }
+
+  //Método para actualizar el listado de restaurantes de una cultura
+  async actualizarRestaurantesEnCultura(culturaId: string, restaurantesIds: string[]){
+    const culture = await this.findOne(culturaId);
+    const nuevosRestaurantes =  await this.restauranteRepository.findBy({ id: In(restaurantesIds) });
+    // Validar que todos los restaurantes existan
+    this.validateArrayRestaurantes(nuevosRestaurantes, restaurantesIds)
+    culture.restaurantes = nuevosRestaurantes;
+    return await this.culturaRepository.save(culture);
+  }
+
+  //Método para eliminar un restaurante de una cultura
+  async eliminarRestauranteDeCultura(culturaId: string, restauranteId: string){
+    const culture = await this.findOne(culturaId);
+    culture.restaurantes = culture.restaurantes.filter(restaurante => restaurante.id !== restauranteId);
+
+    return await this.culturaRepository.save(culture);
+  }
+
+  validateArrayRestaurantes(restaurantes, restauranteIds){
+    if (restaurantes.length !== restauranteIds.length) {
+      const restaurantesExistentesIds = restaurantes.map(restaurante => restaurante.id);
+      const restaurantesNoEncontrados = restauranteIds.filter(id => !restaurantesExistentesIds.includes(id));
+      throw new BusinessLogicException(`Alguno de los restaurantes no existe`, HttpStatus.NOT_FOUND);
+    }
   }
 }

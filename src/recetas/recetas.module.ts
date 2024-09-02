@@ -3,7 +3,7 @@ import { RecetasService } from './recetas.service';
 import { RecetasController } from './recetas.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Receta } from './entities/receta.entity';
-import { Producto } from 'src/productos/entities/producto.entity';
+import { Producto } from '../productos/entities/producto.entity';
 
 @Module({
   controllers: [RecetasController],
