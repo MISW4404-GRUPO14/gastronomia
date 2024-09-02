@@ -11,17 +11,14 @@ describe('PaisesController', () => {
   const mockPais = {
     id: 'some-uuid',
     nombre: 'País de Ejemplo',
-    // Agrega aquí cualquier otra propiedad relevante de tu entidad Pais
   };
 
   const mockCreatePaisDto: CreatePaisDto = {
     nombre: 'País de Ejemplo',
-    // Agrega aquí cualquier otra propiedad relevante de tu DTO CreatePaisDto
   };
 
   const mockUpdatePaisDto: UpdatePaisDto = {
     nombre: 'País de Ejemplo Actualizado',
-    // Agrega aquí cualquier otra propiedad relevante de tu DTO UpdatePaisDto
   };
 
   beforeEach(async () => {

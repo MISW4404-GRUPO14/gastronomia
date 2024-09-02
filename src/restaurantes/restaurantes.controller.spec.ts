@@ -4,8 +4,6 @@ import { RestaurantesService } from './restaurantes.service';
 import { CreateRestauranteDto } from './dto/create-restaurante.dto';
 import { UpdateRestauranteDto } from './dto/update-restaurante.dto';
 import { Restaurante } from './entities/restaurante.entity';
-import { Cultura } from '../culturas/entities/cultura.entity';
-import { Ciudad } from '../ciudades/entities/ciudad.entity';
 
 describe('RestaurantesController', () => {
   let controller: RestaurantesController;
@@ -17,7 +15,7 @@ describe('RestaurantesController', () => {
     estrellas: 5,
     fechasConsecucionEstrellas: new Date('2023-01-01'),
     idCiudad: 'some-city-id',
-    culturas: [], // Asumiendo que no hay culturas asociadas en este caso
+    culturas: [],
   };
 
   const mockCreateRestauranteDto: CreateRestauranteDto = {

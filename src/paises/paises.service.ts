@@ -11,8 +11,6 @@ import { HttpStatus } from '@nestjs/common';
 @Injectable()
 export class PaisesService {
 
-  private readonly logger = new Logger('PaisesService')
-
   constructor(
     @InjectRepository(Pais)
     private readonly paisRepository: Repository<Pais>
@@ -23,8 +21,6 @@ export class PaisesService {
       await this.paisRepository.save( pais );
       return pais
     } catch(error){
-      // console.log(error);
-      // this.logger.error(error)
       throw new BusinessLogicException(error, HttpStatus.INTERNAL_SERVER_ERROR )
     }
   }
@@ -34,7 +30,6 @@ export class PaisesService {
       const paises = await this.paisRepository.find(); // Usa await aquí
       return paises;
     } catch (error) {
-      // this.logger.error(error);
       throw new BusinessLogicException('Failed to get paises due to a server error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -64,7 +59,6 @@ export class PaisesService {
       await this.paisRepository.save(pais);
       return pais;
     } catch (error) {
-      // this.logger.error(error);
       throw new BusinessLogicException('Failed to update pais due to a server error.', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }  
@@ -75,7 +69,6 @@ export class PaisesService {
       await this.paisRepository.remove(pais);
       return pais;
     } catch (error) {
-      // this.logger.error(error);
       throw new BusinessLogicException('The pais with the given id was not found', HttpStatus.NOT_FOUND);
     }
   }

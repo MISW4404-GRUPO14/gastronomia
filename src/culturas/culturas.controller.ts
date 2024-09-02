@@ -35,8 +35,6 @@ export class CulturasController {
     return this.culturasService.remove(id);
   }
 
-  // Paises de una cultura
-
   @Post(':id/paises')
   async agregarPaises(
     @Param('id', ParseUUIDPipe) id: string,
@@ -67,8 +65,6 @@ export class CulturasController {
     const {culturaId, paisId} = params
     return this.culturasService.eliminarPaisDeCultura(culturaId, paisId);
   }
-
-  // Restaurante de una cultura
 
   @Post(':id/paises')
   async agregarRestaurantes(

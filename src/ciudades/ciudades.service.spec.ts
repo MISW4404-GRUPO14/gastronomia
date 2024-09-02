@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CiudadesService } from './ciudades.service';
 import { Ciudad } from './entities/ciudad.entity';
-import { Restaurante } from '../restaurantes/entities/restaurante.entity'; // Ajusta la ruta según tu estructura
+import { Restaurante } from '../restaurantes/entities/restaurante.entity';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { BusinessLogicException } from '../shared/errors/business-errors';
@@ -19,7 +19,6 @@ describe('CiudadesService', () => {
   };
 
   const createCiudadDto = { nombre: 'Bogotá' };
-  const updatedCiudadDto = { nombre: 'Updated City' };
 
   const mockCiudadRepository = {
     create: jest.fn().mockReturnValue(mockCiudad),
@@ -28,10 +27,6 @@ describe('CiudadesService', () => {
     findOne: jest.fn().mockResolvedValue(mockCiudad),
     preload: jest.fn().mockResolvedValue(mockCiudad),
     remove: jest.fn().mockResolvedValue(mockCiudad),
-  };
-
-  const mockRestauranteRepository = {
-    // Define here any methods used by CiudadesService that involve Restaurante
   };
 
   beforeEach(async () => {

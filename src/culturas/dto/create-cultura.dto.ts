@@ -1,4 +1,4 @@
-import { IsString, IsUrl, MinLength } from "class-validator";
+import { IsString, MinLength } from "class-validator";
 
 export class CreateCulturaDto {
     @IsString({message: 'El campo nombre debe ser un string' })

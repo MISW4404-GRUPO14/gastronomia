@@ -24,8 +24,6 @@ export class RestaurantesService {
       await this.restauranteRepository.save( restaurante );
       return restaurante
     } catch(error){
-      // console.log(error);
-      // this.logger.error(error)
       throw new BusinessLogicException(error, HttpStatus.INTERNAL_SERVER_ERROR )
     }
   }
@@ -35,7 +33,6 @@ export class RestaurantesService {
       const restaurantes = this.restauranteRepository.find();
       return restaurantes;
     } catch(error){
-      // this.logger.error(error)
       throw new BusinessLogicException('Failed to get restaurantes due to a server error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -64,7 +61,6 @@ export class RestaurantesService {
       await this.restauranteRepository.save(restaurante);
       return restaurante;
     } catch(error){
-      // this.logger.error(error)
       throw new BusinessLogicException('Failed to update restaurant due to a server error.', HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }

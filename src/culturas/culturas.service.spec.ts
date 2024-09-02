@@ -3,7 +3,6 @@ import { CulturasService } from './culturas.service';
 import { Cultura } from './entities/cultura.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { faker } from '@faker-js/faker';
 import { Pais } from '../paises/entities/pais.entity';
 import { Restaurante } from '../restaurantes/entities/restaurante.entity';
 
@@ -11,7 +10,6 @@ describe('CulturasService', () => {
   let culturaservice: CulturasService;
   let culturaRepository: Repository<Cultura>;
   let culturaRepositoryMock: jest.Mocked<Repository<Cultura>>;
-  let culturasList: Cultura[];
   let paisRepository: Repository<Pais>;  
   let restauranteRepository: Repository<Restaurante>;
 
@@ -76,7 +74,6 @@ describe('CulturasService', () => {
 
       const result = await culturaservice.findAll();
       expect(result).toEqual(culturasMock);
-      // expect(culturaRepository.find).toHaveBeenCalledWith({ relations: ['pais'] });
     });
     
   });
