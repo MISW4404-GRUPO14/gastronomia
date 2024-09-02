@@ -68,14 +68,16 @@ export class CulturasService {
     }
   }
 
-  async remove(id:string) {
-    const cultura = await this.findOne(id)
-    if(cultura){
-      await this.culturaRepository.remove(cultura)
-    }else{
-      throw new NotFoundException(`The culture with the given id ${id} was not found`)
+  async remove(id: string): Promise<Cultura> {
+    const cultura = await this.findOne(id);
+    if (cultura) {
+      await this.culturaRepository.remove(cultura);
+      return cultura; 
+    } else {
+      throw new NotFoundException(`The culture with the given id ${id} was not found`);
     }
   }
+  
 
 //-----------------------------Paises de una cultura---------------------------------------------------//
 

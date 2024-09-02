@@ -5,6 +5,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Pais } from '../paises/entities/pais.entity';
 import { Restaurante } from '../restaurantes/entities/restaurante.entity';
+import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
 
 describe('CulturasService', () => {
   let culturaservice: CulturasService;
@@ -76,6 +77,54 @@ describe('CulturasService', () => {
     });
   });
 
+  describe('update', () => {
+    it('debería actualizar una cultura', async () => {
+      const updateCulturaDto = {
+        nombre: "Japonesa Actualizada",
+        descripcion: "Descripción actualizada.",
+      };
+      const culturaMock = { id: 'culturaId', nombre: 'Japonesa', descripcion: 'Descripción original' } as Cultura;
+      const updatedCulturaMock = { id: 'culturaId', ...updateCulturaDto } as Cultura;
+
+      culturaRepository.preload.mockResolvedValue(updatedCulturaMock);
+      culturaRepository.save.mockResolvedValue(updatedCulturaMock);
+
+      const result = await culturaservice.update('culturaId', updateCulturaDto);
+      expect(result).toEqual(updatedCulturaMock);
+    });
+
+    it('debería lanzar NotFoundException al actualizar una cultura que no existe', async () => {
+      const updateCulturaDto = {
+        nombre: "Japonesa Actualizada",
+        descripcion: "Descripción actualizada.",
+      };
+      culturaRepository.preload.mockResolvedValue(null);
+
+      await expect(culturaservice.update('culturaId', updateCulturaDto))
+        .rejects
+        .toThrow(InternalServerErrorException);
+    });
+  });
+
+  describe('remove', () => {
+    it('debería eliminar una cultura', async () => {
+      const culturaMock = { id: 'culturaId' } as Cultura;
+      culturaRepository.findOneBy.mockResolvedValue(culturaMock);
+      culturaRepository.remove.mockResolvedValue(culturaMock);
+  
+      const result = await culturaservice.remove('culturaId');
+      expect(result).toEqual(culturaMock);
+    });
+  
+    it('debería lanzar NotFoundException al eliminar una cultura que no existe', async () => {
+      culturaRepository.findOneBy.mockResolvedValue(null);
+      await expect(culturaservice.remove('culturaId'))
+        .rejects
+        .toThrow(NotFoundException);
+    });
+  });
+  
+
   describe('agregarPaisesACultura', () => {
     it('debería lanzar NotFoundException si la cultura no existe', async () => {
       culturaRepository.findOneBy.mockResolvedValueOnce(null); 
@@ -133,6 +182,36 @@ describe('CulturasService', () => {
 
       const result = await culturaservice.eliminarPaisDeCultura('culturaId', 'paisId');
       expect(result.paises).not.toContainEqual(paisesMock);
+    });
+  });
+
+  describe('eliminarRestauranteDeCultura', () => {
+    it('debería eliminar un restaurante de una cultura', async () => {
+      const culturaMock = new Cultura();
+      culturaMock.id = 'culturaId';
+      const restauranteMock = new Restaurante();
+      restauranteMock.id = 'restauranteId';
+      culturaMock.restaurantes = [restauranteMock];
+
+      culturaRepository.findOneBy.mockResolvedValueOnce(culturaMock);
+      culturaRepository.save.mockResolvedValueOnce(culturaMock);
+
+      const result = await culturaservice.eliminarRestauranteDeCultura('culturaId', 'restauranteId');
+      expect(result.restaurantes).not.toContainEqual(restauranteMock);
+    });
+
+    it('debería manejar la eliminación de un restaurante que no está en la cultura', async () => {
+      const culturaMock = new Cultura();
+      culturaMock.id = 'culturaId';
+      const restauranteMock = new Restaurante();
+      restauranteMock.id = 'restauranteId';
+      culturaMock.restaurantes = []; 
+
+      culturaRepository.findOneBy.mockResolvedValueOnce(culturaMock);
+      culturaRepository.save.mockResolvedValueOnce(culturaMock);
+
+      const result = await culturaservice.eliminarRestauranteDeCultura('culturaId', 'restauranteId');
+      expect(result.restaurantes).toEqual([]); 
     });
   });
 });
