@@ -19,6 +19,7 @@ describe('CiudadesService', () => {
   };
 
   const createCiudadDto = { nombre: 'Bogotá' };
+  const updatedCiudadDto = { nombre: 'Updated City' };
 
   const mockCiudadRepository = {
     create: jest.fn().mockReturnValue(mockCiudad),
@@ -27,6 +28,9 @@ describe('CiudadesService', () => {
     findOne: jest.fn().mockResolvedValue(mockCiudad),
     preload: jest.fn().mockResolvedValue(mockCiudad),
     remove: jest.fn().mockResolvedValue(mockCiudad),
+  };
+
+  const mockRestauranteRepository = {
   };
 
   beforeEach(async () => {
