@@ -1,8 +1,7 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, ParseUUIDPipe, NotFoundException } from '@nestjs/common';
 import { CiudadesService } from './ciudades.service';
 import { CreateCiudadDto } from './dto/create-ciudad.dto';
 import { UpdateCiudadDto } from './dto/update-ciudad.dto';
-import { NotFoundException } from '@nestjs/common';
 
 @Controller('ciudades')
 export class CiudadesController {

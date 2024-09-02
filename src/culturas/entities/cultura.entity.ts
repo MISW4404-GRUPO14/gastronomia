@@ -9,10 +9,10 @@ import { Pais } from '../../paises/entities/pais.entity';
         id: string;
 
         @Column('text')
-        nombre: String;
+        nombre: string;
 
         @Column('text')
-        descripcion: String;
+        descripcion: string;
 
         @ManyToMany(() => Pais, pais => pais.culturas)
         @JoinTable()
