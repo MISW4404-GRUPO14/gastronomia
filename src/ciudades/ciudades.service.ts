@@ -29,8 +29,8 @@ export class CiudadesService {
       await this.ciudadRepository.save( ciudad );
       return ciudad
     } catch(error){
-      console.log(error);
-      this.logger.error(error)
+      // console.log(error);
+      // this.logger.error(error)
       throw new BusinessLogicException(error, HttpStatus.INTERNAL_SERVER_ERROR )
     }
   }
@@ -40,7 +40,7 @@ export class CiudadesService {
       const ciudades = await this.ciudadRepository.find(); // Añadido await para resolver la promesa
       return ciudades;
     } catch (error) {
-      this.logger.error(error);
+      // this.logger.error(error);
       throw new BusinessLogicException('Failed to get ciudades due to a server error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -69,7 +69,7 @@ export class CiudadesService {
       await this.ciudadRepository.save(ciudad);
       return ciudad;
     } catch(error){
-      this.logger.error(error)
+      // this.logger.error(error)
       throw new BusinessLogicException('Failed to update ciudad due to a server error.', HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
@@ -85,7 +85,7 @@ export class CiudadesService {
       await this.ciudadRepository.remove(ciudad);
       return ciudad;
     } catch(error){
-      this.logger.error(error);
+      // this.logger.error(error);
       throw new BusinessLogicException('The ciudad with the given id was not found', HttpStatus.NOT_FOUND);
     }
   }

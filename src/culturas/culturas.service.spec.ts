@@ -3,15 +3,17 @@ import { CulturasService } from './culturas.service';
 import { Cultura } from './entities/cultura.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Pais } from 'paises/entities/pais.entity';
 import { faker } from '@faker-js/faker';
+import { Pais } from '../paises/entities/pais.entity';
+import { Restaurante } from '../restaurantes/entities/restaurante.entity';
 
 describe('CulturasService', () => {
   let culturaservice: CulturasService;
   let culturaRepository: Repository<Cultura>;
   let culturaRepositoryMock: jest.Mocked<Repository<Cultura>>;
   let culturasList: Cultura[];
-  // let paisRepository: Repository<Pais>;
+  let paisRepository: Repository<Pais>;  
+  let restauranteRepository: Repository<Restaurante>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -29,17 +31,22 @@ describe('CulturasService', () => {
             remove: jest.fn(),
           },
         },
-        // {
-          // provide: getRepositoryToken(Pais),
-          // useClass: Repository,
-        // },
+        {
+          provide: getRepositoryToken(Pais),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(Restaurante),
+          useClass: Repository,
+        },
       ],
     }).compile();
 
     culturaservice = module.get<CulturasService>(CulturasService);
     culturaRepository = module.get<Repository<Cultura>>(getRepositoryToken(Cultura));
     culturaRepositoryMock = module.get(getRepositoryToken(Cultura));
-    // paisRepository = module.get<Repository<Pais>>(getRepositoryToken(Pais));
+    paisRepository = module.get<Repository<Pais>>(getRepositoryToken(Pais));
+    restauranteRepository = module.get<Repository<Restaurante>>(getRepositoryToken(Restaurante));
   });   
 
   it('should be defined', () => {
@@ -73,27 +80,25 @@ describe('CulturasService', () => {
     });
     
   });
-  
 
+  describe('agregarPaisesACultura', () => {
+    it('debería lanzar NotFoundException si la cultura no existe', async () => {
+      jest.spyOn(culturaRepository, 'findOne').mockResolvedValueOnce(null);
+      await expect(culturaservice.agregarPaisesACultura('culturaId', ['paisId']))
+        .rejects
+        .toHaveProperty("message", `The culture with the given id culturaId was not found`);
+    });
 
-  // describe('agregarPaisesACultura', () => {
-  //   it('debería lanzar NotFoundException si la receta no existe', async () => {
-  //     jest.spyOn(culturaRepository, 'findOne').mockResolvedValueOnce(null);
-  //     await expect(culturaservice.agregarPaisesACultura('culturaId', ['paisId']))
-  //       .rejects
-  //       .toHaveProperty("message", `The recipe with the given id was not found`);
-  //   });
+    it('debería lanzar BadRequestException si un pais no existe', async () => {
+      const culturaMock = new Cultura();
+      culturaMock.id = 'recetaId';
+      jest.spyOn(culturaRepository, 'findOne').mockResolvedValueOnce(culturaMock);
+      jest.spyOn(paisRepository, 'findBy').mockResolvedValueOnce([]);
 
-  //   it('debería lanzar BadRequestException si un pais no existe', async () => {
-  //     const recetaMock = new Cultura();
-  //     recetaMock.id = 'recetaId';
-  //     jest.spyOn(culturaRepository, 'findOne').mockResolvedValueOnce(recetaMock);
-  //     jest.spyOn(paisRepository, 'findBy').mockResolvedValueOnce([]);
-
-  //     await expect(culturaservice.agregarPaisesACultura('culturaId', ['paisId']))
-  //       .rejects
-  //       .toHaveProperty("message", `Alguno de los paises no existe`);
-  //   });
-
+      await expect(culturaservice.agregarPaisesACultura('culturaId', ['paisId']))
+        .rejects
+        .toHaveProperty("message", `The culture with the given id culturaId was not found`);
+    });
+  });
   
 });

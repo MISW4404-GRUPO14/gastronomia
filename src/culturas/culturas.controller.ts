@@ -42,7 +42,7 @@ export class CulturasController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() agregarPaisesDto: AgregarPaisesDto
   ){
-    return this.culturasService.agregarPaisesACultura(id, agregarPaisesDto.paisesIds);
+    return this.culturasService.agregarPaisesACultura(id, agregarPaisesDto.paisIds);
   }
 
   @Get(':id/paises')
@@ -57,7 +57,7 @@ export class CulturasController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() agregarPaisesDto: AgregarPaisesDto
   ){
-    return this.culturasService.actualizarPaisesEnCultura(id, agregarPaisesDto.paisesIds);
+    return this.culturasService.actualizarPaisesEnCultura(id, agregarPaisesDto.paisIds);
   }
 
   @Delete(':culturaId/paises/:paisId')

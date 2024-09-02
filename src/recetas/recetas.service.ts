@@ -27,7 +27,7 @@ export class RecetasService {
       await this.recetaRepository.save( recipe );
       return recipe
     } catch(error){
-      console.log(error);
+      // console.log(error);
       this.logger.error(error)
       throw new BusinessLogicException(error, HttpStatus.INTERNAL_SERVER_ERROR )
     }

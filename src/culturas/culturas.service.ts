@@ -87,11 +87,14 @@ export class CulturasService {
   //Método para agregar paises a una cultura
   async agregarPaisesACultura(culturaId: string, paisIds: string[]) {
     const culture = await this.findOne(culturaId);
+    if (!culture.paises)
+      culture.paises = []
     const paises = await this.paisRepository.findBy({ id: In(paisIds) });
     this.validateArrayPaises(paises, paisIds)
     culture.paises.push(...paises);
     return await this.culturaRepository.save(culture);
   }
+  
 
   //Método para obtener paises de una cultura
   async obtenerPaisesDecultura(culturaId: string) {

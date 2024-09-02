@@ -80,7 +80,7 @@ describe('CulturasController', () => {
   describe('Agregar pais a una cultura', () => {
     it('debería llamar a agregarPaisesACultura con los datos correctos', async () => {
       const agregarPaisesDto: AgregarPaisesDto = {
-        paisesIds: ["0e07e82b-0a71-465e-ad13-cdf7c8c16c40"]
+        paisIds: ["0e07e82b-0a71-465e-ad13-cdf7c8c16c40"]
     };
       await controller.agregarPaises("0e07e82b-0a71-465e-ad13-cdf7c8c16c45",agregarPaisesDto);
       expect(culturaservice.agregarPaisesACultura).toHaveBeenCalledWith( "0e07e82b-0a71-465e-ad13-cdf7c8c16c45", ["0e07e82b-0a71-465e-ad13-cdf7c8c16c40"]);
