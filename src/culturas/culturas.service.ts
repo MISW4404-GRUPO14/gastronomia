@@ -158,8 +158,6 @@ export class CulturasService {
 
   validateArrayRestaurantes(restaurantes, restauranteIds){
     if (restaurantes.length !== restauranteIds.length) {
-      const restaurantesExistentesIds = restaurantes.map(restaurante => restaurante.id);
-      const restaurantesNoEncontrados = restauranteIds.filter(id => !restaurantesExistentesIds.includes(id));
       throw new BusinessLogicException(`Alguno de los restaurantes no existe`, HttpStatus.NOT_FOUND);
     }
   }
