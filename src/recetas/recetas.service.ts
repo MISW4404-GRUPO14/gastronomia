@@ -27,7 +27,6 @@ export class RecetasService {
       await this.recetaRepository.save( recipe );
       return recipe
     } catch(error){
-      // console.log(error);
       this.logger.error(error)
       throw new BusinessLogicException(error, HttpStatus.INTERNAL_SERVER_ERROR )
     }
@@ -79,8 +78,6 @@ export class RecetasService {
     await this.recetaRepository.remove( recipe );
   }
 
-
-  //Método para agregar productos a una receta
   async agregarProductosAReceta(recetaId: string, productoIds: string[]) {
     const recipe = await this.findOne(recetaId);
     const productos = await this.productoRepository.findBy({ id: In(productoIds) });
@@ -89,17 +86,14 @@ export class RecetasService {
     return await this.recetaRepository.save(recipe);
   }
 
-   //Método para traer productos de una receta
    async obtenerProductosDeReceta(recetaId: string) {
     const recipe = await this.findOne(recetaId);
     return recipe
   }
 
-  //Método para actualizar el listado de productos
   async actualizarProductosEnReceta(recetaId: string, productoIds: string[]){
     const recipe = await this.findOne(recetaId);
     const nuevosProductos =  await this.productoRepository.findBy({ id: In(productoIds) });
-    // Validar que todos los productos existan
     this.validateArrayProductos(nuevosProductos, productoIds)
     recipe.productos = nuevosProductos;
     return await this.recetaRepository.save(recipe);

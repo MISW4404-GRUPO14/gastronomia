@@ -1,5 +1,4 @@
-import { IsNumber, IsString, MinLength, IsDate, IsDateString } from "class-validator";
-import { Type } from 'class-transformer';
+import { IsNumber, IsString, MinLength, IsDateString } from "class-validator";
 
 export class CreateRestauranteDto {
 
@@ -7,7 +6,7 @@ export class CreateRestauranteDto {
     @MinLength(1, { message: 'El campo nombre no debe estar vacío' }) 
     nombre: string;
 
-    @IsNumber({}, { message: 'El campo estrellas debe ser un número' }) // Corrected: Added empty options object
+    @IsNumber({}, { message: 'El campo estrellas debe ser un número' })
     estrellas: number;
 
     

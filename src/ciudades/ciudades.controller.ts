@@ -35,7 +35,6 @@ export class CiudadesController {
     return this.ciudadesService.remove(id);
   }
 
-  // Endpoint para asociar un restaurante a una ciudad
   @Post(':ciudadId/restaurantes/:restauranteId')
   async asociarRestauranteACiudad(
     @Param('ciudadId', ParseUUIDPipe) ciudadId: string,
@@ -51,7 +50,6 @@ export class CiudadesController {
     }
   }
 
-  // Endpoint para eliminar un restaurante de una ciudad
   @Delete(':ciudadId/restaurantes/:restauranteId')
   async eliminarRestauranteDeCiudad(
     @Param('ciudadId', ParseUUIDPipe) ciudadId: string,
@@ -68,7 +66,6 @@ export class CiudadesController {
     }
   }
 
-  // Endpoint para obtener los restaurantes de una ciudad
   @Get(':ciudadId/restaurantes')
   async obtenerRestaurantesDeCiudad(
     @Param('ciudadId', ParseUUIDPipe) ciudadId: string,

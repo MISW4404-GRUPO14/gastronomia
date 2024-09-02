@@ -1,7 +1,7 @@
 
 import { Categoria } from '../../categorias/entities/categoria.entity';
 import { Receta } from '../../recetas/entities/receta.entity';
-import { Column, Entity, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Producto {

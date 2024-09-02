@@ -1,4 +1,4 @@
-import { Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from "typeorm";
+import { Entity, JoinTable, ManyToMany, OneToMany } from "typeorm";
 import { Column, PrimaryGeneratedColumn } from "typeorm";
 import { Ciudad } from "../../ciudades/entities/ciudad.entity";
 import { Cultura } from "../../culturas/entities/cultura.entity";

@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { Restaurante } from './entities/restaurante.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { BusinessLogicException } from '../shared/errors/business-errors';
-import { HttpStatus } from '@nestjs/common';
 import { CreateRestauranteDto } from './dto/create-restaurante.dto';
 import { UpdateRestauranteDto } from './dto/update-restaurante.dto';
 
@@ -43,7 +42,7 @@ describe('RestaurantesService', () => {
       const createRestauranteDto: CreateRestauranteDto = {
         nombre: 'Test Restaurante',
         estrellas: 5,
-        fechasConsecucionEstrellas: new Date().toISOString(), // Convertir a cadena
+        fechasConsecucionEstrellas: new Date().toISOString(),
       };
       const createdRestaurante = { id: '1', ...createRestauranteDto };
       jest.spyOn(repository, 'create').mockReturnValue(createdRestaurante as any);
@@ -56,7 +55,7 @@ describe('RestaurantesService', () => {
       const createRestauranteDto: CreateRestauranteDto = {
         nombre: 'Test Restaurante',
         estrellas: 5,
-        fechasConsecucionEstrellas: new Date().toISOString(), // Convertir a cadena
+        fechasConsecucionEstrellas: new Date().toISOString(), 
       };
       jest.spyOn(repository, 'create').mockReturnValue({} as any);
       jest.spyOn(repository, 'save').mockRejectedValue(new Error('Creation failed'));
@@ -96,7 +95,7 @@ describe('RestaurantesService', () => {
       const updateRestauranteDto: UpdateRestauranteDto = {
         nombre: 'Updated Restaurante',
         estrellas: 4,
-        fechasConsecucionEstrellas: new Date().toISOString(), // Convertir a cadena
+        fechasConsecucionEstrellas: new Date().toISOString(),
       };
       const updatedRestaurante = { id: '1', ...updateRestauranteDto };
       jest.spyOn(repository, 'preload').mockResolvedValue(updatedRestaurante as any);

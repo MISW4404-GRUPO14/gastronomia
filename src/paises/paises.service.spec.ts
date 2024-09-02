@@ -4,7 +4,6 @@ import { Pais } from './entities/pais.entity';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { BusinessLogicException } from '../shared/errors/business-errors';
-import { HttpStatus } from '@nestjs/common';
 
 describe('PaisesService', () => {
   let service: PaisesService;
@@ -13,8 +12,8 @@ describe('PaisesService', () => {
   const mockPais: Pais = {
     id: '1',
     nombre: 'Colombia',
-    ciudades: [], // Añadir propiedades necesarias
-    culturas: []  // Añadir propiedades necesarias
+    ciudades: [], 
+    culturas: [] 
   };
 
   const createPaisDto = { nombre: 'Colombia' };
