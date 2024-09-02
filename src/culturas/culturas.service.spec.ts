@@ -8,9 +8,8 @@ import { Restaurante } from '../restaurantes/entities/restaurante.entity';
 
 describe('CulturasService', () => {
   let culturaservice: CulturasService;
-  let culturaRepository: Repository<Cultura>;
-  let culturaRepositoryMock: jest.Mocked<Repository<Cultura>>;
-  let paisRepository: Repository<Pais>;  
+  let culturaRepository: jest.Mocked<Repository<Cultura>>;
+  let paisRepository: jest.Mocked<Repository<Pais>>;
   let restauranteRepository: Repository<Restaurante>;
 
   beforeEach(async () => {
@@ -21,7 +20,6 @@ describe('CulturasService', () => {
           provide: getRepositoryToken(Cultura),
           useValue: {
             find: jest.fn(),
-            findOne: jest.fn(),
             findOneBy: jest.fn(),
             create: jest.fn(),
             save: jest.fn(),
@@ -31,7 +29,9 @@ describe('CulturasService', () => {
         },
         {
           provide: getRepositoryToken(Pais),
-          useClass: Repository,
+          useValue: {
+            findBy: jest.fn(),
+          },
         },
         {
           provide: getRepositoryToken(Restaurante),
@@ -41,11 +41,10 @@ describe('CulturasService', () => {
     }).compile();
 
     culturaservice = module.get<CulturasService>(CulturasService);
-    culturaRepository = module.get<Repository<Cultura>>(getRepositoryToken(Cultura));
-    culturaRepositoryMock = module.get(getRepositoryToken(Cultura));
-    paisRepository = module.get<Repository<Pais>>(getRepositoryToken(Pais));
-    restauranteRepository = module.get<Repository<Restaurante>>(getRepositoryToken(Restaurante));
-  });   
+    culturaRepository = module.get(getRepositoryToken(Cultura));
+    paisRepository = module.get(getRepositoryToken(Pais));
+    restauranteRepository = module.get(getRepositoryToken(Restaurante));
+  });
 
   it('should be defined', () => {
     expect(culturaservice).toBeDefined();
@@ -55,10 +54,10 @@ describe('CulturasService', () => {
     it('debería crear una cultura', async () => {
       const createCulturaDto = {
         nombre: "Japonesa",
-        descripcion:"La gastronomía japonesa es conocida por su equilibrio, frescura y estética. En ella se destacan ingredientes como el pescado crudo (sushi y sashimi), arroz, algas marinas, y una variedad de vegetales y salsas como la soja y el miso. Los platos japoneses tienden a estar elaborados con cuidado, buscando resaltar los sabores naturales de los ingredientes.",
-    };
-      culturaRepositoryMock.create.mockReturnValue(createCulturaDto as any);
-      culturaRepositoryMock.save.mockResolvedValue(createCulturaDto as any);
+        descripcion: "La gastronomía japonesa es conocida por su equilibrio, frescura y estética. En ella se destacan ingredientes como el pescado crudo (sushi y sashimi), arroz, algas marinas, y una variedad de vegetales y salsas como la soja y el miso. Los platos japoneses tienden a estar elaborados con cuidado, buscando resaltar los sabores naturales de los ingredientes.",
+      };
+      culturaRepository.create.mockReturnValue(createCulturaDto as any);
+      culturaRepository.save.mockResolvedValue(createCulturaDto as any);
       const result = await culturaservice.create(createCulturaDto);
       expect(result).toEqual(createCulturaDto);
     });
@@ -68,19 +67,18 @@ describe('CulturasService', () => {
     it('debería retornar todas las culturas', async () => {
       const culturasMock = [{
         nombre: "Japonesa",
-        descripcion: "La gastronomía japonesa es conocida por su equilibrio, frescura y estética. En ella se destacan ingredientes como el pescado crudo (sushi y sashimi), arroz, algas marinas, y una variedad de vegetales y salsas como la soja y el miso. Los platos japoneses tienden a estar elaborados con cuidado, buscando resaltar los sabores naturales de los ingredientes."
+        descripcion: "La gastronomía japonesa es conocida por su equilibrio, frescura y estética. En ella se destacan ingredientes como el pescado crudo (sushi y sashimi), arroz, algas marinas, y una variedad de vegetales y salsas como la soja y el miso. Los platos japoneses tienden a estar elaborados con cuidado, buscando resaltar los sabores naturales de los ingredientes.",
       }] as unknown as Cultura[];
-      culturaRepositoryMock.find.mockResolvedValue(culturasMock);
+      culturaRepository.find.mockResolvedValue(culturasMock);
 
       const result = await culturaservice.findAll();
       expect(result).toEqual(culturasMock);
     });
-    
   });
 
   describe('agregarPaisesACultura', () => {
     it('debería lanzar NotFoundException si la cultura no existe', async () => {
-      jest.spyOn(culturaRepository, 'findOne').mockResolvedValueOnce(null);
+      culturaRepository.findOneBy.mockResolvedValueOnce(null); 
       await expect(culturaservice.agregarPaisesACultura('culturaId', ['paisId']))
         .rejects
         .toHaveProperty("message", `The culture with the given id culturaId was not found`);
@@ -88,14 +86,53 @@ describe('CulturasService', () => {
 
     it('debería lanzar BadRequestException si un pais no existe', async () => {
       const culturaMock = new Cultura();
-      culturaMock.id = 'recetaId';
-      jest.spyOn(culturaRepository, 'findOne').mockResolvedValueOnce(culturaMock);
-      jest.spyOn(paisRepository, 'findBy').mockResolvedValueOnce([]);
+      culturaMock.id = 'culturaId';
+      culturaMock.paises = [];
+      culturaRepository.findOneBy.mockResolvedValueOnce(culturaMock); 
+      paisRepository.findBy.mockResolvedValueOnce([]);
 
       await expect(culturaservice.agregarPaisesACultura('culturaId', ['paisId']))
         .rejects
-        .toHaveProperty("message", `The culture with the given id culturaId was not found`);
+        .toHaveProperty("message", `Alguno de los paises no existe`);
+    });
+
+    it('debería agregar paises a la cultura correctamente', async () => {
+      const culturaMock = new Cultura();
+      culturaMock.id = 'culturaId';
+      culturaMock.paises = [];
+      const paisesMock = new Pais();
+      paisesMock.id = 'paisId';
+
+      culturaRepository.findOneBy.mockResolvedValueOnce(culturaMock);
+      paisRepository.findBy.mockResolvedValueOnce([paisesMock]);
+      culturaRepository.save.mockResolvedValueOnce(culturaMock);
+
+      const result = await culturaservice.agregarPaisesACultura('culturaId', ['paisId']);
+      expect(result.paises).toContainEqual(paisesMock);
     });
   });
-  
+
+  describe('eliminarPaisDeCultura', () => {
+    it('debería lanzar NotFoundException si la cultura no existe', async () => {
+      culturaRepository.findOneBy.mockResolvedValueOnce(null);
+      await expect(culturaservice.eliminarPaisDeCultura('culturaId', 'paisId'))
+        .rejects
+        .toHaveProperty("message", `The culture with the given id culturaId was not found`);
+    });
+
+    it('debería eliminar un pais de una cultura correctamente', async () => {
+      const paisesMock = new Pais();
+      paisesMock.id = 'paisId';
+
+      const culturaMock = new Cultura();
+      culturaMock.id = 'culturaId';
+      culturaMock.paises = [paisesMock];
+
+      culturaRepository.findOneBy.mockResolvedValueOnce(culturaMock);
+      culturaRepository.save.mockResolvedValueOnce(culturaMock);
+
+      const result = await culturaservice.eliminarPaisDeCultura('culturaId', 'paisId');
+      expect(result.paises).not.toContainEqual(paisesMock);
+    });
+  });
 });
