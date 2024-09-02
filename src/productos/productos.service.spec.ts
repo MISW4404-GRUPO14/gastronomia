@@ -87,7 +87,6 @@ describe('ProductosService', () => {
   });
   
   it('create retorna un producto nuevo', async () => {
-    // Crea un mock de producto
     const prodMock = new Producto();
     prodMock.id = 'prodId';
     prodMock.idCategoria = "categoriaId"; 
@@ -132,7 +131,49 @@ describe('ProductosService', () => {
     await expect(() => service.findOne("0")).rejects.toHaveProperty("message","No existe un producto con ese id")
   });
 
-
+  
+  it('update debe actualizar y retornar un producto existente', async () => {
+    const prodMock = new Producto();
+    prodMock.id = 'prodId';
+    prodMock.idCategoria = "categoriaId"; 
+  
+    jest.spyOn(repositoryCategoria, 'findOne').mockResolvedValueOnce(categoriasList[0]);
+    jest.spyOn(repository, 'save').mockResolvedValueOnce(prodMock);
+  
+    const producto= {
+      id: "",
+      nombre: "Producto Name", 
+      descripcion: "descripcion", 
+      historia: "Historia", 
+      idCategoria: null, 
+      recetas: []
+    };
+    
+    const productoExistente = await service.create(producto);
+    const updateProductoDto = {
+      ...productoExistente,
+      nombre: 'Nombre Modificado',
+      idCategoria: null 
+    };
+  
+    productoRepositoryMock.findOne.mockResolvedValue(productoExistente);
+    categoriaRepositoryMock.findOne.mockResolvedValue(categoriasList[0]);
+  
+    productoRepositoryMock.save.mockResolvedValue({
+      ...productoExistente,
+      ...updateProductoDto
+    });
+  
+    const result = await service.update(productoExistente.id, updateProductoDto);
+    expect(result).toEqual({
+      ...productoExistente,
+      ...updateProductoDto
+    });
+  
+    expect(productoRepositoryMock.findOne).toHaveBeenCalledWith({ where: { id: productoExistente.id } });
+    expect(productoRepositoryMock.save).toHaveBeenCalledWith(updateProductoDto);
+  });
+  
   it('update retorna error si no encuentra la producto modificar', async () => {
     let producto: Producto = productosList[0];
     producto = {
