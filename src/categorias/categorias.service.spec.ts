@@ -87,6 +87,40 @@ describe('CategoriasService', () => {
     await expect(() => service.update("0", categoria)).rejects.toHaveProperty("message", "No existe una categoria con ese id")
   });
 
+  it('update debe actualizar y retornar una categoría existente', async () => {
+    const categoriaExistente = categoriasList[0];
+    const categoria= {
+      id: "",
+      nombre: "Nueva Categoria", 
+      descripcion: "Descripción nueva categoria", 
+      productos: []
+    }
+    
+    categoriaRepositoryMock.create.mockReturnValue(categoria as any);
+    categoriaRepositoryMock.save.mockResolvedValue(categoria as any);
+
+    const resultCAt = await service.create(categoria);
+
+    const updateCategoriaDto = {
+      nombre: 'Nombre Modificado',
+      descripcion: 'Descripción Modificada',
+      id: resultCAt.id,
+      productos: []
+    };
+  
+    categoriaRepositoryMock.findOne.mockResolvedValue(resultCAt);
+    categoriaRepositoryMock.save.mockResolvedValue({
+      ...resultCAt,
+      ...updateCategoriaDto
+    });
+  
+    const result = await service.update(resultCAt.id, updateCategoriaDto);
+    expect(result).toEqual({
+      ...resultCAt,
+      ...updateCategoriaDto
+    });
+  });
+
   it('delete retorna error al elimina una categoria', async () => {
     await expect(() => service.remove("0")).rejects.toHaveProperty("message", "No existe una categoria con ese id")
   });
