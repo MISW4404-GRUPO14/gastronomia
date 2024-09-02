@@ -1,6 +1,6 @@
 import { IsUUID } from 'class-validator';
 
-export class EliminarPaisDto {
+export class EliminarRestauranteDto {
   @IsUUID()
   culturaId: string;
 

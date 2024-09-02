@@ -68,14 +68,16 @@ export class CulturasService {
     }
   }
 
-  async remove(id:string) {
-    const cultura = await this.findOne(id)
-    if(cultura){
-      await this.culturaRepository.remove(cultura)
-    }else{
-      throw new NotFoundException(`The culture with the given id ${id} was not found`)
+  async remove(id: string): Promise<Cultura> {
+    const cultura = await this.findOne(id);
+    if (cultura) {
+      await this.culturaRepository.remove(cultura);
+      return cultura; 
+    } else {
+      throw new NotFoundException(`The culture with the given id ${id} was not found`);
     }
   }
+  
 
 //-----------------------------Paises de una cultura---------------------------------------------------//
 
@@ -158,8 +160,6 @@ export class CulturasService {
 
   validateArrayRestaurantes(restaurantes, restauranteIds){
     if (restaurantes.length !== restauranteIds.length) {
-      const restaurantesExistentesIds = restaurantes.map(restaurante => restaurante.id);
-      const restaurantesNoEncontrados = restauranteIds.filter(id => !restaurantesExistentesIds.includes(id));
       throw new BusinessLogicException(`Alguno de los restaurantes no existe`, HttpStatus.NOT_FOUND);
     }
   }
