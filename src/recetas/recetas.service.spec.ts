@@ -14,6 +14,9 @@ const mockRecetaRepository = () => ({
   find: jest.fn(),
   findOne: jest.fn(),
   preload: jest.fn(),
+  update: jest.fn(),
+  remove: jest.fn(),
+  obtenerProductosDeReceta: jest.fn()
 });
 
 const receta: Receta = {
@@ -102,6 +105,38 @@ describe('RecetasService', () => {
     .toHaveProperty("message", `The recipe with the given id was not found`);
   });
 
+  it('debe actualizar una receta', async () => {
+    const updateRecetaDto: UpdateRecetaDto = {
+      nombre: 'Receta actualizada',
+    };
+
+
+    const recetaActualizada: Receta = {
+      ...receta,
+      ...updateRecetaDto,
+    };
+
+    recetaRepositoryMock.preload.mockResolvedValue(recetaActualizada); // Mock del método preload
+    recetaRepositoryMock.save.mockResolvedValue(recetaActualizada); // Mock del método save
+
+    const resultado = await recetaService.update('mock-uuid', updateRecetaDto);
+
+    expect(resultado).toEqual(recetaActualizada);
+    expect(recetaRepository.preload).toHaveBeenCalledWith({
+      id: 'mock-uuid',
+      ...updateRecetaDto,
+    });
+    expect(recetaRepository.save).toHaveBeenCalledWith(recetaActualizada);
+  });
+
+  it('debe lanzar un error si no se encuentra una receta', async () => {
+    recetaRepositoryMock.findOne.mockResolvedValue(undefined); // Mock de respuesta sin receta encontrada
+
+    await expect(recetaService.findOne('no-existe'))
+    .rejects
+    .toHaveProperty("message", `The recipe with the given id was not found`);
+  });
+
 
   describe('findAll', () => {
     it('debería retornar todas las recetas', async () => {
@@ -114,6 +149,14 @@ describe('RecetasService', () => {
       const result = await recetaService.findAll();
       expect(result).toEqual(recetasMock);
       expect(recetaRepository.find).toHaveBeenCalledWith({ relations: ['productos'] });
+    });
+  });
+
+  describe('obtenerProductosDeReceta', () => {
+    it('debería retornar todas las recetas', async () => {
+      recetaRepositoryMock.findOne.mockResolvedValue(receta); // Mock del método findOneBy
+      const resultado = await recetaService.obtenerProductosDeReceta('mock-uuid');
+      expect(resultado).toEqual(receta);
     });
   });
 
