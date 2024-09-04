@@ -25,7 +25,7 @@ export class ProductosService {
       const cate: Categoria = await this.categoriaRepository.findOne({where: {id: categoriaId}});
         
       if (!cate){
-        throw new BusinessLogicException("La categoría no existe", HttpStatus.BAD_REQUEST);
+        throw new BusinessLogicException("No existe una categoria con ese id", HttpStatus.BAD_REQUEST);
       }
     }
     
@@ -59,8 +59,12 @@ export class ProductosService {
       if (!cate){
         throw new BusinessLogicException("La categoría no existe", HttpStatus.BAD_REQUEST);
       }
-    } 
-    return await this.productoRepository.save(updateProductoDto);
+    }
+    existeProducto.nombre = updateProductoDto.nombre;
+    existeProducto.descripcion = updateProductoDto.descripcion;
+    existeProducto.historia = updateProductoDto.historia;
+    existeProducto.idCategoria = updateProductoDto.idCategoria;
+    return await this.productoRepository.save(existeProducto);
 
 }
 

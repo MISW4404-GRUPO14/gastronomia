@@ -479,13 +479,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/categorias/00000000-0000-0000-0000-000000000000",
+					"raw": "{{baseURL}}/categorias/{{id_categoria_que_no_existe}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
 						"categorias",
-						"00000000-0000-0000-0000-000000000000"
+						"{{id_categoria_que_no_existe}}"
 					]
 				}
 			},
@@ -699,7 +699,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\r\n    \"error\": \"Recurso no encontrado\",\r\n    \"message\": \"No existe un producto con ese id\"\r\n}"
+					"body": "{\r\n    \"error\": \"Recurso no encontrado\",\r\n    \"message\": \"No existe una categoria con ese id\"\r\n}"
 				},
 				{
 					"name": "Error Interno al actualizar una categoria",
@@ -776,13 +776,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseURL}}/categorias/00000000-0000-0000-0000-000000000000",
+					"raw": "{{baseURL}}/categorias/{{id_categoria_que_no_existe}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
 						"categorias",
-						"00000000-0000-0000-0000-000000000000"
+						"{{id_categoria_que_no_existe}}"
 					]
 				},
 				"description": "Actualizar una receta usando el id de la receta"
@@ -800,13 +800,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseURL}}/categorias/00000000-0000-0000-0000-000000000000",
+							"raw": "{{baseURL}}/categorias/{{id_categoria_que_no_existe}}",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"categorias",
-								"00000000-0000-0000-0000-000000000000"
+								"{{id_categoria_que_no_existe}}"
 							]
 						}
 					},
@@ -917,13 +917,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/categorias/819e7da4-96f4-4c45-81fc-1e5416544598",
+							"raw": "{{baseUrl}}/categorias/{{id_categoria_que_no_existe}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"categorias",
-								"819e7da4-96f4-4c45-81fc-1e5416544598"
+								"{{id_categoria_que_no_existe}}"
 							]
 						}
 					},
@@ -942,7 +942,7 @@
 					"body": "{\r\n    \"error\": \"Recurso no encontrado\",\r\n    \"message\": \"No existe una categoria con ese id\"\r\n}"
 				},
 				{
-					"name": "Error Interno al actualizar una categoria Copy",
+					"name": "Error Interno al borrar una categoria",
 					"originalRequest": {
 						"method": "GET",
 						"header": [
@@ -1014,13 +1014,13 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/categorias/00000000-0000-0000-0000-000000000000",
+					"raw": "{{baseURL}}/categorias/{{id_categoria_que_no_existe}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
 						"categorias",
-						"00000000-0000-0000-0000-000000000000"
+						"{{id_categoria_que_no_existe}}"
 					]
 				}
 			},
@@ -1037,13 +1037,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/categorias/00000000-0000-0000-0000-000000000000",
+							"raw": "{{baseUrl}}/categorias/{{id_categoria_que_no_existe}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"categorias",
-								"00000000-0000-0000-0000-000000000000"
+								"{{id_categoria_que_no_existe}}"
 							]
 						}
 					},
@@ -1094,6 +1094,11 @@
 		{
 			"key": "token",
 			"value": "Autorizacion",
+			"type": "string"
+		},
+		{
+			"key": "id_categoria_que_no_existe",
+			"value": "00000000-0000-0000-0000-000000000000",
 			"type": "string"
 		}
 	]
