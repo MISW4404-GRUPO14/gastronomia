@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Param, Delete, ParseUUIDPipe, Put } from '
 import { ProductosService } from './productos.service';
 import { CreateProductoDto } from './dto/create-producto.dto';
 import { UpdateProductoDto } from './dto/update-producto.dto';
+import { CreateCategoriaDto } from './dto/create-categoria.dto';
 
 @Controller('productos')
 export class ProductosController {
@@ -31,4 +32,40 @@ export class ProductosController {
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.productosService.remove(id);
   }
+
+
+
+
+  
+  @Post(':id/categorias')
+  async agregarCategoria(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() categoriaDto: CreateCategoriaDto
+  ){
+    return this.productosService.agregarCategoriaAProducto(id, categoriaDto.categoriaId);
+  }
+
+  @Get(':id/categorias')
+  async obtenerCategoria(
+    @Param('id', ParseUUIDPipe) id: string
+  ){
+    return this.productosService.obtenerCategoriaDeProducto(id);
+  }
+
+  @Put(':id/categorias')
+  async actualizarCategoria(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() categoriaDto: CreateCategoriaDto
+  ){
+    return this.productosService.actualizarCategoriaEnProductos(id, categoriaDto.categoriaId);
+  }
+
+  @Delete(':id/categorias')
+  async eliminarCategoria(
+    @Param('id', ParseUUIDPipe) id: string
+  ){
+    return this.productosService.eliminarCategoriaDeProducto(id);
+  }
+
+
 }

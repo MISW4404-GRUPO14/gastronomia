@@ -12,7 +12,7 @@ export class Categoria {
     @Column()
     descripcion: string;
     
-    @OneToMany(() => Producto, producto => producto.idCategoria)
+    @OneToMany(() => Producto, producto => producto.categoria)
     productos: Producto[];    
     
 }

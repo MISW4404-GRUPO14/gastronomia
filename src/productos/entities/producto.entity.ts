@@ -18,7 +18,7 @@ export class Producto {
     historia: string;
     
     @ManyToOne(() => Categoria, categoria => categoria.productos)
-    idCategoria: string;
+    categoria: string;
 
     @ManyToMany(() => Receta, (receta) => receta.productos)
     recetas: Receta[];
