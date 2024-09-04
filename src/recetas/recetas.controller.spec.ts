@@ -16,6 +16,7 @@ describe('RecetasController', () => {
     update: jest.fn(),
     remove: jest.fn(),
     agregarProductosAReceta: jest.fn(),
+    actualizarProductosEnReceta: jest.fn()
   };
 
   beforeEach(async () => {
@@ -89,6 +90,17 @@ describe('RecetasController', () => {
     };
       await controller.agregarProductos("0e07e82b-0a71-465e-ad13-cdf7c8c16c45",agregarProductosDto);
       expect(service.agregarProductosAReceta).toHaveBeenCalledWith( "0e07e82b-0a71-465e-ad13-cdf7c8c16c45", ["0e07e82b-0a71-465e-ad13-cdf7c8c16c40"]);
+    });
+  });
+
+
+  describe('Actualizar productos', () => {
+    it('debería llamar a actualizarProductos con los datos correctos', async () => {
+      const agregarProductosDto: AgregarProductosDto = {
+        productoIds: ["0e07e82b-0a71-465e-ad13-cdf7c8c16c40"]
+    };
+      await controller.actualizarProductos("0e07e82b-0a71-465e-ad13-cdf7c8c16c45",agregarProductosDto);
+      expect(service.actualizarProductosEnReceta).toHaveBeenCalledWith( "0e07e82b-0a71-465e-ad13-cdf7c8c16c45", ["0e07e82b-0a71-465e-ad13-cdf7c8c16c40"]);
     });
   });
 });
