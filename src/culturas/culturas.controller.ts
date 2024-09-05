@@ -59,14 +59,17 @@ export class CulturasController {
   ){
     return this.culturasService.actualizarPaisesEnCultura(id, agregarPaisesDto.paisIds);
   }
-
+  
   @Delete(':culturaId/paises/:paisId')
   async eliminarPais(
-    @Param() params: EliminarPaisDto
-  ){
-    const {culturaId, paisId} = params
-    return this.culturasService.eliminarPaisDeCultura(culturaId, paisId);
+    @Param('culturaId', ParseUUIDPipe) culturaId: string,
+    @Param('paisId', ParseUUIDPipe) paisId: string,
+    @Res() res: Response
+  ): Promise<void> {
+    await this.culturasService.eliminarPaisDeCultura(culturaId, paisId);
+    res.status(HttpStatus.NO_CONTENT).send();
   }
+
 
   @Post(':id/paises')
   async agregarRestaurantes(
