@@ -6,7 +6,6 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BusinessLogicException } from '../shared/errors/business-errors';
 
-
 @Injectable()
 export class PaisesService {
 
