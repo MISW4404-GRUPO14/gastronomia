@@ -53,30 +53,43 @@ export class CulturasService {
     return cultura;
   }
 
-  async update(id:string, updateCulturaDto: UpdateCulturaDto) {
-    try{  
-      const cultura = await this.culturaRepository.preload({
-        id: id,
-        ...updateCulturaDto
-      })
-      if ( !cultura ) throw new NotFoundException(`The culture with the given id ${id} was not found`)
-      await this.culturaRepository.save( cultura );
-      return cultura; 
-    } catch(error){
-      this.logger.error(error)
-      throw new InternalServerErrorException('Failed to update culture due to a server error.')
+  async update(id: string, updateCulturaDto: UpdateCulturaDto): Promise<Cultura> {
+    const cultura = await this.culturaRepository.preload({
+      id: id,
+      ...updateCulturaDto
+    });
+  
+    if (!cultura) {
+      throw new NotFoundException(`The culture with the given id ${id} was not found`);
+    }
+  
+    try {
+      await this.culturaRepository.save(cultura);
+      return cultura;
+    } catch (error) {
+      this.logger.error(`Failed to update culture with id ${id}:`, error);
+      throw new InternalServerErrorException('Failed to update culture due to a server error.');
     }
   }
 
-  async remove(id: string): Promise<Cultura> {
-    const cultura = await this.findOne(id);
-    if (cultura) {
-      await this.culturaRepository.remove(cultura);
-      return cultura; 
-    } else {
-      throw new NotFoundException(`The culture with the given id ${id} was not found`);
+  async remove(id: string): Promise<void> {
+    try {
+      const cultura = await this.findOne(id);
+      if (cultura) {
+        await this.culturaRepository.remove(cultura);
+        return;
+      } else {
+        throw new NotFoundException(`The culture with the given id ${id} was not found`);
+      }
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      this.logger.error(`Failed to remove culture with id ${id}:`, error);
+      throw new InternalServerErrorException('Failed to remove culture due to a server error.');
     }
   }
+  
   
 
 //-----------------------------Paises de una cultura---------------------------------------------------//
