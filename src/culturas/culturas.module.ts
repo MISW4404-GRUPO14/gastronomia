@@ -5,7 +5,7 @@ import { CulturasController } from './culturas.controller';
 import { Cultura } from './entities/cultura.entity';
 import { Restaurante } from '../restaurantes/entities/restaurante.entity';
 import { Pais } from '../paises/entities/pais.entity';
-import { Producto } from 'productos/entities/producto.entity';
+import { Producto } from '../productos/entities/producto.entity';
 
 
 @Module({

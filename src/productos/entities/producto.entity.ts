@@ -1,5 +1,5 @@
 
-import { Cultura } from 'culturas/entities/cultura.entity';
+import { Cultura } from '../../culturas/entities/cultura.entity';
 import { Categoria } from '../../categorias/entities/categoria.entity';
 import { Receta } from '../../recetas/entities/receta.entity';
 import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';

@@ -7,7 +7,7 @@ import { EliminarPaisDto } from './dto/eliminar-paises.dto';
 import { AgregarRestaurantesDto } from './dto/agregar-restaurantes.dto';
 import { ActualizarProductosDto } from './dto/actualizar-productos.dto';
 import { plainToInstance } from 'class-transformer';
-import { Producto } from 'productos/entities/producto.entity';
+import { Producto } from '../productos/entities/producto.entity';
 import { Response } from 'express';
 
 @Controller('culturas')
