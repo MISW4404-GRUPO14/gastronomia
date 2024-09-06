@@ -76,18 +76,17 @@ export class ProductosService {
     await this.productoRepository.remove(producto);
   }
 
-  
-
-
   async agregarCategoriaAProducto(productoId: string, categoriaId: string) {
-    const categoriaExiste = await this.categoriaRepository.findBy({ id: categoriaId });
+    const categoriaExiste: Categoria = await this.categoriaRepository.findOne({where: {id: categoriaId}});
 
-    if (!categoriaExiste || categoriaExiste.length==0){
-      console.log(categoriaExiste.length==0)
+    if (!categoriaExiste){
       throw new BusinessLogicException("La categoría no existe", HttpStatus.BAD_REQUEST);
     }
     const producto  = await this.findOne(productoId);
-   
+
+    if (!producto){
+      throw new BusinessLogicException("El producto no existe con ese id", HttpStatus.BAD_REQUEST);
+    }
     producto.categoria = categoriaId;
     return await this.productoRepository.save(producto);
   }
@@ -99,8 +98,14 @@ export class ProductosService {
 
   async actualizarCategoriaEnProductos(productoId: string, categoriaId: string){
     const producto = await this.findOne(productoId);
-    const nuevaCategoria =  await this.productoRepository.findBy({ id:categoriaId });
-    if (!nuevaCategoria){
+
+    
+    if (!producto){
+      throw new BusinessLogicException("El producto no existe con ese id", HttpStatus.BAD_REQUEST);
+    }
+    
+    const categoriaExiste: Categoria = await this.categoriaRepository.findOne({where: {id: categoriaId}});
+    if (!categoriaExiste){
       throw new BusinessLogicException("La categoría no existe", HttpStatus.BAD_REQUEST);
     }
 

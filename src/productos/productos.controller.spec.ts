@@ -3,6 +3,7 @@ import { ProductosController } from './productos.controller';
 import { ProductosService } from './productos.service';
 import { CreateProductoDto } from './dto/create-producto.dto';
 import { UpdateProductoDto } from './dto/update-producto.dto';
+import { CreateCategoriaDto } from './dto/create-categoria.dto';
 
 describe('ProductosController', () => {
   let controller: ProductosController;
@@ -23,7 +24,16 @@ describe('ProductosController', () => {
     providers: [
         {
           provide: ProductosService,
-          useValue: categoriaServiceMock,
+          useValue: {
+            create: jest.fn(), 
+            findAll: jest.fn(),
+            findOne: jest.fn(), 
+            update: jest.fn(), 
+            remove: jest.fn(), 
+            agregarCategoriaAProducto: jest.fn(), 
+            actualizarCategoriaEnProductos: jest.fn(), 
+            eliminarCategoriaDeProducto: jest.fn(), 
+          },
         },
       ],
     }).compile();
@@ -41,7 +51,7 @@ describe('ProductosController', () => {
         nombre: "Producto 1",
         descripcion:"Descripción Producto",
         historia:"historia Producto",
-        idCategoria:"",
+        categoria:"",
         recetas:[],
     };
       await controller.create(createProductoDto);
@@ -67,7 +77,7 @@ describe('ProductosController', () => {
   describe('update', () => {
     it('debería llamar a Categoria.update con el ID y datos correctos', async () => {
       const id = 'uuid';
-      const updateProductoDto:UpdateProductoDto  = { descripcion:"",nombre: 'Receta Actualizada',historia:"", idCategoria:"", recetas:[] };
+      const updateProductoDto:UpdateProductoDto  = { descripcion:"",nombre: 'Receta Actualizada',historia:"", categoria:"", recetas:[] };
       await controller.update(id, updateProductoDto);
       expect(service.update).toHaveBeenCalledWith(id, updateProductoDto);
     });
@@ -81,4 +91,30 @@ describe('ProductosController', () => {
     });
   });
 
+  it('debe agregar una categoría a un producto', async () => {
+    const categoriaDto: CreateCategoriaDto = {
+      categoriaId: '0e07e82b-0a71-465e-ad13-cdf7c8c16c40',
+    };
+    await controller.agregarCategoria("0e07e82b-0a71-465e-ad13-cdf7c8c16c45",categoriaDto);
+
+    expect(service.agregarCategoriaAProducto).toHaveBeenCalledWith( "0e07e82b-0a71-465e-ad13-cdf7c8c16c45", "0e07e82b-0a71-465e-ad13-cdf7c8c16c40");
+
+  });
+
+  it('debería llamar a actualizarProductos con los datos correctos', async () => {
+    const categoriaDto: CreateCategoriaDto = {
+      categoriaId: "0e07e82b-0a71-465e-ad13-cdf7c8c16c40"
+  };
+    await controller.actualizarCategoria("0e07e82b-0a71-465e-ad13-cdf7c8c16c45",categoriaDto);
+    expect(service.actualizarCategoriaEnProductos).toHaveBeenCalledWith( "0e07e82b-0a71-465e-ad13-cdf7c8c16c45", "0e07e82b-0a71-465e-ad13-cdf7c8c16c40");
+  });
+  
+  it('debe eliminar la categoría asociada a un producto', async () => {
+    const productoId = '456';
+    jest.spyOn(service, 'eliminarCategoriaDeProducto').mockResolvedValue(undefined);
+    await controller.eliminarCategoria(productoId);
+  
+    expect(service.eliminarCategoriaDeProducto).toHaveBeenCalledWith(productoId);
+  });
+  
 });

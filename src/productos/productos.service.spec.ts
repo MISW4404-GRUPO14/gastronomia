@@ -4,6 +4,7 @@ import { Producto } from './entities/producto.entity';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Categoria } from '../categorias/entities/categoria.entity';
+import { Cultura } from '../culturas/entities/cultura.entity';
 
 describe('ProductosService', () => {
   let service: ProductosService;
@@ -61,7 +62,7 @@ describe('ProductosService', () => {
         nombre: "Producto Name", 
         descripcion: "descripcion", 
         historia: "Historia", 
-        idCategoria: "categoriaId",
+        categoria: "categoriaId",
         recetas: []
       });
       productosList.push(producto);
@@ -89,7 +90,7 @@ describe('ProductosService', () => {
   it('create retorna un producto nuevo', async () => {
     const prodMock = new Producto();
     prodMock.id = 'prodId';
-    prodMock.idCategoria = "categoriaId"; 
+    prodMock.categoria = "categoriaId"; 
 
     jest.spyOn(repositoryCategoria, 'findOne').mockResolvedValueOnce(categoriasList[0]);
     jest.spyOn(repository, 'save').mockResolvedValueOnce(prodMock);
@@ -99,7 +100,7 @@ describe('ProductosService', () => {
       nombre: "Producto Name", 
       descripcion: "descripcion", 
       historia: "Historia", 
-      idCategoria: null,
+      categoria: null,
       recetas: []
     };
     
@@ -110,18 +111,19 @@ describe('ProductosService', () => {
 
   it('create un producto con id de categoria erronea', async () => {
     
-    const producto: Producto = {
-      id: "",
+    const producto = {
       nombre: "Producto Name", 
       descripcion: "descripcion", 
       historia: "Historia", 
-      idCategoria:'0', 
-      recetas:[]
+      categoria:'0', 
+      recetas:[],
+      cultura: new Cultura
     }
 
-    await expect(() => service.create(producto)).rejects.toHaveProperty("message", "La categoría no existe")
+    await expect(() => service.create(producto)).rejects.toHaveProperty("message", "No existe una categoria con ese id")
 
   });
+
   it('findAll retornar todas las categorias', async () => {
     const categorias: Producto[] = await service.findAll();
     expect(categorias).not.toBeNull();
@@ -130,12 +132,11 @@ describe('ProductosService', () => {
   it('findOne retorna error si un producto no existe', async () => {
     await expect(() => service.findOne("0")).rejects.toHaveProperty("message","No existe un producto con ese id")
   });
-
   
   it('update debe actualizar y retornar un producto existente', async () => {
     const prodMock = new Producto();
     prodMock.id = 'prodId';
-    prodMock.idCategoria = "categoriaId"; 
+    prodMock.categoria = "categoriaId"; 
   
     jest.spyOn(repositoryCategoria, 'findOne').mockResolvedValueOnce(categoriasList[0]);
     jest.spyOn(repository, 'save').mockResolvedValueOnce(prodMock);
@@ -145,7 +146,7 @@ describe('ProductosService', () => {
       nombre: "Producto Name", 
       descripcion: "descripcion", 
       historia: "Historia", 
-      idCategoria: null, 
+      categoria: null, 
       recetas: []
     };
     
@@ -153,7 +154,7 @@ describe('ProductosService', () => {
     const updateProductoDto = {
       ...productoExistente,
       nombre: 'Nombre Modificado',
-      idCategoria: null 
+      categoria: null 
     };
   
     productoRepositoryMock.findOne.mockResolvedValue(productoExistente);
@@ -184,5 +185,143 @@ describe('ProductosService', () => {
 
   it('delete retorna error al elimina un producto', async () => {
     await expect(() => service.remove("0")).rejects.toHaveProperty("message", "No existe un producto con ese id")
+  });
+
+  it('agregarCategoriaAProducto retorna error si una categoria no existe', async () => {
+    await expect(() => service.agregarCategoriaAProducto('productoId', 'categoriaId')).rejects.toHaveProperty("message","La categoría no existe")
+  });
+
+  it('debe asignar la categoría al producto', async () => {
+    const productoId = '456';
+    const categoriaId = '1';
+  
+    const categoria = { id: categoriaId, nombre: 'Categoría 1',descripcion:'', productos:[] };
+    const producto = {
+      id: productoId,
+      nombre: 'Producto 1',
+      descripcion: 'Descripción del producto',
+      categoria: null,
+      historia: 'Historia del producto',
+      recetas: [],
+      cultura: null
+    };
+  
+    jest.spyOn(repositoryCategoria, 'findOne').mockResolvedValue(categoria);
+    jest.spyOn(service, 'findOne').mockResolvedValue(producto);
+    jest.spyOn(repository, 'save').mockResolvedValue({
+      ...producto,
+      categoria: categoriaId
+    });
+  
+    const result = await service.agregarCategoriaAProducto(productoId, categoriaId);
+  
+    expect(service.findOne).toHaveBeenCalledWith(productoId);
+    expect(repository.save).toHaveBeenCalledWith({
+      ...producto,
+      categoria: categoriaId
+    });
+    expect(result.categoria).toEqual(categoriaId);
+  });
+  
+  it('debe obtener una categoría asociada a un producto', async () => {
+    const productoId = '456';
+    const producto = {
+      id: productoId,
+      nombre: 'Producto 1',
+      descripcion: 'Descripción del producto',
+      categoria: '1',
+      historia: 'Historia del producto',
+      recetas: [],
+      cultura: null
+    };
+  
+    jest.spyOn(service, 'findOne').mockResolvedValue(producto);
+  
+    const result = await service.obtenerCategoriaDeProducto(productoId);
+  
+    expect(service.findOne).toHaveBeenCalledWith(productoId);
+    expect(result).toEqual(producto);
+  });
+
+  it('debe actualizar la categoría de un producto', async () => {
+    const productoId = '456';
+    const categoriaId = '1';
+    
+    const producto = {
+      id: productoId,
+      nombre: 'Producto 1',
+      descripcion: 'Descripción del producto',
+      categoria: null,
+      historia: 'Historia del producto',
+      recetas: [],
+      cultura: null
+    };
+  
+    const nuevaCategoria = { id: categoriaId, nombre: 'Categoría Nueva', descripcion: '', productos: [] };
+  
+    jest.spyOn(service, 'findOne').mockResolvedValue(producto);
+    jest.spyOn(repositoryCategoria, 'findOne').mockResolvedValue(nuevaCategoria); 
+    jest.spyOn(repository, 'save').mockResolvedValue({
+      ...producto,
+      categoria: categoriaId
+    });
+  
+    const result = await service.actualizarCategoriaEnProductos(productoId, categoriaId);
+    expect(service.findOne).toHaveBeenCalledWith(productoId);
+    expect(repositoryCategoria.findOne).toHaveBeenCalledWith({ where: { id: categoriaId } }); 
+    expect(repository.save).toHaveBeenCalledWith({
+      ...producto,
+      categoria: categoriaId
+    });
+    expect(result.categoria).toEqual(categoriaId);
+  });
+
+  it('debe lanzar un error si la nueva categoría no existe', async () => {
+    const productoId = '456';
+    const categoriaId = '1';
+    
+    const producto = {
+      id: productoId,
+      nombre: 'Producto 1',
+      descripcion: 'Descripción del producto',
+      categoria: null,
+      historia: 'Historia del producto',
+      recetas: [],
+      cultura: null
+    };
+  
+    jest.spyOn(service, 'findOne').mockResolvedValue(producto);
+  
+    await expect(service.actualizarCategoriaEnProductos(productoId, categoriaId))
+      .rejects.toThrow("La categoría no existe");
+  });
+  
+  it('debe eliminar la categoría de un producto', async () => {
+    const productoId = '456';
+    
+    const producto = {
+      id: productoId,
+      nombre: 'Producto 1',
+      descripcion: 'Descripción del producto',
+      categoria: '1',
+      historia: 'Historia del producto',
+      recetas: [],
+      cultura: null
+    };
+  
+    jest.spyOn(service, 'findOne').mockResolvedValue(producto);
+    jest.spyOn(repository, 'save').mockResolvedValue({
+      ...producto,
+      categoria: null
+    });
+  
+    const result = await service.eliminarCategoriaDeProducto(productoId);
+  
+    expect(service.findOne).toHaveBeenCalledWith(productoId);
+    expect(repository.save).toHaveBeenCalledWith({
+      ...producto,
+      categoria: null
+    });
+    expect(result.categoria).toBeNull();
   });
 });

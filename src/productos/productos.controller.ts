@@ -32,10 +32,6 @@ export class ProductosController {
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.productosService.remove(id);
   }
-
-
-
-
   
   @Post(':id/categorias')
   async agregarCategoria(
