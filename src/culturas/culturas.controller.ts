@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, ParseUUIDPipe, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, ParseUUIDPipe, Res, HttpStatus, HttpCode } from '@nestjs/common';
 import { CulturasService } from './culturas.service';
 import { CreateCulturaDto } from './dto/create-cultura.dto';
 import { UpdateCulturaDto } from './dto/update-cultura.dto';
@@ -8,6 +8,7 @@ import { AgregarRestaurantesDto } from './dto/agregar-restaurantes.dto';
 import { ActualizarProductosDto } from './dto/actualizar-productos.dto';
 import { plainToInstance } from 'class-transformer';
 import { Producto } from 'productos/entities/producto.entity';
+import { Response } from 'express';
 
 @Controller('culturas')
 export class CulturasController {
@@ -34,8 +35,9 @@ export class CulturasController {
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.culturasService.remove(id);
+  async remove(@Param('id', ParseUUIDPipe) id: string, @Res() res: Response): Promise<void> {
+    await this.culturasService.remove(id);
+    res.status(HttpStatus.NO_CONTENT).send();
   }
 
   @Post(':id/paises')

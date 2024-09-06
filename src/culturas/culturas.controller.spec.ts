@@ -3,10 +3,12 @@ import { CulturasController } from './culturas.controller';
 import { CulturasService } from './culturas.service';
 import { UpdateCulturaDto } from './dto/update-cultura.dto';
 import { AgregarPaisesDto } from './dto/agregar-paises.dto';
+import { Response } from 'express';
 
 describe('CulturasController', () => {
   let controller: CulturasController;
   let culturaservice: CulturasService;
+  let mockResponse: Partial<Response>;
 
   const culturaServiceMock = {
     create: jest.fn(),
@@ -18,6 +20,10 @@ describe('CulturasController', () => {
   };
 
   beforeEach(async () => {
+    mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn(),
+    };
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CulturasController],
       providers: [{
@@ -72,7 +78,9 @@ describe('CulturasController', () => {
   describe('remove', () => {
     it('debería llamar a CulturaService.remove con el ID correcto', async () => {
       const id = 'uuid';
-      await controller.remove(id);
+      jest.spyOn(culturaservice, 'remove').mockResolvedValue(undefined);
+      // await controller.remove(id);
+      await controller.remove(id, mockResponse as Response);
       expect(culturaservice.remove).toHaveBeenCalledWith(id);
     });
   });
