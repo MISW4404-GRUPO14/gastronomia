@@ -3,7 +3,6 @@ import { CulturasService } from './culturas.service';
 import { CreateCulturaDto } from './dto/create-cultura.dto';
 import { UpdateCulturaDto } from './dto/update-cultura.dto';
 import { AgregarPaisesDto } from './dto/agregar-paises.dto';
-import { EliminarPaisDto } from './dto/eliminar-paises.dto';
 import { AgregarRestaurantesDto } from './dto/agregar-restaurantes.dto';
 import { Response } from 'express';
 
@@ -36,6 +35,8 @@ export class CulturasController {
     await this.culturasService.remove(id);
     res.status(HttpStatus.NO_CONTENT).send();
   }
+
+  //-----------------------------Paises de una cultura---------------------------------------------------//
 
   @Post(':id/paises')
   async agregarPaises(

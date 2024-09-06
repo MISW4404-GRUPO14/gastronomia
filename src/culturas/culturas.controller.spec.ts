@@ -10,6 +10,9 @@ describe('CulturasController', () => {
   let culturaservice: CulturasService;
   let mockResponse: Partial<Response>;
 
+  const culturaId = '0e07e82b-0a71-465e-ad13-cdf7c8c16c45';
+  const paisId = '0e07e82b-0a71-465e-ad13-cdf7c8c16c40';
+
   const culturaServiceMock = {
     create: jest.fn(),
     findAll: jest.fn(),
@@ -17,6 +20,9 @@ describe('CulturasController', () => {
     update: jest.fn(),
     remove: jest.fn(),
     agregarPaisesACultura: jest.fn(),
+    obtenerPaisesDecultura: jest.fn(), 
+    actualizarPaisesEnCultura: jest.fn(), 
+    eliminarPaisDeCultura: jest.fn()
   };
 
   beforeEach(async () => {
@@ -60,38 +66,66 @@ describe('CulturasController', () => {
 
   describe('findOne', () => {
     it('debería llamar a CulturaService.findOne con el ID correcto', async () => {
-      const id = 'uuid';
-      await controller.findOne(id);
-      expect(culturaservice.findOne).toHaveBeenCalledWith(id);
+      await controller.findOne(culturaId);
+      expect(culturaservice.findOne).toHaveBeenCalledWith(culturaId);
     });
   });
 
   describe('update', () => {
     it('debería llamar a CulturaService.update con el ID y datos correctos', async () => {
-      const id = 'uuid';
       const updateCulturaDto: UpdateCulturaDto = { nombre: 'Cultura Actualizada' };
-      await controller.update(id, updateCulturaDto);
-      expect(culturaservice.update).toHaveBeenCalledWith(id, updateCulturaDto);
+      await controller.update(culturaId, updateCulturaDto);
+      expect(culturaservice.update).toHaveBeenCalledWith(culturaId, updateCulturaDto);
     });
   });
 
   describe('remove', () => {
     it('debería llamar a CulturaService.remove con el ID correcto', async () => {
-      const id = 'uuid';
       jest.spyOn(culturaservice, 'remove').mockResolvedValue(undefined);
-      // await controller.remove(id);
-      await controller.remove(id, mockResponse as Response);
-      expect(culturaservice.remove).toHaveBeenCalledWith(id);
+      await controller.remove(culturaId, mockResponse as Response);
+      expect(culturaservice.remove).toHaveBeenCalledWith(culturaId);
     });
   });
+
+//-----------------------------Paises de una cultura---------------------------------------------------//
 
   describe('Agregar pais a una cultura', () => {
     it('debería llamar a agregarPaisesACultura con los datos correctos', async () => {
       const agregarPaisesDto: AgregarPaisesDto = {
         paisIds: ["0e07e82b-0a71-465e-ad13-cdf7c8c16c40"]
     };
-      await controller.agregarPaises("0e07e82b-0a71-465e-ad13-cdf7c8c16c45",agregarPaisesDto);
-      expect(culturaservice.agregarPaisesACultura).toHaveBeenCalledWith( "0e07e82b-0a71-465e-ad13-cdf7c8c16c45", ["0e07e82b-0a71-465e-ad13-cdf7c8c16c40"]);
+      await controller.agregarPaises(paisId,agregarPaisesDto);
+      expect(culturaservice.agregarPaisesACultura).toHaveBeenCalledWith( paisId, ["0e07e82b-0a71-465e-ad13-cdf7c8c16c40"]);
+    });
+  });
+
+  describe('obtenerPaises', () => {
+    it('debería llamar a obtenerPaisesDecultura con el ID correcto', async () => {
+      await controller.obtenerPaises(culturaId);
+      expect(culturaservice.obtenerPaisesDecultura).toHaveBeenCalledWith(culturaId);
+    });
+  });
+
+  describe('actualizarPaises', () => {
+    it('debería llamar a actualizarPaisesEnCultura con los datos correctos', async () => {
+      const agregarPaisesDto: AgregarPaisesDto = {
+        paisIds: ['0e07e82b-0a71-465e-ad13-cdf7c8c16c40'],
+      };
+      await controller.actualizarPais(culturaId, agregarPaisesDto);
+      expect(culturaservice.actualizarPaisesEnCultura).toHaveBeenCalledWith(
+        culturaId,
+        agregarPaisesDto.paisIds,
+      );
+    });
+  });
+
+  describe('eliminarPais', () => {
+    it('debería llamar a eliminarPaisDeCultura con los IDs correctos', async () => {
+      jest.spyOn(culturaservice, 'eliminarPaisDeCultura').mockResolvedValue(undefined);
+      await controller.eliminarPais(culturaId, paisId, mockResponse as Response);
+      expect(culturaservice.eliminarPaisDeCultura).toHaveBeenCalledWith(culturaId, paisId);
+      expect(mockResponse.status).toHaveBeenCalledWith(204);
+      expect(mockResponse.send).toHaveBeenCalled();
     });
   });
 });

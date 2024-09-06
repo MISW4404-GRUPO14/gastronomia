@@ -5,7 +5,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Pais } from '../paises/entities/pais.entity';
 import { Restaurante } from '../restaurantes/entities/restaurante.entity';
-import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { HttpStatus, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { BusinessLogicException } from '../shared/errors/business-errors';
 import { CreateCulturaDto } from './dto/create-cultura.dto';
 
@@ -14,6 +14,8 @@ describe('CulturasService', () => {
   let culturaRepository: jest.Mocked<Repository<Cultura>>;
   let paisRepository: jest.Mocked<Repository<Pais>>;
   let restauranteRepository: Repository<Restaurante>;
+  const culturaID = 'd84d19a6-2cfd-439e-96ca-01d694920de5';
+  const paisID = '03e029d1-d0b5-4623-a96c-35685fcbe944';
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -24,6 +26,7 @@ describe('CulturasService', () => {
           useValue: {
             find: jest.fn(),
             findOneBy: jest.fn(),
+            findOne: jest.fn(),
             create: jest.fn(),
             save: jest.fn(),
             preload: jest.fn(),
@@ -196,7 +199,7 @@ describe('CulturasService', () => {
     });
   });
   
-
+//-----------------------------Paises de una cultura---------------------------------------------------//
 
   describe('agregarPaisesACultura', () => {
     it('debería lanzar NotFoundException si la cultura no existe', async () => {
@@ -234,6 +237,28 @@ describe('CulturasService', () => {
     });
   });
 
+  describe('obtenerPaisesDecultura', () => {
+    it('should return countries of a culture', async () => {
+      const cultura = { id: culturaID, paises: [{ id: '887b4604-79fb-4f3c-bd9c-e23ac51ce0d8' }] };
+
+      jest.spyOn(culturaRepository, 'findOneBy').mockResolvedValue(cultura as any);
+
+      const result = await culturaservice.obtenerPaisesDecultura(culturaID);
+
+      expect(result).toEqual(cultura);
+      expect(culturaRepository.findOneBy).toHaveBeenCalledWith({ id: culturaID });
+    });
+
+    it('deberia dar NotFoundException como mensaje cuando la cultura no exista', async () => {
+      culturaRepository.findOneBy.mockResolvedValue(null);
+  
+      await expect(culturaservice.obtenerPaisesDecultura(culturaID))
+        .rejects
+        .toThrowError(new NotFoundException(`The culture with the given id ${culturaID} was not found`));
+    });
+  });
+  
+
   describe('actualizarPaisesEnCultura', () => {
     it('debería actualizar países en una cultura', async () => {
       const culturaMock = new Cultura();
@@ -260,31 +285,81 @@ describe('CulturasService', () => {
         .toThrow(BusinessLogicException); 
     });
   });
- 
 
   describe('eliminarPaisDeCultura', () => {
     it('debería lanzar NotFoundException si la cultura no existe', async () => {
-      culturaRepository.findOneBy.mockResolvedValueOnce(null);
-      await expect(culturaservice.eliminarPaisDeCultura('culturaId', 'paisId'))
+      culturaRepository.findOneBy.mockResolvedValue(null);
+
+      await expect(culturaservice.eliminarPaisDeCultura(culturaID, paisID))
         .rejects
-        .toHaveProperty("message", `The culture with the given id culturaId was not found`);
+        .toThrowError(new NotFoundException(`The culture with the given id ${culturaID} was not found`));
     });
 
-    it('debería eliminar un pais de una cultura correctamente', async () => {
-      const paisesMock = new Pais();
-      paisesMock.id = 'paisId';
-
+    it('debería eliminar un país de la cultura correctamente', async () => {
       const culturaMock = new Cultura();
       culturaMock.id = 'culturaId';
-      culturaMock.paises = [paisesMock];
+      const paisMock = new Pais();
+      paisMock.id = 'paisId';
+      culturaMock.paises = [paisMock];
 
-      culturaRepository.findOneBy.mockResolvedValueOnce(culturaMock);
-      culturaRepository.save.mockResolvedValueOnce(culturaMock);
+      culturaRepository.findOneBy.mockResolvedValue(culturaMock);
+      culturaRepository.save.mockResolvedValue(culturaMock);
 
       const result = await culturaservice.eliminarPaisDeCultura('culturaId', 'paisId');
-      expect(result.paises).not.toContainEqual(paisesMock);
+      expect(result.paises).not.toContain(paisMock);
+      expect(culturaRepository.save).toHaveBeenCalledWith(culturaMock);
+    });
+
+    it('debería manejar el caso en que la cultura no tenga países', async () => {
+      const culturaMock = new Cultura();
+      culturaMock.id = 'culturaId';
+      culturaMock.paises = [];
+
+      culturaRepository.findOneBy.mockResolvedValue(culturaMock);
+      culturaRepository.save.mockResolvedValue(culturaMock);
+
+      const result = await culturaservice.eliminarPaisDeCultura('culturaId', 'paisId');
+      expect(result.paises).toEqual([]); 
+      expect(culturaRepository.save).toHaveBeenCalledWith(culturaMock);
+    });
+
+    it('debería lanzar InternalServerErrorException en caso de error al guardar', async () => {
+      const culturaMock = new Cultura();
+      culturaMock.id = 'culturaId';
+      const paisMock = new Pais();
+      paisMock.id = 'paisId';
+      culturaMock.paises = [paisMock];
+
+      culturaRepository.findOneBy.mockResolvedValue(culturaMock);
+      culturaRepository.save.mockRejectedValue(new Error('Database error'));
+
+      await expect(culturaservice.eliminarPaisDeCultura('culturaId', 'paisId'))
+        .rejects
+        .toThrowError(new InternalServerErrorException('Database error'));
     });
   });
+
+  describe('validateArrayPaises', () => {
+    it('debería lanzar BusinessLogicException si alguno de los países no existe', () => {
+      const paises = [{ id: 'paisId' }] as Pais[];
+      const paisIds = ['paisId', 'nonExistingPaisId'];
+
+      expect(() => culturaservice.validateArrayPaises(paises, paisIds))
+        .toThrowError(new BusinessLogicException('Alguno de los paises no existe', HttpStatus.NOT_FOUND));
+    });
+
+    it('no debería lanzar excepción si todos los países existen', () => {
+      const paises = [{ id: 'paisId' }] as Pais[];
+      const paisIds = ['paisId'];
+
+      expect(() => culturaservice.validateArrayPaises(paises, paisIds))
+        .not
+        .toThrow();
+    });
+  });
+
+
+  //-----------------------------Restaurantes de una cultura---------------------------------------------------//  
 
   describe('eliminarRestauranteDeCultura', () => {
     it('debería eliminar un restaurante de una cultura', async () => {
