@@ -923,7 +923,7 @@
 	"variable": [
 		{
 			"key": "token",
-			"value": "Autorización",
+			"value": "Autorizacion",
 			"type": "string"
 		},
 		{
