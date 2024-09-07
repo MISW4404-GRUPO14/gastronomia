@@ -4,9 +4,10 @@ import { RestaurantesController } from './restaurantes.controller';
 import { TypeOrmModule} from '@nestjs/typeorm';
 import { Restaurante } from './entities/restaurante.entity';
 import { Ciudad } from '../ciudades/entities/ciudad.entity';
+import { Cultura } from '../culturas/entities/cultura.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Restaurante, Ciudad])],
+  imports: [TypeOrmModule.forFeature([Restaurante, Ciudad, Cultura])],
   controllers: [RestaurantesController],
   providers: [RestaurantesService],
 })
