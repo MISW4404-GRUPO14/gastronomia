@@ -5,30 +5,41 @@ import { Restaurante } from '../restaurantes/entities/restaurante.entity';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { BusinessLogicException } from '../shared/errors/business-errors';
+import { NotFoundException } from '@nestjs/common';
 
 describe('CiudadesService', () => {
   let service: CiudadesService;
   let ciudadRepository: Repository<Ciudad>;
+  let ciudadRepositoryMock: jest.Mocked<Repository<Ciudad>>
   let restauranteRepository: Repository<Restaurante>;
 
-  const mockCiudad = {
+  const mockCiudad: Ciudad = {
     id: '1',
     nombre: 'Bogotá',
     idPais: '1',
-    restaurantes: []
+    restaurantes: [
+      {
+        id: 'mock:id',
+        nombre: 'Nombre',
+        estrellas: 5,
+        fechasConsecucionEstrellas: undefined,
+        culturas: [],
+        idCiudad: ''
+      }
+    ]
   };
 
   const createCiudadDto = { nombre: 'Bogotá' };
   const updatedCiudadDto = { nombre: 'Updated City' };
 
-  const mockCiudadRepository = {
+  const mockCiudadRepository = () => ({
     create: jest.fn().mockReturnValue(mockCiudad),
     save: jest.fn().mockResolvedValue(mockCiudad),
     find: jest.fn().mockResolvedValue([mockCiudad]),
     findOne: jest.fn().mockResolvedValue(mockCiudad),
     preload: jest.fn().mockResolvedValue(mockCiudad),
     remove: jest.fn().mockResolvedValue(mockCiudad),
-  };
+  });
 
   const mockRestauranteRepository = {
   };
@@ -37,13 +48,23 @@ describe('CiudadesService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CiudadesService,
-        { provide: getRepositoryToken(Ciudad), useValue: mockCiudadRepository },
-        { provide: getRepositoryToken(Restaurante), useValue: mockRestauranteRepository },
+        { provide: getRepositoryToken(Ciudad), useFactory: mockCiudadRepository },
+        { provide: getRepositoryToken(Restaurante),
+           useValue: mockRestauranteRepository 
+        },
+        {
+          provide: getRepositoryToken(Restaurante),
+          useValue: {
+            findOne: jest.fn(),
+            findBy: jest.fn(),
+          }
+        },
       ],
     }).compile();
 
     service = module.get<CiudadesService>(CiudadesService);
     ciudadRepository = module.get<Repository<Ciudad>>(getRepositoryToken(Ciudad));
+    ciudadRepositoryMock = module.get(getRepositoryToken(Ciudad));
     restauranteRepository = module.get<Repository<Restaurante>>(getRepositoryToken(Restaurante));
   });
 
@@ -118,5 +139,107 @@ describe('CiudadesService', () => {
       await expect(service.remove('1')).rejects.toThrow(BusinessLogicException);
     });
   });
+
+  //----------------- Pruebas Cultura - Ciudaddes ---------------------------------//
+
+  describe('ObtenerRestaurantesDeCiudades', () => {
+    it('should return a ciudad by id', async () => {
+      ciudadRepositoryMock.findOne.mockResolvedValue(mockCiudad); // Mock del método findOneBy
+      const resultado = await service.obtenerRestaurantesDeCiudad('1');
+      expect(resultado).toEqual(mockCiudad.restaurantes);
+    });
+
+    it('debería retornar error por al obtener recetas de una cultura que no existe', async () => {
+      ciudadRepositoryMock.findOne.mockResolvedValue(undefined); // Mock del método findOneBy
+      await expect(service.obtenerRestaurantesDeCiudad('no-existe'))
+      .rejects
+      .toHaveProperty("message", `Ciudad con ID no-existe no encontrada`)
+    });
+  });
+
+  describe('agregarProductosAReceta', () => {
+    it('debería agregar restaurantes a la ciudad correctamente', async () => {
+      const ciudadMock = new Ciudad();
+      ciudadMock.id = 'ciudadId';
+      ciudadMock.restaurantes = [];
+      const restauranteMock = new Restaurante();
+      restauranteMock.id = 'restauranteId';
+
+      jest.spyOn( ciudadRepositoryMock, 'findOne').mockResolvedValueOnce(ciudadMock);
+      jest.spyOn(restauranteRepository, 'findOne').mockResolvedValueOnce(restauranteMock);
+      jest.spyOn(ciudadRepositoryMock, 'save').mockResolvedValueOnce(ciudadMock);
+
+      const result = await service.asociarRestauranteACiudad('ciudadId', 'restauranteId');
+      expect(result.restaurantes).toContain(restauranteMock);
+    });
+
+    it('debería dar error cuando se intente agregar un restaurante a una ciudad qe no existe', async () => {
+      jest.spyOn(ciudadRepository, 'findOne').mockResolvedValue(null);
+      await expect(service.asociarRestauranteACiudad('no-existe', 'restauranteId'))
+      .rejects
+      .toThrow(NotFoundException);
+    });
+
+    it('debería dar error cuando se intente agregar un restaurante que no existe a una ciudad', async () => {
+      
+      const ciudadMock = new Ciudad();
+      ciudadMock.id = 'ciudadId';
+      ciudadMock.restaurantes = [];
+    
+      jest.spyOn( ciudadRepositoryMock, 'findOne').mockResolvedValueOnce(ciudadMock);
+      jest.spyOn(restauranteRepository, 'findOne').mockResolvedValueOnce(null);
+      jest.spyOn(ciudadRepositoryMock, 'save').mockResolvedValueOnce(ciudadMock);
+      
+      await expect(service.asociarRestauranteACiudad('ciudadId', 'no-existe'))
+      .rejects
+      .toThrow(NotFoundException);
+    });
+
+    it('debería dar error cuando se intente agregar un restaurante que ya existe en una ciudad', async () => {
+      
+      const ciudadMock = new Ciudad();
+      ciudadMock.id = 'ciudadId';
+      ciudadMock.restaurantes = [];
+      const restauranteMock = new Restaurante();
+      restauranteMock.id = 'restauranteId';
+
+      jest.spyOn( ciudadRepositoryMock, 'findOne').mockResolvedValueOnce(ciudadMock);
+      jest.spyOn(restauranteRepository, 'findOne').mockResolvedValueOnce(restauranteMock);
+      jest.spyOn(ciudadRepositoryMock, 'save').mockResolvedValueOnce(ciudadMock);
+
+      const result = await service.asociarRestauranteACiudad('ciudadId', 'restauranteId');
+      await expect(service.asociarRestauranteACiudad('ciudadId', 'restauranteId'))
+      .rejects
+      .toThrow(Error);
+    });
+
+  });
+
+  describe('eliminarRestauranteDeCiudad', () => {
+    it('debería lanzar NotFoundException si la cultura no existe', async () => {
+      jest.spyOn(ciudadRepository, 'findOne').mockResolvedValueOnce(null);
+      await expect(service.eliminarRestauranteDeCiudad('ciudadId', 'restauranteId'))
+        .rejects
+        .toHaveProperty("message", `Ciudad con ID ciudadId no encontrada`);
+    });
+
+    it('debería eliminar una receta de una cultura correctamente', async () => {
+      const restauranteMock = new Restaurante();
+      restauranteMock.id = 'restauranteId';
+
+      const ciudadMock = new Ciudad();
+      ciudadMock.id = 'ciudadId';
+      ciudadMock.restaurantes = [restauranteMock];
+
+      jest.spyOn(ciudadRepository, 'findOne').mockResolvedValueOnce(ciudadMock);
+      jest.spyOn(ciudadRepository, 'save').mockResolvedValueOnce(ciudadMock);
+
+      const result = await service.eliminarRestauranteDeCiudad('ciudadId', 'restauranteId');
+      console.log(result)
+      expect(result).toEqual(undefined);
+    }); 
+  });
+
+  
 
 });
