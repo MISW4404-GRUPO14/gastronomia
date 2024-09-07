@@ -3,8 +3,6 @@ import { CulturasService } from './culturas.service';
 import { CreateCulturaDto } from './dto/create-cultura.dto';
 import { UpdateCulturaDto } from './dto/update-cultura.dto';
 import { AgregarPaisesDto } from './dto/agregar-paises.dto';
-import { EliminarPaisDto } from './dto/eliminar-paises.dto';
-import { AgregarRestaurantesDto } from './dto/agregar-restaurantes.dto';
 import { ActualizarProductosDto } from './dto/actualizar-productos.dto';
 import { plainToInstance } from 'class-transformer';
 import { Producto } from '../productos/entities/producto.entity';
@@ -42,6 +40,8 @@ export class CulturasController {
     res.status(HttpStatus.NO_CONTENT).send();
   }
 
+  //-----------------------------Paises de una cultura---------------------------------------------------//
+
   @Post(':id/paises')
   async agregarPaises(
     @Param('id', ParseUUIDPipe) id: string,
@@ -64,13 +64,25 @@ export class CulturasController {
   ){
     return this.culturasService.actualizarPaisesEnCultura(id, agregarPaisesDto.paisIds);
   }
-
+  
   @Delete(':culturaId/paises/:paisId')
+  @HttpCode(204)
   async eliminarPais(
-    @Param() params: EliminarPaisDto
+    @Param('culturaId', ParseUUIDPipe) culturaId: string,
+    @Param('paisId', ParseUUIDPipe) paisId: string,
+    @Res() res: Response
+  ): Promise<void> {
+    await this.culturasService.eliminarPaisDeCultura(culturaId, paisId);
+    res.status(HttpStatus.NO_CONTENT).send();
+  }
+
+
+  @Post(':id/paises')
+  async agregarRestaurantes(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() agregarRecetaDto: AgregarRecetasDto
   ){
-    const {culturaId, paisId} = params
-    return this.culturasService.eliminarPaisDeCultura(culturaId, paisId);
+    return this.culturasService.agregarRecetaACultura(id, agregarRecetaDto.recetasId);
   }
 
   @Post(':id/recetas')
@@ -135,3 +147,5 @@ export class CulturasController {
 
 
 }
+
+//-----------------------------Restaurantes de una cultura---------------------------------------------------//

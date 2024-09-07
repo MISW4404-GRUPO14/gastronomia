@@ -15,7 +15,7 @@ import { Producto } from '../../productos/entities/producto.entity';
         @Column('text')
         descripcion: string;
 
-        @ManyToMany(() => Pais, pais => pais.culturas)
+        @ManyToMany(() => Pais, (pais) => pais.culturas)
         @JoinTable()
         paises: Pais[];
       
