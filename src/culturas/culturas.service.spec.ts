@@ -7,9 +7,8 @@ import { Pais } from '../paises/entities/pais.entity';
 import { Restaurante } from '../restaurantes/entities/restaurante.entity';
 import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { BusinessLogicException } from '../shared/errors/business-errors';
+import { CreateCulturaDto } from './dto/create-cultura.dto';
 import { Receta } from '../recetas/entities/receta.entity';
-
-
 
 const cultura: Cultura = {
   id: 'mock-uuid',
@@ -95,6 +94,16 @@ describe('CulturasService', () => {
       const result = await culturaservice.create(createCulturaDto);
       expect(result).toEqual(createCulturaDto);
     });
+
+    it('debería lanzar NotFoundException al crear mal una cultura', async () => {
+      const createCulturaDto: CreateCulturaDto = {
+        nombre: 'Test Cultura',
+        descripcion: ''
+      };
+      jest.spyOn(culturaRepository, 'save').mockRejectedValue(new Error());
+
+      await expect(culturaservice.create(createCulturaDto)).rejects.toThrow(InternalServerErrorException);
+    });
   });
 
   describe('findAll', () => {
@@ -107,6 +116,28 @@ describe('CulturasService', () => {
 
       const result = await culturaservice.findAll();
       expect(result).toEqual(culturasMock);
+    });
+
+    it('debería lanzar NotFoundException al no encontrar ninguna cultura', async () => {
+      jest.spyOn(culturaRepository, 'find').mockRejectedValue(new Error());
+
+      await expect(culturaservice.findAll()).rejects.toThrow(InternalServerErrorException);
+    });
+  });
+
+  describe('findOne', () => {
+    it('debería retornar una cultura con id determinado', async () => {
+      const cultura = new Cultura();
+      cultura.id = 'uuid';
+      jest.spyOn(culturaRepository, 'findOneBy').mockResolvedValue(cultura);
+
+      expect(await culturaservice.findOne('uuid')).toEqual(cultura);
+    });
+
+    it('debería lanzar NotFoundException al encontrar una cultura que no existe', async () => {
+      jest.spyOn(culturaRepository, 'findOneBy').mockResolvedValue(null);
+
+      await expect(culturaservice.findOne('uuid')).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -135,7 +166,14 @@ describe('CulturasService', () => {
 
       await expect(culturaservice.update('culturaId', updateCulturaDto))
         .rejects
-        .toThrow(InternalServerErrorException);
+        .toThrow(NotFoundException);
+    });
+
+    it('deberia dar un InternalServerErrorException error', async () => {
+      jest.spyOn(culturaRepository, 'preload').mockResolvedValue(new Cultura());
+      jest.spyOn(culturaRepository, 'save').mockRejectedValue(new Error());
+
+      await expect(culturaservice.update('uuid', { nombre: 'Updated Cultura' })).rejects.toThrow(InternalServerErrorException);
     });
   });
 
@@ -146,7 +184,7 @@ describe('CulturasService', () => {
       culturaRepository.remove.mockResolvedValue(culturaMock);
   
       const result = await culturaservice.remove('culturaId');
-      expect(result).toEqual(culturaMock);
+      expect(result).toEqual(undefined);
     });
   
     it('debería lanzar NotFoundException al eliminar una cultura que no existe', async () => {
@@ -154,6 +192,37 @@ describe('CulturasService', () => {
       await expect(culturaservice.remove('culturaId'))
         .rejects
         .toThrow(NotFoundException);
+    });
+
+    it('should throw NotFoundException if cultura not found', async () => {
+      const id = 'uuid';
+
+      jest.spyOn(culturaservice, 'findOne').mockResolvedValue(null);
+
+      await expect(culturaservice.remove(id)).rejects.toThrow(NotFoundException);
+      expect(culturaservice.findOne).toHaveBeenCalledWith(id);
+    });
+
+    it('deberia dar un Error', async () => {
+      const cultura = new Cultura();
+      cultura.id = 'uuid';
+      jest.spyOn(culturaRepository, 'findOneBy').mockResolvedValue(cultura);
+      jest.spyOn(culturaRepository, 'remove').mockRejectedValue(new Error());
+
+      await expect(culturaservice.remove('uuid')).rejects.toThrow(Error);
+    });
+
+    it('debería lanzar InternalServerErrorException', async () => {
+      const id = 'uuid';
+      const cultura = new Cultura();
+      cultura.id = id;
+
+      jest.spyOn(culturaservice, 'findOne').mockResolvedValue(cultura);
+      jest.spyOn(culturaRepository, 'remove').mockRejectedValue(new Error('Database error'));
+
+      await expect(culturaservice.remove(id)).rejects.toThrow(InternalServerErrorException);
+      expect(culturaservice.findOne).toHaveBeenCalledWith(id);
+      expect(culturaRepository.remove).toHaveBeenCalledWith(cultura);
     });
   });
   
