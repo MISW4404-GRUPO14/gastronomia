@@ -128,20 +128,27 @@ export class CulturasService {
     return await this.culturaRepository.save(cultura);
   }
   
-
   //Método para eliminar un pais de una cultura
-  async eliminarPaisDeCultura(culturaId: string, paisId: string){
+  async eliminarPaisDeCultura(culturaId: string, paisId: string): Promise<Cultura> {
     const culture = await this.findOne(culturaId);
+    
+    if (!culture) {
+      throw new NotFoundException(`La cultura con ID ${culturaId} no fue encontrada`);
+    }
+    if (!culture.paises) {
+      culture.paises = [];
+    }  
     culture.paises = culture.paises.filter(pais => pais.id !== paisId);
-
     return await this.culturaRepository.save(culture);
   }
-
+  
   validateArrayPaises(paises, paisIds){
     if (paises.length !== paisIds.length) {
       throw new BusinessLogicException(`Alguno de los paises no existe`, HttpStatus.NOT_FOUND);
     }
   }
+
+  
 
   //-----------------------------Restaurantes de una cultura---------------------------------------------------//
 

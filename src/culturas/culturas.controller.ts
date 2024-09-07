@@ -1,10 +1,8 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, ParseUUIDPipe, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, ParseUUIDPipe, Res, HttpStatus, HttpCode } from '@nestjs/common';
 import { CulturasService } from './culturas.service';
 import { CreateCulturaDto } from './dto/create-cultura.dto';
 import { UpdateCulturaDto } from './dto/update-cultura.dto';
 import { AgregarPaisesDto } from './dto/agregar-paises.dto';
-import { EliminarPaisDto } from './dto/eliminar-paises.dto';
-import { AgregarRestaurantesDto } from './dto/agregar-restaurantes.dto';
 import { Response } from 'express';
 import { AgregarRecetasDto } from './dto/agregar-receta.dto';
 import { EliminarRecetaDto } from './dto/eliminar-receta.dtos';
@@ -39,6 +37,8 @@ export class CulturasController {
     res.status(HttpStatus.NO_CONTENT).send();
   }
 
+  //-----------------------------Paises de una cultura---------------------------------------------------//
+
   @Post(':id/paises')
   async agregarPaises(
     @Param('id', ParseUUIDPipe) id: string,
@@ -61,13 +61,25 @@ export class CulturasController {
   ){
     return this.culturasService.actualizarPaisesEnCultura(id, agregarPaisesDto.paisIds);
   }
-
+  
   @Delete(':culturaId/paises/:paisId')
+  @HttpCode(204)
   async eliminarPais(
-    @Param() params: EliminarPaisDto
+    @Param('culturaId', ParseUUIDPipe) culturaId: string,
+    @Param('paisId', ParseUUIDPipe) paisId: string,
+    @Res() res: Response
+  ): Promise<void> {
+    await this.culturasService.eliminarPaisDeCultura(culturaId, paisId);
+    res.status(HttpStatus.NO_CONTENT).send();
+  }
+
+
+  @Post(':id/paises')
+  async agregarRestaurantes(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() agregarRecetaDto: AgregarRecetasDto
   ){
-    const {culturaId, paisId} = params
-    return this.culturasService.eliminarPaisDeCultura(culturaId, paisId);
+    return this.culturasService.agregarRecetaACultura(id, agregarRecetaDto.recetasId);
   }
 
   @Post(':id/recetas')
@@ -101,3 +113,5 @@ export class CulturasController {
     return this.culturasService.eliminarRecetaDeCultura(culturaId, recetaId);
   }
 }
+
+//-----------------------------Restaurantes de una cultura---------------------------------------------------//
