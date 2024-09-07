@@ -7,6 +7,8 @@ import { In, Repository } from 'typeorm';
 import { Pais } from '../paises/entities/pais.entity';
 import { BusinessLogicException } from '../shared/errors/business-errors';
 import { Restaurante } from '../restaurantes/entities/restaurante.entity';
+import { Receta } from '../recetas/entities/receta.entity';
+
 
 @Injectable()
 export class CulturasService {
@@ -21,7 +23,10 @@ export class CulturasService {
     private readonly paisRepository: Repository<Pais>,
 
     @InjectRepository(Restaurante)
-    private readonly restauranteRepository: Repository<Restaurante>
+    private readonly restauranteRepository: Repository<Restaurante>,
+
+    @InjectRepository(Receta)
+    private readonly recetaRepository: Repository<Receta>
   ){}
   
   async create(createCulturaDto: CreateCulturaDto) {
@@ -165,4 +170,50 @@ export class CulturasService {
       throw new BusinessLogicException(`Alguno de los restaurantes no existe`, HttpStatus.NOT_FOUND);
     }
   }
+
+   //-----------------------------Recetas de una cultura---------------------------------------------------//
+
+   //Metodo para agregar una receta a una cultura
+   async agregarRecetaACultura(culturaId: string, recetasIds: string[]) {
+    const cultura = await this.obtenerRecetasDeCultura(culturaId);
+    const recetas = await this.recetaRepository.findBy({ id: In(recetasIds) });
+    this.validateArrayRecetas(recetas, recetasIds);
+    cultura.recetas.push(...recetas);
+    return await this.culturaRepository.save(cultura);
+  }
+
+  async obtenerRecetasDeCultura(culturaId: string){
+    const cultura = await this.culturaRepository.findOne(
+      {
+        where: { id: culturaId },
+        relations: ['recetas'],
+      }
+    );
+    if(!cultura){
+      throw new BusinessLogicException(`La cultura ingresada no existe`, HttpStatus.NOT_FOUND);
+      }
+    return cultura;
+  }
+
+  async actualizarRecetasEnCultura(culturaId: string, recetasIds: string[]){
+    const cultura = await this.obtenerRecetasDeCultura(culturaId);
+    const nuevasRecetas =  await this.recetaRepository.findBy({ id: In(recetasIds) });
+    this.validateArrayRecetas(nuevasRecetas, recetasIds)
+    cultura.recetas = nuevasRecetas;
+    return await this.culturaRepository.save(cultura);
+  }
+
+  async eliminarRecetaDeCultura(culturaId: string, recetaId: string){
+    const cultura = await this.obtenerRecetasDeCultura(recetaId);
+    cultura.recetas = cultura.recetas.filter(receta => receta.id !== recetaId);
+
+    return await this.culturaRepository.save(cultura);
+  }
+
+  validateArrayRecetas(recetas, recetasIds){
+    if (recetas.length !== recetasIds.length) {
+      throw new BusinessLogicException(`Algunas de las recetas existe`, HttpStatus.NOT_FOUND);
+    }
+  }
 }
+
