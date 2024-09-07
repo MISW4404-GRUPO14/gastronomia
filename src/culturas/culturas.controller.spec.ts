@@ -8,6 +8,9 @@ import { AgregarRecetasDto } from './dto/agregar-receta.dto';
 import { Receta } from '../recetas/entities/receta.entity';
 import { Cultura } from './entities/cultura.entity';
 import { EliminarRecetaDto } from './dto/eliminar-receta.dtos';
+import { ActualizarProductosDto } from './dto/actualizar-productos.dto';
+import { Producto } from '../productos/entities/producto.entity';
+import { plainToInstance } from 'class-transformer';
 
 const cultura: Cultura = {
   id: 'mock-uuid',
@@ -25,6 +28,17 @@ const cultura: Cultura = {
       video: "https://www.youtube.com/watch?v=CrMAy18VRg4",
       cultura: new Cultura,
       productos: []
+    }
+  ],
+  productos:[
+    {
+      id: 'mock-uuid_producto',
+      nombre: "Arroz",
+      descripcion: "El arroz es un cereal básico en la dieta de muchas culturas alrededor del mundo. Es conocido por su versatilidad en la cocina, pudiéndose preparar en una amplia variedad de platos, desde acompañamientos hasta platillos principales.",
+      historia: "El arroz ha sido cultivado durante más de 8,000 años, con orígenes en Asia. A lo largo de la historia, ha sido un alimento esencial para diversas civilizaciones, especialmente en Asia, donde sigue siendo un alimento primordial en la dieta diaria.",
+      cultura: new Cultura,
+      categoria:"mock-uuid",
+      recetas: []
     }
   ]
 }
@@ -44,7 +58,12 @@ describe('CulturasController', () => {
     agregarRecetaACultura: jest.fn(),
     actualizarRecetasEnCultura: jest.fn(),
     obtenerRecetasDeCultura: jest.fn(),
-    eliminarRecetaDeCultura: jest.fn()
+    eliminarRecetaDeCultura: jest.fn(),
+    agregarProductoAcultura: jest.fn(),
+    obtenerProductoDeCultura: jest.fn(),
+    obtenerTodoLosProductosDeCultura: jest.fn(),
+    actualizarProductosDeLaCultura: jest.fn(),
+    eliminarProductoDeCultura: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -180,4 +199,53 @@ describe('CulturasController', () => {
     });
   });
 
+  describe('agregar un producto a la cultura', () => {
+    it('debería agregar un producto a la cultura', async () => {
+      const culturaId ="0e07e82b-0a71-465e-ad13-cdf7c8c16c45";
+      const productoId = "0e07e82b-0a71-465e-ad13-cdf7c8c16c50";
+      await controller.agregarProductoAcultura(culturaId,productoId);
+      expect(culturaservice.agregarProductoAcultura).toHaveBeenCalledWith(culturaId, productoId);
+    });
+  });
+
+  describe('obtener un producto de la cultura', () => {
+    it('debería obtener un producto de la cultura', async () => {
+      const culturaId ="0e07e82b-0a71-465e-ad13-cdf7c8c16c45";
+      const productoId = "0e07e82b-0a71-465e-ad13-cdf7c8c16c50";
+
+      await controller.obtenerProductoDeCultura(culturaId, productoId);
+      expect(culturaservice.obtenerProductoDeCultura).toHaveBeenCalledWith(culturaId, productoId);
+    });
+    
+    it('debería obtener todos los productos de la cultura', async () => {
+      const culturaId = 'mockCulturaId';
+      const mockProductos = [{ id: 'prod1', nombre: 'Producto 1',descripcion:'',categoria:'',historia:'',recetas:[],cultura:new Cultura }, { id: 'prod2', nombre: 'Producto 2',descripcion:'',categoria:'',historia:'',recetas:[],cultura:new Cultura }];
+      await controller.obtenerTodoLosProductosDeCultura(culturaId);
+
+      expect(culturaservice.obtenerTodoLosProductosDeCultura).toHaveBeenCalledWith(culturaId);
+    });
+
+  });
+
+  describe('actualizar los productos de la cultura', () => {
+    it('debería actualizar los productos de la cultura', async () => {
+      const culturaId = 'mockCulturaId';
+      const actualizarProductosDto: ActualizarProductosDto = {
+        productosIds: ['prod1', 'prod2'],
+      };
+      const productos = plainToInstance(Producto, actualizarProductosDto.productosIds);
+      await controller.actualizarProductosDeLaCultura(culturaId, actualizarProductosDto);
+      expect(culturaservice.actualizarProductosDeLaCultura).toHaveBeenCalledWith(culturaId, productos);
+    });
+  });
+  
+  describe('eliminar un producto de la cultura', () => {  
+    it('debería eliminar un producto de la cultura', async () => {
+      const culturaId = 'mockCulturaId';
+      const productoId = 'mockProductoId';
+
+      await controller.eliminarProductoDeCultura(culturaId, productoId);
+      expect(culturaservice.eliminarProductoDeCultura).toHaveBeenCalledWith(culturaId, productoId);
+    });
+  });
 });
