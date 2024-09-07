@@ -7,7 +7,6 @@ import { AgregarCulturasDto } from './dto/agregar-culturas.dto';
 @Controller('restaurantes')
 export class RestaurantesController {
   constructor(private readonly restaurantesService: RestaurantesService) {}
-
   @Post()
   create(@Body() createRestauranteDto: CreateRestauranteDto) {
     return this.restaurantesService.create(createRestauranteDto);
@@ -40,6 +39,10 @@ export class RestaurantesController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() agregarCulturasDto: AgregarCulturasDto
   ){
+    console.log('Recibido culturaIds', agregarCulturasDto.culturaIds);
+    console.log('Recibido restauranteid', id);
+    const restaurante = await this.restaurantesService.findOne(id);
+    console.log('Restaurante encontrado', restaurante);
     return this.restaurantesService.agregarCulturasARestaurante(id, agregarCulturasDto.culturaIds);
   }
 

@@ -17,10 +17,9 @@ export class RestaurantesService {
     @InjectRepository(Restaurante)
     private readonly restauranteRepository: Repository<Restaurante>,
 
-    @InjectRepository(Cultura)  // Inyección del repositorio de Cultura
+    @InjectRepository(Cultura)
     private readonly culturaRepository: Repository<Cultura>,
   ){}
-  
   async create(createRestauranteDto: CreateRestauranteDto) {
     try{
       const restaurante = this.restauranteRepository.create(createRestauranteDto);
@@ -73,16 +72,18 @@ export class RestaurantesService {
     await this.restauranteRepository.remove( restaurante );
   }
 
-  // Método para agregar culturas a un restaurante
+  //Método para agregar culturas a un restaurante
   async agregarCulturasARestaurante(restauranteId: string, culturaIds: string[]) {
     const restaurante = await this.findOne(restauranteId);
-    if(!restaurante.culturas) 
-      restaurante.culturas = []
+    if (!restaurante.culturas) {
+      restaurante.culturas = [];
+    }
     const culturas = await this.culturaRepository.findBy({ id: In(culturaIds) });
+    console.log('Culturas encontradas:', culturas);
     this.validateArrayCulturas(culturas, culturaIds);
     restaurante.culturas.push(...culturas);
+    console.log('Culturas agregadas:', restaurante);
     return await this.restauranteRepository.save(restaurante);
-    
   }
 
   // async agregarCulturasARestaurante(restauranteId: string, culturaIds: string[]) {
@@ -127,9 +128,6 @@ export class RestaurantesService {
   //     throw new BusinessLogicException(`Failed to add culturas to restaurante: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
   //   }
   // }
-  
-  
-  
 
   // Método para obtener culturas de un restaurante
   async obtenerCulturasDeRestaurante(restauranteId: string) {
@@ -156,7 +154,8 @@ export class RestaurantesService {
   }
 
   // Validación de que todas las culturas existen
-  private validateArrayCulturas(culturas: Cultura[], culturaIds: string[]) {  // Definición del método de validación
+  private validateArrayCulturas(culturas, culturaIds) { 
+    console.log('Culturas encontradas:', culturas);
     if (culturas.length !== culturaIds.length) {
       throw new BusinessLogicException(`Alguna de las culturas no existe`, HttpStatus.NOT_FOUND);
     }
