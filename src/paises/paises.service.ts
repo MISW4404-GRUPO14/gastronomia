@@ -30,7 +30,7 @@ export class PaisesService {
 
   async findAll() {
     try {
-      const paises = await this.paisRepository.find(); // Usa await aquí
+      const paises = await this.paisRepository.find(); 
       return paises;
     } catch (error) {
       throw new BusinessLogicException('Failed to get paises due to a server error', HttpStatus.INTERNAL_SERVER_ERROR);

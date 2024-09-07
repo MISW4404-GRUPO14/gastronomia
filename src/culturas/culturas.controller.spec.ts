@@ -46,7 +46,7 @@ describe('CulturasController', () => {
     agregarPaisesACultura: jest.fn(),
     obtenerPaisesDecultura: jest.fn(), 
     actualizarPaisesEnCultura: jest.fn(), 
-    eliminarPaisDeCultura: jest.fn()
+    eliminarPaisDeCultura: jest.fn(),
     agregarRecetaACultura: jest.fn(),
     actualizarRecetasEnCultura: jest.fn(),
     obtenerRecetasDeCultura: jest.fn(),
