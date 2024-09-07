@@ -137,7 +137,6 @@ export class CulturasService {
     return await this.culturaRepository.save(culture);
   }
   
-
   validateArrayPaises(paises, paisIds){
     if (paises.length !== paisIds.length) {
       throw new BusinessLogicException(`Alguno de los paises no existe`, HttpStatus.NOT_FOUND);

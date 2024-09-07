@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, ParseUUIDPipe, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, ParseUUIDPipe, Res, HttpStatus, HttpCode } from '@nestjs/common';
 import { CulturasService } from './culturas.service';
 import { CreateCulturaDto } from './dto/create-cultura.dto';
 import { UpdateCulturaDto } from './dto/update-cultura.dto';
@@ -62,6 +62,7 @@ export class CulturasController {
   }
   
   @Delete(':culturaId/paises/:paisId')
+  @HttpCode(204)
   async eliminarPais(
     @Param('culturaId', ParseUUIDPipe) culturaId: string,
     @Param('paisId', ParseUUIDPipe) paisId: string,
@@ -80,3 +81,5 @@ export class CulturasController {
     return this.culturasService.agregarRestaurantesACultura(id, agregarRestaurantesDto.restaurantesIds);
   }
 }
+
+//-----------------------------Restaurantes de una cultura---------------------------------------------------//

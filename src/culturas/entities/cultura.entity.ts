@@ -14,7 +14,7 @@ import { Pais } from '../../paises/entities/pais.entity';
         @Column('text')
         descripcion: string;
 
-        @ManyToMany(() => Pais, pais => pais.culturas)
+        @ManyToMany(() => Pais, (pais) => pais.culturas)
         @JoinTable()
         paises: Pais[];
       

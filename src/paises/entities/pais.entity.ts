@@ -13,7 +13,7 @@ export class Pais {
     @OneToMany(() => Ciudad, ciudad => ciudad.idPais)
     ciudades: Ciudad[];
 
-    @ManyToMany(() => Cultura, (cultura) => cultura.paises)
-    @JoinTable()
+    @ManyToMany(() => Cultura, cultura => cultura.paises)
+    // @JoinTable()
     culturas: Cultura[];
 }
