@@ -387,7 +387,7 @@ describe('CulturasService', () => {
     });
   });
 
-  describe('ObtenerRecetasDeProductos', () => {
+  describe('ObtenerRecetasDeCultura', () => {
     it('debería retornar todas las recetas de una cultura', async () => {
       culturaRepository.findOne.mockResolvedValue(cultura); // Mock del método findOneBy
       const resultado = await culturaservice.obtenerRecetasDeCultura('mock-uuid');

@@ -70,16 +70,8 @@ export class CulturasController {
     return this.culturasService.eliminarPaisDeCultura(culturaId, paisId);
   }
 
-  @Post(':id/paises')
-  async agregarRestaurantes(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() agregarRestaurantesDto: AgregarRestaurantesDto
-  ){
-    return this.culturasService.agregarRestaurantesACultura(id, agregarRestaurantesDto.restaurantesIds);
-  }
-
   @Post(':id/recetas')
-  async agregarProductos(
+  async agregarRecetas(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() agregarRecetaDto: AgregarRecetasDto
   ){
@@ -87,14 +79,14 @@ export class CulturasController {
   }
 
   @Get(':id/recetas')
-  async obtenerProductos(
+  async obtenerRecetas(
     @Param('id', ParseUUIDPipe) id: string
   ){
     return this.culturasService.obtenerRecetasDeCultura(id);
   }
 
   @Put(':id/recetas')
-  async actualizarProductos(
+  async actualizarRecetas(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() agregarRecetasDto: AgregarRecetasDto
   ){
@@ -102,7 +94,7 @@ export class CulturasController {
   }
 
   @Delete(':id/recetas/:recetaId')
-  async eliminarProducto(
+  async eliminarReceta(
     @Param() params: EliminarRecetaDto
   ){
     const {culturaId, recetaId} = params
