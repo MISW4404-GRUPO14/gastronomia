@@ -4,6 +4,30 @@ import { CulturasService } from './culturas.service';
 import { UpdateCulturaDto } from './dto/update-cultura.dto';
 import { AgregarPaisesDto } from './dto/agregar-paises.dto';
 import { Response } from 'express';
+import { AgregarRecetasDto } from './dto/agregar-receta.dto';
+import { Receta } from '../recetas/entities/receta.entity';
+import { Cultura } from './entities/cultura.entity';
+import { EliminarRecetaDto } from './dto/eliminar-receta.dtos';
+
+const cultura: Cultura = {
+  id: 'mock-uuid',
+  nombre: 'Cultura Mock',
+  descripcion: 'Descripcion Mock',
+  paises: [],
+  restaurantes: [],
+  recetas: [
+    {
+      id: 'mock-uuid',
+      nombre: "Paella española",
+      descripcion: "La paella es un tradicional plato español originario de Valencia, famoso por su combinación de sabores mediterráneos. Se elabora con arroz como ingrediente principal, al que se añade una variedad de mariscos como gambas, mejillones y calamares, junto con pollo o conejo, verduras frescas y azafrán, que le da su característico color dorado. Cocinada a fuego lento en una sartén ancha y poco profunda, la paella es un festín que celebra la riqueza culinaria de la región.",
+      foto: "https://images.pexels.com/photos/16743486/pexels-photo-16743486/free-photo-of-comida-restaurante-langosta-cocinando.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      proceso: "Preparación de ingredientes: Limpia y corta los mariscos, el pollo (o conejo), y las verduras (pimiento, tomate,judías verdes). Ten listo el caldo de pescado o pollo, y disuelve el azafrán en un poco de caldo caliente.Cocción de carnes: En una paellera con aceite de oliva, dora el pollo o conejo, retíralo y resérvalo. Luego, sofríe los mariscos hasta que estén ligeramente cocidos y también resérvalos. Sofrito: En la misma paellera, añade más aceite si es necesario, sofríe el pimiento, tomate rallado y ajo hasta que estén tiernos. Añadir arroz: Incorpora el arroz al sofrito y mézclalo bien para que absorba los sabores. Añadir caldo y azafrán: Vierte el caldo caliente y el azafrán disuelto. Coloca las carnes y verduras reservadas, distribuyéndolas uniformemente. Cocina a fuego medio-alto hasta que el arroz esté tierno y el caldo se haya absorbido. Cocción final: Añade los mariscos en los últimos minutos de cocción, dejando que se terminen de cocinar sobre el arroz. Deja reposar unos minutos antes de servir.",
+      video: "https://www.youtube.com/watch?v=CrMAy18VRg4",
+      cultura: new Cultura,
+      productos: []
+    }
+  ]
+}
 
 describe('CulturasController', () => {
   let controller: CulturasController;
@@ -17,6 +41,10 @@ describe('CulturasController', () => {
     update: jest.fn(),
     remove: jest.fn(),
     agregarPaisesACultura: jest.fn(),
+    agregarRecetaACultura: jest.fn(),
+    actualizarRecetasEnCultura: jest.fn(),
+    obtenerRecetasDeCultura: jest.fn(),
+    eliminarRecetaDeCultura: jest.fn()
   };
 
   beforeEach(async () => {
@@ -94,4 +122,62 @@ describe('CulturasController', () => {
       expect(culturaservice.agregarPaisesACultura).toHaveBeenCalledWith( "0e07e82b-0a71-465e-ad13-cdf7c8c16c45", ["0e07e82b-0a71-465e-ad13-cdf7c8c16c40"]);
     });
   });
+
+  describe('Agregar receta a cultura', () => {
+    it('debería llamar a agregarRecetasACultura con los datos correctos', async () => {
+      const agregarProductosDto: AgregarRecetasDto = {
+        recetasId: ["0e07e82b-0a71-465e-ad13-cdf7c8c16c40"]
+    };
+      await controller.agregarRecetas("0e07e82b-0a71-465e-ad13-cdf7c8c16c45",agregarProductosDto);
+      expect(culturaservice.agregarRecetaACultura).toHaveBeenCalledWith( "0e07e82b-0a71-465e-ad13-cdf7c8c16c45", ["0e07e82b-0a71-465e-ad13-cdf7c8c16c40"]);
+    });
+  });
+  
+  describe('Actualizar recetas de culturas', () => {
+    it('debería llamar a actualizarRecetas con los datos correctos', async () => {
+      const agregarProductosDto: AgregarRecetasDto = {
+        recetasId: ["0e07e82b-0a71-465e-ad13-cdf7c8c16c40"]
+    };
+      await controller.actualizarRecetas("0e07e82b-0a71-465e-ad13-cdf7c8c16c45",agregarProductosDto);
+      expect(culturaservice.actualizarRecetasEnCultura).toHaveBeenCalledWith( "0e07e82b-0a71-465e-ad13-cdf7c8c16c45", ["0e07e82b-0a71-465e-ad13-cdf7c8c16c40"]);
+    });
+  });
+
+  describe('Obtener recetas de culturas', () => {
+    it('debería llamar a actualizarRecetas con los datos correctos', async () => {
+      const agregarProductosDto: AgregarRecetasDto = {
+        recetasId: ["0e07e82b-0a71-465e-ad13-cdf7c8c16c40"]
+    };
+      await controller.actualizarRecetas("0e07e82b-0a71-465e-ad13-cdf7c8c16c45",agregarProductosDto);
+      expect(culturaservice.actualizarRecetasEnCultura).toHaveBeenCalledWith( "0e07e82b-0a71-465e-ad13-cdf7c8c16c45", ["0e07e82b-0a71-465e-ad13-cdf7c8c16c40"]);
+    });
+  });
+
+  describe('obtenerRecetasPorCultura', () => {
+    it('debe retornar un array de recetas para una cultura dada', async () => {
+      jest.spyOn(culturaservice, 'obtenerRecetasDeCultura').mockResolvedValue(cultura);
+      const culturas = await controller.obtenerRecetas('mock-uuid');
+      expect(culturas).toEqual(cultura);
+      expect(culturaservice.obtenerRecetasDeCultura).toHaveBeenCalledWith('mock-uuid');
+    });
+
+    describe('eliminarRecetaDeCultura', () => {
+      it('debe eliminar una receta de una cultura dada', async () => {
+        const recetaMock = new Receta();
+        recetaMock.id = 'recetaId';
+
+        const culturaMock = new Cultura();
+        culturaMock.id = 'culturaId';
+        culturaMock.recetas = [recetaMock];
+
+        const removeRecetaDto: EliminarRecetaDto = { culturaId:'culturaId', recetaId:'recetaId'}
+        // Llamada al controlador
+        await controller.eliminarReceta(removeRecetaDto);
+  
+        // Aserciones
+        expect(culturaservice.eliminarRecetaDeCultura).toHaveBeenCalledWith('culturaId', 'recetaId');
+      });
+    });
+  });
+
 });

@@ -22,6 +22,6 @@ import { Pais } from '../../paises/entities/pais.entity';
         @JoinTable()
         restaurantes: Restaurante[];
       
-        @OneToMany(() => Receta, receta => receta.cultura)
+        @OneToMany(() => Receta, (receta) => receta.cultura, { cascade: true})
         recetas: Receta[];
 }
