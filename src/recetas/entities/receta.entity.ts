@@ -22,8 +22,8 @@ export class Receta {
     @Column('text')
     video: string;
 
-    @ManyToOne(() => Cultura, cultura => cultura.recetas)
-    cultura: Cultura; 
+    @ManyToOne(() => Cultura, (cultura) => cultura.recetas, { onDelete: 'CASCADE' })
+    cultura: Cultura;
     
     @ManyToMany(() => Producto, (producto) => producto.recetas)
     @JoinTable()  // Define la tabla intermedia

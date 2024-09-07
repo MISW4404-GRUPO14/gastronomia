@@ -8,6 +8,8 @@ import { Pais } from '../paises/entities/pais.entity';
 import { BusinessLogicException } from '../shared/errors/business-errors';
 import { Restaurante } from '../restaurantes/entities/restaurante.entity';
 import { Producto } from '../productos/entities/producto.entity';
+import { Receta } from '../recetas/entities/receta.entity';
+
 
 @Injectable()
 export class CulturasService {
@@ -25,7 +27,10 @@ export class CulturasService {
     private readonly restauranteRepository: Repository<Restaurante>,
 
     @InjectRepository(Producto)
-    private readonly productoRepository: Repository<Producto>
+    private readonly productoRepository: Repository<Producto>,
+    
+    @InjectRepository(Receta)
+    private readonly recetaRepository: Repository<Receta>
   ){}
   
   async create(createCulturaDto: CreateCulturaDto) {
@@ -183,96 +188,140 @@ export class CulturasService {
     }
   }
 
-  async agregarProductoAcultura( culturaId: string, productoId: string){
-      const cultura: Cultura = await this.culturaRepository.findOne({where: {id: culturaId}});
-      if (!cultura)
-        throw new BusinessLogicException("La cultura no existe con ese id", HttpStatus.NOT_FOUND);
-      if (!cultura.productos) {
-        cultura.productos = [];
-      }
+  
+   //-----------------------------Recetas de una cultura---------------------------------------------------//
 
-      const producto: Producto = await this.productoRepository.findOne({where: {id: productoId}}) 
-      if (!producto)
-        throw new BusinessLogicException("El producto no existe con ese id", HttpStatus.NOT_FOUND);
-    
-      const productoYaEnCultura = cultura.productos.some(p => p.id === productoId);
-      if (productoYaEnCultura) {
-          throw new BusinessLogicException("El producto ya está asociado a esta cultura", HttpStatus.BAD_REQUEST);
-      }
-
-      cultura.productos.push(producto);
+   //Metodo para agregar una receta a una cultura
+   async agregarRecetaACultura(culturaId: string, recetasIds: string[]) {
+    const cultura = await this.obtenerRecetasDeCultura(culturaId);
+    const recetas = await this.recetaRepository.findBy({ id: In(recetasIds) });
+    this.validateArrayRecetas(recetas, recetasIds);
+    cultura.recetas.push(...recetas);
     return await this.culturaRepository.save(cultura);
   }
 
-  async obtenerProductoDeCultura(culturaId: string, productoId: string){
-      const producto: Producto = await this.productoRepository.findOne({where: {id: productoId}});
-      if (!producto)
-        throw new BusinessLogicException("El producto no existe con ese id", HttpStatus.NOT_FOUND)
-      
-      const cultura: Cultura = await this.culturaRepository.findOne({where: {id: culturaId}, relations: ["productos"]}); 
-      if (!cultura)
-        throw new BusinessLogicException("La cultura no existe con ese id", HttpStatus.NOT_FOUND)
-
-      const culturaProducto: Producto = cultura.productos.find(e => e.id === producto.id);
-
-      if (!culturaProducto)
-        throw new BusinessLogicException("El producto con ese id no se encuentra asociado a la cultura", HttpStatus.PRECONDITION_FAILED)
-
-    return culturaProducto;
+  async obtenerRecetasDeCultura(culturaId: string){
+    const cultura = await this.culturaRepository.findOne(
+      {
+        where: { id: culturaId },
+        relations: ['recetas'],
+      }
+    );
+    if(!cultura){
+      throw new BusinessLogicException(`La cultura ingresada no existe`, HttpStatus.NOT_FOUND);
+      }
+    return cultura;
   }
 
-  async obtenerTodoLosProductosDeCultura(culturaId: string){
-    const cultura: Cultura = await this.culturaRepository.findOne({where: {id: culturaId}, relations: ["productos"]});
-    if (!cultura)
-      throw new BusinessLogicException("La cultura no existe con ese id", HttpStatus.NOT_FOUND)
-      
-    return cultura.productos;
+  async actualizarRecetasEnCultura(culturaId: string, recetasIds: string[]){
+    const cultura = await this.obtenerRecetasDeCultura(culturaId);
+    const nuevasRecetas =  await this.recetaRepository.findBy({ id: In(recetasIds) });
+    this.validateArrayRecetas(nuevasRecetas, recetasIds)
+    cultura.recetas = nuevasRecetas;
+    return await this.culturaRepository.save(cultura);
   }
 
-  async actualizarProductosDeLaCultura(culturaId: string, productos: Producto[]){
-    console.log(productos)
-    const cultura: Cultura = await this.culturaRepository.findOne({where: {id: culturaId}, relations: ["productos"]});
-     
-    if (!cultura)
-      throw new BusinessLogicException("La cultura no existe con ese id", HttpStatus.NOT_FOUND)
-  
-    const productosValidos: Producto[] = [];
+  async eliminarRecetaDeCultura(culturaId: string, recetaId: string){
+    const cultura = await this.obtenerRecetasDeCultura(recetaId);
+    cultura.recetas = cultura.recetas.filter(receta => receta.id !== recetaId);
 
-    for (let i = 0; i < productos.length; i++) {
-      const productoExistente: Producto = await this.productoRepository.findOne({where: {id: productos[i].id}});
-      if (!productoExistente)
-        throw new BusinessLogicException("The artwork with the given id was not found", HttpStatus.NOT_FOUND)
-      
-      productosValidos.push(productoExistente)
-      console.log(productosValidos)
+    return await this.culturaRepository.save(cultura);
+  }
+
+  validateArrayRecetas(recetas, recetasIds){
+    if (recetas.length !== recetasIds.length) {
+      throw new BusinessLogicException(`Algunas de las recetas existe`, HttpStatus.NOT_FOUND);
     }
- 
-    cultura.productos = productosValidos;
-
-    return await this.culturaRepository.save(cultura);
   }
+
+
+   //-----------------------------Producto a una cultura---------------------------------------------------//
+
+  async agregarProductoAcultura( culturaId: string, productoId: string){
+    const cultura: Cultura = await this.culturaRepository.findOne({where: {id: culturaId}});
+    if (!cultura)
+      throw new BusinessLogicException("La cultura no existe con ese id", HttpStatus.NOT_FOUND);
+    if (!cultura.productos) {
+      cultura.productos = [];
+    }
+
+    const producto: Producto = await this.productoRepository.findOne({where: {id: productoId}}) 
+    if (!producto)
+      throw new BusinessLogicException("El producto no existe con ese id", HttpStatus.NOT_FOUND);
   
-  async eliminarProductoDeCultura(culturaId: string, productoId: string){
+    const productoYaEnCultura = cultura.productos.some(p => p.id === productoId);
+    if (productoYaEnCultura) {
+        throw new BusinessLogicException("El producto ya está asociado a esta cultura", HttpStatus.BAD_REQUEST);
+    }
+
+    cultura.productos.push(producto);
+  return await this.culturaRepository.save(cultura);
+}
+
+async obtenerProductoDeCultura(culturaId: string, productoId: string){
     const producto: Producto = await this.productoRepository.findOne({where: {id: productoId}});
     if (!producto)
       throw new BusinessLogicException("El producto no existe con ese id", HttpStatus.NOT_FOUND)
-  
-    const cultura: Cultura = await this.culturaRepository.findOne({where: {id: culturaId}, relations: ["productos"]});
+    
+    const cultura: Cultura = await this.culturaRepository.findOne({where: {id: culturaId}, relations: ["productos"]}); 
     if (!cultura)
       throw new BusinessLogicException("La cultura no existe con ese id", HttpStatus.NOT_FOUND)
-  
+
     const culturaProducto: Producto = cultura.productos.find(e => e.id === producto.id);
-  
+
     if (!culturaProducto)
-        throw new BusinessLogicException("El producto con ese id no se encuentra asociado a la cultura", HttpStatus.PRECONDITION_FAILED)
+      throw new BusinessLogicException("El producto con ese id no se encuentra asociado a la cultura", HttpStatus.PRECONDITION_FAILED)
 
-    cultura.productos = cultura.productos.filter(e => e.id !== productoId);
-    await this.culturaRepository.save(cultura);
+  return culturaProducto;
+}
+
+async obtenerTodoLosProductosDeCultura(culturaId: string){
+  const cultura: Cultura = await this.culturaRepository.findOne({where: {id: culturaId}, relations: ["productos"]});
+  if (!cultura)
+    throw new BusinessLogicException("La cultura no existe con ese id", HttpStatus.NOT_FOUND)
+    
+  return cultura.productos;
+}
+
+async actualizarProductosDeLaCultura(culturaId: string, productos: Producto[]){
+  console.log(productos)
+  const cultura: Cultura = await this.culturaRepository.findOne({where: {id: culturaId}, relations: ["productos"]});
+   
+  if (!cultura)
+    throw new BusinessLogicException("La cultura no existe con ese id", HttpStatus.NOT_FOUND)
+
+  const productosValidos: Producto[] = [];
+
+  for (let i = 0; i < productos.length; i++) {
+    const productoExistente: Producto = await this.productoRepository.findOne({where: {id: productos[i].id}});
+    if (!productoExistente)
+      throw new BusinessLogicException("The artwork with the given id was not found", HttpStatus.NOT_FOUND)
+    
+    productosValidos.push(productoExistente)
+    console.log(productosValidos)
   }
-  
 
+  cultura.productos = productosValidos;
 
+  return await this.culturaRepository.save(cultura);
+}
 
+async eliminarProductoDeCultura(culturaId: string, productoId: string){
+  const producto: Producto = await this.productoRepository.findOne({where: {id: productoId}});
+  if (!producto)
+    throw new BusinessLogicException("El producto no existe con ese id", HttpStatus.NOT_FOUND)
 
+  const cultura: Cultura = await this.culturaRepository.findOne({where: {id: culturaId}, relations: ["productos"]});
+  if (!cultura)
+    throw new BusinessLogicException("La cultura no existe con ese id", HttpStatus.NOT_FOUND)
+
+  const culturaProducto: Producto = cultura.productos.find(e => e.id === producto.id);
+
+  if (!culturaProducto)
+      throw new BusinessLogicException("El producto con ese id no se encuentra asociado a la cultura", HttpStatus.PRECONDITION_FAILED)
+
+  cultura.productos = cultura.productos.filter(e => e.id !== productoId);
+  await this.culturaRepository.save(cultura);
+}
 
 }
