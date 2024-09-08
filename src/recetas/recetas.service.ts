@@ -59,12 +59,12 @@ export class RecetasService {
 
   async update(id: string, updateRecetaDto: UpdateRecetaDto) {
 
+    const recipe = await this.recetaRepository.preload({
+      id: id,
+      ...updateRecetaDto
+    })
+    if ( !recipe ) throw new BusinessLogicException(`The recipe with the given id ${id} was not found`, HttpStatus.NOT_FOUND);
     try{  
-      const recipe = await this.recetaRepository.preload({
-        id: id,
-        ...updateRecetaDto
-      })
-      if ( !recipe ) throw new BusinessLogicException(`The recipe with the given id ${id} was not found`, HttpStatus.NOT_FOUND);
       await this.recetaRepository.save( recipe );
       return recipe; 
     } catch(error){
@@ -102,8 +102,8 @@ export class RecetasService {
   async eliminarProductoDeReceta(recetaId: string, productoId: string){
     const recipe = await this.findOne(recetaId);
     recipe.productos = recipe.productos.filter(producto => producto.id !== productoId);
-
-    return await this.recetaRepository.save(recipe);
+    await this.recetaRepository.save(recipe);
+    return 
   }
 
 
