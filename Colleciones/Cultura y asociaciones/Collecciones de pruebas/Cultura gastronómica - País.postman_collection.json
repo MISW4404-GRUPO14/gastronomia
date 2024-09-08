@@ -8,19 +8,41 @@
 	"item": [
 		{
 			"name": "Agregar un pais a una cultura",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"   pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"paisIds\": [\"{{paisId}}\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/paises/{{id_pais}}",
+					"raw": "{{baseURL}}/culturas/{{culturaId}}/paises",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"culturasGastronomicas",
-						"{{id_culturaGastronomica}}",
-						"paises",
-						"{{id_pais}}"
+						"culturas",
+						"{{culturaId}}",
+						"paises"
 					]
 				}
 			},
@@ -61,19 +83,54 @@
 		},
 		{
 			"name": "Agregar un pais a una cultura inexistente",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"const paisId = pm.variables.get(\"paisId\");\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"   pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"if (paisId) {\r",
+							"  const id = paisId;  \r",
+							"  pm.test(`Get expected error message`, function() {\r",
+							"    if (response.error) {\r",
+							"      pm.expect(response.message).to.include(`The culture with the given id ${id} was not found`);\r",
+							"    }\r",
+							"  });\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"paisIds\": [\"53c65852-db00-4eae-ad7b-a99b88c626fe\"] \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/paises/{{id_pais}}",
+					"raw": "{{baseURL}}/culturas/{{paisId}}/paises",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"culturasGastronomicas",
-						"{{id_culturaGastronomica}}",
-						"paises",
-						"{{id_pais}}"
+						"culturas",
+						"{{paisId}}",
+						"paises"
 					]
 				}
 			},
@@ -114,19 +171,37 @@
 		},
 		{
 			"name": "Obtener pais de una cultura",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Number of culturas > ' + 0, function () {\r",
+							"   var data = pm.response.json()\r",
+							"   pm.expect(data.length).to.greaterThan(0)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"   pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/paises/{{id_pais}}",
+					"raw": "{{baseURL}}/culturas/{{culturaId}}/paises",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"culturasGastronomicas",
-						"{{id_culturaGastronomica}}",
-						"paises",
-						"{{id_pais}}"
+						"culturas",
+						"{{culturaId}}",
+						"paises"
 					]
 				}
 			},
@@ -167,19 +242,45 @@
 		},
 		{
 			"name": "Obtener pais de una cultura inexistente",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"const paisId = pm.variables.get(\"paisId\");\r",
+							"\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"   pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"if (paisId) {\r",
+							"  const id = paisId;  \r",
+							"  pm.test(`Get expected error message`, function() {\r",
+							"    if (response.error) {\r",
+							"      pm.expect(response.message).to.include(`The culture with the given id ${id} was not found`);\r",
+							"    }\r",
+							"  });\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/12-44/paises/{{id_pais}}",
+					"raw": "{{baseURL}}/culturas/{{paisId}}/paises",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"culturasGastronomicas",
-						"12-44",
-						"paises",
-						"{{id_pais}}"
+						"culturas",
+						"{{paisId}}",
+						"paises"
 					]
 				}
 			},
@@ -220,12 +321,26 @@
 		},
 		{
 			"name": "Actualizar un pais de una cultura",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"   pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"cultura\": \"e2cc30ae-e7bf-4890-8034-d654715584b7\"\r\n}",
+					"raw": "{\r\n    \"paisIds\": [\"{{paisId}}\"]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -233,15 +348,15 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/paises/{{id_pais}}",
+					"raw": "{{baseURL}}/culturas/{{culturaId}}/paises/",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"culturasGastronomicas",
-						"{{id_culturaGastronomica}}",
+						"culturas",
+						"{{culturaId}}",
 						"paises",
-						"{{id_pais}}"
+						""
 					]
 				}
 			},
@@ -289,19 +404,53 @@
 		},
 		{
 			"name": "Actualizar un pais de una cultura inexistente",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"const paisId = pm.variables.get(\"paisId\");\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"   pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"if (paisId) {\r",
+							"  const id = paisId;  \r",
+							"  pm.test(`Get expected error message`, function() {\r",
+							"    if (response.error) {\r",
+							"      pm.expect(response.message).to.include(`The culture with the given id ${id} was not found`);\r",
+							"    }\r",
+							"  });\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"paisIds\": [\"{{paisId}}\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/paises/{{id_pais}}",
+					"raw": "{{baseURL}}/culturas/{{paisId}}/paises",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"culturasGastronomicas",
-						"{{id_culturaGastronomica}}",
-						"paises",
-						"{{id_pais}}"
+						"culturas",
+						"{{paisId}}",
+						"paises"
 					]
 				}
 			},
@@ -342,19 +491,33 @@
 		},
 		{
 			"name": "Eliminar pais de una cultura",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"   pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/paises/{{id_pais}}",
+					"raw": "{{baseURL}}/culturas/{{paisId}}/paises/{{paisId}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"culturasGastronomicas",
-						"{{id_culturaGastronomica}}",
+						"culturas",
+						"{{paisId}}",
 						"paises",
-						"{{id_pais}}"
+						"{{paisId}}"
 					]
 				}
 			},
@@ -388,19 +551,45 @@
 		},
 		{
 			"name": "Eliminar pais de una cultura inexistente",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"const paisId = pm.variables.get(\"paisId\");\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"   pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"if (paisId) {\r",
+							"  const id = paisId;  \r",
+							"  pm.test(`Get expected error message`, function() {\r",
+							"    if (response.error) {\r",
+							"      pm.expect(response.message).to.include(`The culture with the given id ${id} was not found`);\r",
+							"    }\r",
+							"  });\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/paises/{{id_pais}}",
+					"raw": "{{baseURL}}/culturas/{{paisId}}/paises/{{paisId}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"culturasGastronomicas",
-						"{{id_culturaGastronomica}}",
+						"culturas",
+						"{{paisId}}",
 						"paises",
-						"{{id_pais}}"
+						"{{paisId}}"
 					]
 				}
 			},
@@ -440,14 +629,36 @@
 			]
 		}
 	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
 	"variable": [
 		{
 			"key": "id_culturaGastronomica",
-			"value": "id cultura"
+			"value": "1"
 		},
 		{
 			"key": "id_pais",
-			"value": "id pais"
+			"value": "1"
 		}
 	]
 }

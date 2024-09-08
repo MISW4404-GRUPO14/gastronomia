@@ -1,45 +1,45 @@
 {
 	"info": {
-		"_postman_id": "8471cde0-d15b-4f62-9f45-8a887cce557e",
-		"name": "Cultura gastronómica - País",
+		"_postman_id": "ffc117c6-96c8-4ea3-9f20-7598d5ce82f1",
+		"name": "Cultura gastronómica - Producto",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "29499381"
+		"_exporter_id": "29550126"
 	},
 	"item": [
 		{
-			"name": "Agregar un pais a una cultura",
+			"name": "Agregar un producto a una cultura",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/paises/{{id_pais}}",
+					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/productos/{{id_producto}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
 						"culturasGastronomicas",
 						"{{id_culturaGastronomica}}",
-						"paises",
-						"{{id_pais}}"
+						"productos",
+						"{{id_producto}}"
 					]
 				}
 			},
 			"response": [
 				{
-					"name": "Agregar un pais a una cultura",
+					"name": "Agregar un producto a una cultura",
 					"originalRequest": {
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/paises/{{id_pais}}",
+							"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/productos/{{id_producto}}",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"culturasGastronomicas",
 								"{{id_culturaGastronomica}}",
-								"paises",
-								"{{id_pais}}"
+								"productos",
+								"{{id_producto}}"
 							]
 						}
 					},
@@ -55,44 +55,44 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\r\n    \"id\": \"1\",\r\n    \"nombre\": \"Nueva Cultura Gastronómica\",\r\n    \"descripcion\": \"Descripción de la nueva cultura\",\r\n    \"pais\": {\r\n        \"id\": \"1\",\r\n        \"nombre\": \"Colombia\"\r\n        }\r\n}"
+					"body": "{\r\n    \"id\": \"1\",\r\n    \"nombre\": \"Nueva Cultura Gastronómica\",\r\n    \"descripcion\": \"Descripción de la nueva cultura\",\r\n    \"productos\":[\r\n            {\r\n            \"id\":\"819e7da4-96f4-4c45-81fc-1e5416544598\",\r\n            \"nombre\":\"Mariscos\", \r\n            \"descripcion\":\"Producto usado en platos de alta cocina\"\r\n            }, \r\n            {\r\n            \"id\":\"a4178cd4-dc0e-4f99-8b9d-617e8a3d257f\",\r\n            \"nombre\":\"Pimiento\",\r\n            \"descripcion\":\"Producto usado en platos de alta cocina\"\r\n            }\r\n        ]\r\n}"
 				}
 			]
 		},
 		{
-			"name": "Agregar un pais a una cultura inexistente",
+			"name": "Agregar un producto a una cultura inexistente",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/paises/{{id_pais}}",
+					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/productos/{{id_producto}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
 						"culturasGastronomicas",
 						"{{id_culturaGastronomica}}",
-						"paises",
-						"{{id_pais}}"
+						"productos",
+						"{{id_producto}}"
 					]
 				}
 			},
 			"response": [
 				{
-					"name": "Agregar un pais a una cultura inexistente",
+					"name": "Agregar un producto a una cultura inexistente",
 					"originalRequest": {
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}/culturasGastronomicas/12-44/paises/{{id_pais}}",
+							"raw": "{{baseURL}}/culturasGastronomicas/12-44/productos/{{id_producto}}",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"culturasGastronomicas",
 								"12-44",
-								"paises",
-								"{{id_pais}}"
+								"productos",
+								"{{id_producto}}"
 							]
 						}
 					},
@@ -113,39 +113,39 @@
 			]
 		},
 		{
-			"name": "Obtener pais de una cultura",
+			"name": "Obtener producto de una cultura",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/paises/{{id_pais}}",
+					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/productos/{{id_producto}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
 						"culturasGastronomicas",
 						"{{id_culturaGastronomica}}",
-						"paises",
-						"{{id_pais}}"
+						"productos",
+						"{{id_producto}}"
 					]
 				}
 			},
 			"response": [
 				{
-					"name": "Obtener pais de una cultura",
+					"name": "Obtener producto de una cultura",
 					"originalRequest": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/paises/{{id_pais}}",
+							"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/productos/{{id_producto}}",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"culturasGastronomicas",
 								"{{id_culturaGastronomica}}",
-								"paises",
-								"{{id_pais}}"
+								"productos",
+								"{{id_producto}}"
 							]
 						}
 					},
@@ -161,44 +161,44 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"id\": \"1\",\n    \"nombre\": \"Colombia\"\n}"
+					"body": "{\n    \"id\":\"819e7da4-96f4-4c45-81fc-1e5416544598\",\n    \"nombre\":\"Mariscos\", \n    \"descripcion\":\"Producto usado en platos de alta cocina\"\n}"
 				}
 			]
 		},
 		{
-			"name": "Obtener pais de una cultura inexistente",
+			"name": "Obtener producto de una cultura inexistente",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/12-44/paises/{{id_pais}}",
+					"raw": "{{baseURL}}/culturasGastronomicas/12-44/productos/{{id_producto}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
 						"culturasGastronomicas",
 						"12-44",
-						"paises",
-						"{{id_pais}}"
+						"productos",
+						"{{id_producto}}"
 					]
 				}
 			},
 			"response": [
 				{
-					"name": "Obtener pais de una cultura inexistente",
+					"name": "Obtener productos de una cultura inexistente",
 					"originalRequest": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}/culturasGastronomicas/12-44/paises/{{id_pais}}",
+							"raw": "{{baseURL}}/culturasGastronomicas/12-44/productos/{{id_producto}}",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"culturasGastronomicas",
 								"12-44",
-								"paises",
-								"{{id_pais}}"
+								"productos",
+								"{{id_producto}}"
 							]
 						}
 					},
@@ -219,7 +219,7 @@
 			]
 		},
 		{
-			"name": "Actualizar un pais de una cultura",
+			"name": "Actualizar un producto de una cultura",
 			"request": {
 				"method": "PUT",
 				"header": [],
@@ -233,15 +233,15 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/paises/{{id_pais}}",
+					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/productos/{{id_producto}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
 						"culturasGastronomicas",
 						"{{id_culturaGastronomica}}",
-						"paises",
-						"{{id_pais}}"
+						"productos",
+						"{{id_producto}}"
 					]
 				}
 			},
@@ -261,15 +261,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/paises/{{id_pais}}",
+							"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/productos/{{id_producto}}",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"culturasGastronomicas",
 								"{{id_culturaGastronomica}}",
-								"paises",
-								"{{id_pais}}"
+								"productos",
+								"{{id_producto}}"
 							]
 						}
 					},
@@ -283,25 +283,25 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"id\": \"1\",\n    \"nombre\": \"Nueva Cultura Gastronómica\",\n    \"descripcion\": \"Descripción de la nueva cultura\",\n    \"pais\": {\n        \"id\": \"1\",\n        \"nombre\": \"Colombia\"\n    }\n}"
+					"body": "{\n    \"id\": \"1\",\n    \"nombre\": \"Nueva Cultura Gastronómica\",\n    \"descripcion\": \"Descripción de la nueva cultura\",\n    \"productos\":[\n            {\n            \"id\":\"819e7da4-96f4-4c45-81fc-1e5416544598\",\n            \"nombre\":\"Mariscos\", \n            \"descripcion\":\"Producto usado en platos de alta cocina\"\n            }\n    ]\n}"
 				}
 			]
 		},
 		{
-			"name": "Actualizar un pais de una cultura inexistente",
+			"name": "Actualizar un producto de una cultura inexistente",
 			"request": {
 				"method": "PUT",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/paises/{{id_pais}}",
+					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/productos/{{id_producto}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
 						"culturasGastronomicas",
 						"{{id_culturaGastronomica}}",
-						"paises",
-						"{{id_pais}}"
+						"productos",
+						"{{id_producto}}"
 					]
 				}
 			},
@@ -312,15 +312,15 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}/culturasGastronomicas/12-44/paises/{{id_pais}}",
+							"raw": "{{baseURL}}/culturasGastronomicas/12-44/productos/{{id_producto}}",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"culturasGastronomicas",
 								"12-44",
-								"paises",
-								"{{id_pais}}"
+								"productos",
+								"{{id_producto}}"
 							]
 						}
 					},
@@ -341,85 +341,85 @@
 			]
 		},
 		{
-			"name": "Eliminar pais de una cultura",
+			"name": "Eliminar producto de una cultura",
 			"request": {
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/paises/{{id_pais}}",
+					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/productos/{{id_producto}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
 						"culturasGastronomicas",
 						"{{id_culturaGastronomica}}",
-						"paises",
-						"{{id_pais}}"
+						"productos",
+						"{{id_producto}}"
 					]
 				}
 			},
 			"response": [
 				{
-					"name": "Eliminar pais de una cultura",
+					"name": "Eliminar producto de una cultura",
 					"originalRequest": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/paises/{{id_pais}}",
+							"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/productos/{{id_producto}}",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"culturasGastronomicas",
 								"{{id_culturaGastronomica}}",
-								"paises",
-								"{{id_pais}}"
+								"productos",
+								"{{id_producto}}"
 							]
 						}
 					},
 					"status": "OK",
 					"code": 200,
-					"_postman_previewlanguage": null,
-					"header": null,
+					"_postman_previewlanguage": "Text",
+					"header": [],
 					"cookie": [],
-					"body": null
+					"body": ""
 				}
 			]
 		},
 		{
-			"name": "Eliminar pais de una cultura inexistente",
+			"name": "Eliminar producto de una cultura inexistente",
 			"request": {
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/paises/{{id_pais}}",
+					"raw": "{{baseURL}}/culturasGastronomicas/{{id_culturaGastronomica}}/productos/{{id_producto}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
 						"culturasGastronomicas",
 						"{{id_culturaGastronomica}}",
-						"paises",
-						"{{id_pais}}"
+						"productos",
+						"{{id_producto}}"
 					]
 				}
 			},
 			"response": [
 				{
-					"name": "Eliminar pais de una cultura inexistente",
+					"name": "Eliminar producto de una cultura inexistente",
 					"originalRequest": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}/culturasGastronomicas/12-44/paises/{{id_pais}}",
+							"raw": "{{baseURL}}/culturasGastronomicas/12-44/productos/{{id_producto}}",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"culturasGastronomicas",
 								"12-44",
-								"paises",
-								"{{id_pais}}"
+								"productos",
+								"{{id_producto}}"
 							]
 						}
 					},
@@ -440,14 +440,36 @@
 			]
 		}
 	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
 	"variable": [
 		{
 			"key": "id_culturaGastronomica",
-			"value": "id cultura"
+			"value": "idCultura"
 		},
 		{
-			"key": "id_pais",
-			"value": "id pais"
+			"key": "id_producto",
+			"value": "idProducto"
 		}
 	]
 }
