@@ -18,7 +18,6 @@ export class Restaurante {
     fechasConsecucionEstrellas: Date;
 
     @ManyToMany(()=> Cultura, (cultura) => cultura.restaurantes)
-    @JoinTable()
     culturas: Cultura[];
 
     @ManyToOne(() => Ciudad, ciudad => ciudad.restaurantes)
