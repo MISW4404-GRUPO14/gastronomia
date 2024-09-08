@@ -241,4 +241,60 @@ describe('RestaurantesService', () => {
       expect(result).toEqual({ ...mockRestaurante, culturas: [{ id: '3' }] });
     });
   });
+
+  describe('actualizarCulturasEnRestaurante', () => {
+    it('should update cultures with unique values and correct mapping', async () => {
+      const restauranteId = '1';
+      const culturaIds = ['2', '3'];
+      const mockRestaurante = { id: restauranteId, culturas: [{ id: '2' }, { id: '4' }] }; // Culturas existentes
+      const mockCulturas = [{ id: '2' }, { id: '3' }]; // Nuevas culturas
+  
+      jest.spyOn(service, 'findOne').mockResolvedValue(mockRestaurante as any);
+      jest.spyOn(culturaRepository, 'findBy').mockResolvedValue(mockCulturas as any);
+      jest.spyOn(repository, 'save').mockResolvedValue({ ...mockRestaurante, culturas: mockCulturas } as any);
+  
+      const result = await service.actualizarCulturasEnRestaurante(restauranteId, culturaIds);
+      expect(result).toEqual({ ...mockRestaurante, culturas: mockCulturas });
+      expect(result.culturas).toEqual(mockCulturas); // Verifica que culturas se han actualizado correctamente
+    });
+  });
+
+  describe('obtenerCulturaDeRestaurante', () => {
+    it('should return a specific culture from a restaurant', async () => {
+      const restauranteId = '1';
+      const culturaId = '2';
+      const mockRestaurante = { id: restauranteId, culturas: [{ id: culturaId }] };
+      const mockCultura = { id: culturaId };
+  
+      jest.spyOn(service, 'findOne').mockResolvedValue(mockRestaurante as any);
+  
+      const result = await service.obtenerCulturaDeRestaurante(restauranteId, culturaId);
+      expect(result).toEqual(mockCultura);
+    });
+  
+    it('should throw a BusinessLogicException if the restaurant has no cultures', async () => {
+      const restauranteId = '1';
+      const culturaId = '2';
+      const mockRestaurante = { id: restauranteId, culturas: [] };
+  
+      jest.spyOn(service, 'findOne').mockResolvedValue(mockRestaurante as any);
+  
+      await expect(service.obtenerCulturaDeRestaurante(restauranteId, culturaId))
+        .rejects
+        .toThrow(new BusinessLogicException('La cultura solicitada no está asociada al restaurante', HttpStatus.NOT_FOUND));
+    });
+  
+    it('should throw a BusinessLogicException if the culture is not found in the restaurant', async () => {
+      const restauranteId = '1';
+      const culturaId = '999'; // Non-existing culture ID
+      const mockRestaurante = { id: restauranteId, culturas: [{ id: '2' }] };
+  
+      jest.spyOn(service, 'findOne').mockResolvedValue(mockRestaurante as any);
+  
+      await expect(service.obtenerCulturaDeRestaurante(restauranteId, culturaId))
+        .rejects
+        .toThrow(new BusinessLogicException('La cultura solicitada no está asociada al restaurante', HttpStatus.NOT_FOUND));
+    });
+  });
+  
 });
