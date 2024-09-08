@@ -26,7 +26,9 @@
     "test:categorias": "jest src/categorias/categorias.service.spec.ts",
     "test:ciudades": "jest src/ciudades/ciudades.service.spec.ts",
     "test:paisesService": "jest src/paises/paises.service.spec.ts",
-    "test:paisesController": "jest src/paises/paises.controller.spec.ts"
+    "test:paisesController": "jest src/paises/paises.controller.spec.ts",
+    "test:restaurantesService": "jest src/restaurantes/restaurantes.service.spec.ts",
+    "test:restaurantesController": "jest src/restaurantes/restaurantes.controller.spec.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^8.4.1",

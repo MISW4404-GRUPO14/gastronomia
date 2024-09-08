@@ -1,0 +1,482 @@
+{
+	"info": {
+		"_postman_id": "9864510f-d623-4c36-bc79-136be4381316",
+		"name": "Cultura gastronómica - Restaurante",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29499381"
+	},
+	"item": [
+		{
+			"name": "Agregar una cultura a un restaurante",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/restaurante/{{id_restaurante}}/culturasGastronomicas/{{id_culturaGastronomica}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"restaurante",
+						"{{id_restaurante}}",
+						"culturasGastronomicas",
+						"{{id_culturaGastronomica}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Agregar una cultura a un restaurante",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/restaurante/{{id_restaurante}}/culturasGastronomicas/{{id_culturaGastronomica}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"restaurante",
+								"{{id_restaurante}}",
+								"culturasGastronomicas",
+								"{{id_culturaGastronomica}}"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Agregar una cultura a un restaurante inexistente",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/restaurante/12-44/culturasGastronomicas/{{id_culturaGastronomica}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"restaurante",
+						"12-44",
+						"culturasGastronomicas",
+						"{{id_culturaGastronomica}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Agregar una cultura a un restaurante inexistente",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/restaurante/12-44/culturasGastronomicas/{{id_culturaGastronomica}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"restaurante",
+								"12-44",
+								"culturasGastronomicas",
+								"{{id_culturaGastronomica}}"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 404,\n    \"message\": \"El restaurante con el ID 12-44 no fue encontrado\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Obtener las culturas de restaurante",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/restaurante/{{id_restaurante}}/culturasGastronomicas",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"restaurante",
+						"{{id_restaurante}}",
+						"culturasGastronomicas"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Obtener las culturas de restaurante",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/restaurante/{{id_restaurante}}/culturasGastronomicas",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"restaurante",
+								"{{id_restaurante}}",
+								"culturasGastronomicas"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"nombre\": \"Restaurante El Sabor del Mundo\",\n    \"ciudad\": {\n        \"id\": 2,\n        \"nombre\": \"Barcelona\",\n        \"pais\": {\n            \"id\": 3,\n            \"nombre\": \"España\"\n        }\n    },\n    \"estrellas\": 3,\n    \"fechasConsecucionEstrellas\": [\n        \"2018-05-12\",\n        \"2019-04-10\",\n        \"2020-06-15\"\n    ],\n    \"culturasGastronomicas\": [\n        {\n            \"id\": 1,\n            \"nombre\": \"Cultura Gastronómica Mediterránea\",\n            \"descripcion\": \"La cultura gastronómica mediterránea abarca países desde Portugal hasta Grecia, incluyendo España, Italia y Marruecos.\"\n        },\n        {\n            \"id\": 4,\n            \"nombre\": \"Cultura Gastronómica Francesa\",\n            \"descripcion\": \"La cultura gastronómica francesa es conocida por su refinamiento y diversidad, con una larga tradición de excelencia culinaria.\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Obtener las culturas de un restaurante inexistente",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/restaurante/12-44/culturasGastronomicas",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"restaurante",
+						"12-44",
+						"culturasGastronomicas"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Obtener las culturas de un restaurante inexistente",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/restaurante/12-44/culturasGastronomicas",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"restaurante",
+								"12-44",
+								"culturasGastronomicas"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 404,\n    \"message\": \"El restaurante con el ID 12-44 no fue encontrado\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Actualizar una cultura de un restaurante",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"restaurante\": \"e2cc30ae-e7bf-4890-8034-d654715584b7\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/restaurante/{{id_restaurante}}/culturasGastronomicas/{{id_culturaGastronomica}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"restaurante",
+						"{{id_restaurante}}",
+						"culturasGastronomicas",
+						"{{id_culturaGastronomica}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Actualizar una cultura de un restaurante",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"restaurante\": \"e2cc30ae-e7bf-4890-8034-d654715584b7\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/restaurante/{{id_restaurante}}/culturasGastronomicas/{{id_culturaGastronomica}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"restaurante",
+								"{{id_restaurante}}",
+								"culturasGastronomicas",
+								"{{id_culturaGastronomica}}"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n  \"id\": 1,\r\n  \"nombre\": \"Restaurante El Sabor del Mundo\",\r\n  \"ciudad\": {\r\n    \"id\": 2,\r\n    \"nombre\": \"Barcelona\",\r\n    \"pais\": {\r\n      \"id\": 3,\r\n      \"nombre\": \"España\"\r\n    }\r\n  },\r\n  \"estrellas\": 3,\r\n  \"fechasConsecucionEstrellas\": [\r\n    \"2018-05-12\",\r\n    \"2019-04-10\",\r\n    \"2020-06-15\"\r\n  ],\r\n  \"culturasGastronomicas\": [\r\n    {\r\n      \"id\": 1,\r\n      \"nombre\": \"Cultura Gastronómica Mediterránea\",\r\n      \"descripcion\": \"La cultura gastronómica mediterránea abarca países desde Portugal hasta Grecia, incluyendo España, Italia y Marruecos.\"\r\n    },\r\n    {\r\n      \"id\": 4,\r\n      \"nombre\": \"Cultura Gastronómica Francesa\",\r\n      \"descripcion\": \"La cultura gastronómica francesa es conocida por su refinamiento y diversidad, con una larga tradición de excelencia culinaria.\"\r\n    }\r\n  ]\r\n}\r\n"
+				}
+			]
+		},
+		{
+			"name": "Actualizar una cultura de un restaurante inexistente",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"restaurante\": \"e2cc30ae-e7bf-4890-8034-d654715584b7\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/restaurante/12-44/culturasGastronomicas/{{id_culturaGastronomica}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"restaurante",
+						"12-44",
+						"culturasGastronomicas",
+						"{{id_culturaGastronomica}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Actualizar una cultura de un restaurante inexistente",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"restaurante\": \"e2cc30ae-e7bf-4890-8034-d654715584b7\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/restaurante/12-44/culturasGastronomicas/{{id_culturaGastronomica}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"restaurante",
+								"12-44",
+								"culturasGastronomicas",
+								"{{id_culturaGastronomica}}"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 404,\n    \"message\": \"El país con el ID 12-44 no fue encontrado\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Eliminar una cultura de un restaurante",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/restaurante/{{id_restaurante}}/culturasGastronomicas/{{id_culturaGastronomica}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"restaurante",
+						"{{id_restaurante}}",
+						"culturasGastronomicas",
+						"{{id_culturaGastronomica}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Eliminar una cultura de un restaurante",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/restaurante/{{id_restaurante}}/culturasGastronomicas/{{id_culturaGastronomica}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"restaurante",
+								"{{id_restaurante}}",
+								"culturasGastronomicas",
+								"{{id_culturaGastronomica}}"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Eliminar una cultura de un restaurante inexistente",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/restaurante/{{id_restaurante}}/culturasGastronomicas/{{id_culturaGastronomica}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"restaurante",
+						"{{id_restaurante}}",
+						"culturasGastronomicas",
+						"{{id_culturaGastronomica}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Eliminar una cultura de un restaurante inexistente",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/restaurante/{{id_restaurante}}/culturasGastronomicas/{{id_culturaGastronomica}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"restaurante",
+								"{{id_restaurante}}",
+								"culturasGastronomicas",
+								"{{id_culturaGastronomica}}"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 404,\n    \"message\": \"El país con el ID 12-44 no fue encontrado\"\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id_culturaGastronomica",
+			"value": "id cultura"
+		},
+		{
+			"key": "id_restaurante",
+			"value": "id restaurante"
+		}
+	]
+}
