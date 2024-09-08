@@ -62,7 +62,17 @@ export class RestaurantesController {
     return this.restaurantesService.actualizarCulturasEnRestaurante(id, agregarCulturasDto.culturaIds);
   }
 
-  @Delete(':id/culturas/:culturaId')
+  @Get(':restauranteId/culturas/:culturaId')
+  async obtenerCulturaDeRestaurante(@Param('restauranteId') restauranteId: string, @Param('culturaId') culturaId: string) {
+    try {
+      const cultura = await this.restaurantesService.obtenerCulturaDeRestaurante(restauranteId, culturaId);
+      return cultura;
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
+
+  @Delete(':restauranteId/culturas/:culturaId')
   async eliminarCultura(
     @Param() params: EliminarCulturaDto
   ){

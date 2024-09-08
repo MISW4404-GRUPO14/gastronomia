@@ -42,7 +42,8 @@ export class RestaurantesService {
   async findOne(id: string) {
     const restaurante = await this.restauranteRepository.findOne(
       {
-        where: { id: id }
+        where: { id: id },
+        relations: ['culturas']
       }
     );
     if(!restaurante){
@@ -88,8 +89,25 @@ export class RestaurantesService {
   // Método para obtener culturas de un restaurante
   async obtenerCulturasDeRestaurante(restauranteId: string) {
     const restaurante = await this.findOne(restauranteId);
+    console.log(restaurante.culturas);
     return restaurante.culturas;
   }
+
+  // Método para obtener una cultura específica de un restaurante
+async obtenerCulturaDeRestaurante(restauranteId: string, culturaId: string) {
+  const restaurante = await this.findOne(restauranteId);  // Obtener el restaurante con las culturas
+  if (!restaurante.culturas) {
+    throw new BusinessLogicException('No se encontraron culturas asociadas al restaurante', HttpStatus.NOT_FOUND);
+  }
+
+  const cultura = restaurante.culturas.find(cultura => cultura.id === culturaId);
+  if (!cultura) {
+    throw new BusinessLogicException('La cultura solicitada no está asociada al restaurante', HttpStatus.NOT_FOUND);
+  }
+
+  return cultura;
+}
+
 
   // Método para actualizar la lista de culturas de un restaurante
   async actualizarCulturasEnRestaurante(restauranteId: string, culturaIds: string[]) {
@@ -105,7 +123,8 @@ export class RestaurantesService {
   // Método para eliminar una cultura de un restaurante
   async eliminarCulturaDeRestaurante(restauranteId: string, culturaId: string) {
     const restaurante = await this.findOne(restauranteId);
-    restaurante.culturas = (restaurante.culturas || []).filter(cultura => cultura.id !== culturaId);
+    console.log('Restaurante encontrado:', restaurante);
+    restaurante.culturas = restaurante.culturas.filter(cultura => cultura.id !== culturaId);
     return await this.restauranteRepository.save(restaurante);
   }
 

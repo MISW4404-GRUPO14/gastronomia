@@ -8,6 +8,8 @@ import { EliminarCulturaDto } from './dto/eliminar-culturas.dto';
 import { Restaurante } from './entities/restaurante.entity';
 import { Cultura } from '../culturas/entities/cultura.entity';
 import { NotFoundException } from '@nestjs/common';
+import { BusinessLogicException } from '../shared/errors/business-errors';
+import { HttpStatus } from '@nestjs/common';
 
 describe('RestaurantesController', () => {
   let controller: RestaurantesController;
@@ -73,6 +75,7 @@ describe('RestaurantesController', () => {
               ...mockRestaurante,
               culturas: mockCulturas.filter(cultura => cultura.id !== '1'),
             }),
+            obtenerCulturaDeRestaurante: jest.fn().mockResolvedValue(mockCulturas[0]),
           },
         },
       ],
@@ -148,6 +151,33 @@ describe('RestaurantesController', () => {
       });
     });
   });
+
+  describe('obtenerCulturaDeRestaurante', () => {
+    it('debe devolver la cultura cuando existe', async () => {
+      const mockCultura: Cultura = {
+        id: 'culturaId',
+        nombre: 'Cultura A',
+        descripcion: 'Descripción de la Cultura A',
+        paises: [],
+        restaurantes: [],
+        recetas: []
+      };
+
+      jest.spyOn(service, 'obtenerCulturaDeRestaurante').mockResolvedValue(mockCultura);
+
+      const result = await controller.obtenerCulturaDeRestaurante('restauranteId', 'culturaId');
+
+      expect(result).toEqual(mockCultura);
+      expect(service.obtenerCulturaDeRestaurante).toHaveBeenCalledWith('restauranteId', 'culturaId');
+    });
+
+    it('debe lanzar NotFoundException cuando la cultura no existe', async () => {
+      jest.spyOn(service, 'obtenerCulturaDeRestaurante').mockRejectedValue(
+        new NotFoundException('La cultura solicitada no está asociada al restaurante')
+      );
+  
+      await expect(controller.obtenerCulturaDeRestaurante('restauranteId', 'culturaId')).rejects.toThrow(NotFoundException);
+      expect(service.obtenerCulturaDeRestaurante).toHaveBeenCalledWith('restauranteId', 'culturaId');
+    });
+  });
 });
-
-
