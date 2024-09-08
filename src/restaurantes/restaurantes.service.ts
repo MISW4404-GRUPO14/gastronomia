@@ -35,7 +35,7 @@ export class RestaurantesService {
       const restaurantes = await this.restauranteRepository.find();
       return restaurantes;
     } catch(error){
-      throw new BusinessLogicException('Failed to get restaurantes due to a server error', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new BusinessLogicException('Error al obtener restaurantes debido a un error del servidor', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -46,7 +46,7 @@ export class RestaurantesService {
       }
     );
     if(!restaurante){
-      throw new BusinessLogicException(`The restaurante with the given id was not found`, HttpStatus.NOT_FOUND);
+      throw new BusinessLogicException(`El restaurante con el ID proporcionado no fue encontrado`, HttpStatus.NOT_FOUND);
       }
     return restaurante;
   }
@@ -57,13 +57,13 @@ export class RestaurantesService {
       ...updateRestauranteDto
     })
     if(!restaurante) { 
-      throw new BusinessLogicException(`The restaurante with the given id was not found`, HttpStatus.NOT_FOUND);}
+      throw new BusinessLogicException(`El restaurante con el ID proporcionado no fue encontrado`, HttpStatus.NOT_FOUND);}
     try{
       
       await this.restauranteRepository.save(restaurante);
       return restaurante;
     } catch(error){
-      throw new BusinessLogicException('Failed to update restaurant due to a server error.', HttpStatus.INTERNAL_SERVER_ERROR)
+      throw new BusinessLogicException('Error al actualizar el restaurante debido a un error del servidor', HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
 
@@ -85,50 +85,6 @@ export class RestaurantesService {
     console.log('Culturas agregadas:', restaurante);
     return await this.restauranteRepository.save(restaurante);
   }
-
-  // async agregarCulturasARestaurante(restauranteId: string, culturaIds: string[]) {
-  //   // Obtener restaurante con sus culturas actuales
-  //   const restaurante = await this.restauranteRepository.findOne({
-  //     where: { id: restauranteId },
-  //     relations: ['culturas'],
-  //   });
-  
-  //   if (!restaurante) {
-  //     throw new BusinessLogicException(`The restaurante with the given id was not found`, HttpStatus.NOT_FOUND);
-  //   }
-  
-  //   // Buscar culturas por IDs proporcionados
-  //   const culturas = await this.culturaRepository.findBy({ id: In(culturaIds) });
-    
-  //   // Validar que todas las culturas solicitadas existan
-  //   this.validateArrayCulturas(culturas, culturaIds);
-  
-  //   // Log para verificar las culturas existentes
-  //   this.logger.log(`Culturas encontradas: ${culturas.map(c => c.id).join(', ')}`);
-  
-  //   // Filtrar culturas ya existentes para evitar duplicados
-  //   const culturasExistentesIds = new Set(restaurante.culturas.map(cultura => cultura.id));
-  //   const nuevasCulturas = culturas.filter(cultura => !culturasExistentesIds.has(cultura.id));
-  
-  //   // Verificar si hay nuevas culturas para agregar
-  //   if (nuevasCulturas.length === 0) {
-  //     throw new BusinessLogicException('No new culturas to add', HttpStatus.BAD_REQUEST);
-  //   }
-  
-  //   // Agregar nuevas culturas al restaurante
-  //   restaurante.culturas.push(...nuevasCulturas);
-  
-  //   try {
-  //     // Intentar guardar cambios en el repositorio
-  //     return await this.restauranteRepository.save(restaurante);
-  //   } catch (error) {
-  //     // Log completo del error
-  //     this.logger.error('Error adding culturas to restaurante:', error);
-  //     // Lanzar excepción con detalles específicos
-  //     throw new BusinessLogicException(`Failed to add culturas to restaurante: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
-  //   }
-  // }
-
   // Método para obtener culturas de un restaurante
   async obtenerCulturasDeRestaurante(restauranteId: string) {
     const restaurante = await this.findOne(restauranteId);

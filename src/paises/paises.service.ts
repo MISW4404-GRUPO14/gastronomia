@@ -28,7 +28,7 @@ export class PaisesService {
       const paises = await this.paisRepository.find(); // Usa await aquí
       return paises;
     } catch (error) {
-      throw new BusinessLogicException('Failed to get paises due to a server error', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new BusinessLogicException('Error al obtener países debido a un error del servidor', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
   
@@ -40,7 +40,7 @@ export class PaisesService {
       }
     );
     if(!pais){
-      throw new BusinessLogicException(`The pais with the given id was not found`, HttpStatus.NOT_FOUND);
+      throw new BusinessLogicException(`El país con el ID proporcionado no fue encontrado`, HttpStatus.NOT_FOUND);
       }
     return pais;
   }
@@ -51,13 +51,13 @@ export class PaisesService {
       ...updatePaisDto
     });
     if (!pais) {
-      throw new BusinessLogicException('The pais with the given id was not found', HttpStatus.NOT_FOUND);
+      throw new BusinessLogicException('El país con el ID proporcionado no fue encontrado', HttpStatus.NOT_FOUND);
     }
     try {
       await this.paisRepository.save(pais);
       return pais;
     } catch (error) {
-      throw new BusinessLogicException('Failed to update pais due to a server error.', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new BusinessLogicException('Error al actualizar el país debido a un error del servidor', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }  
 
@@ -67,8 +67,7 @@ export class PaisesService {
       await this.paisRepository.remove(pais);
       return pais;
     } catch (error) {
-      throw new BusinessLogicException('The pais with the given id was not found', HttpStatus.NOT_FOUND);
+      throw new BusinessLogicException('El país con el ID proporcionado no fue encontrado', HttpStatus.NOT_FOUND);
     }
   }
-  
 }

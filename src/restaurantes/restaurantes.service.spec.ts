@@ -93,7 +93,7 @@ describe('RestaurantesService', () => {
       jest.spyOn(repository, 'find').mockRejectedValue(new Error('Database error'));
   
       await expect(service.findAll()).rejects.toThrow(
-        new BusinessLogicException('Failed to get restaurantes due to a server error', HttpStatus.INTERNAL_SERVER_ERROR),
+        new BusinessLogicException('Error al obtener restaurantes debido a un error del servidor', HttpStatus.INTERNAL_SERVER_ERROR),
       );
     });
   });
@@ -116,7 +116,7 @@ describe('RestaurantesService', () => {
       jest.spyOn(repository, 'findOne').mockResolvedValue(null);
   
       await expect(service.findOne('invalid-id')).rejects.toThrow(
-        new BusinessLogicException(`The restaurante with the given id was not found`, HttpStatus.NOT_FOUND),
+        new BusinessLogicException(`El restaurante con el ID proporcionado no fue encontrado`, HttpStatus.NOT_FOUND),
       );
     });
   });
@@ -139,7 +139,7 @@ describe('RestaurantesService', () => {
       jest.spyOn(repository, 'preload').mockResolvedValue(null); // Simula que el restaurante no se encuentra
   
       await expect(service.update('invalid-id', {})).rejects.toThrow(
-        new BusinessLogicException(`The restaurante with the given id was not found`, HttpStatus.NOT_FOUND),
+        new BusinessLogicException(`El restaurante con el ID proporcionado no fue encontrado`, HttpStatus.NOT_FOUND),
       );
     });
   
@@ -148,10 +148,9 @@ describe('RestaurantesService', () => {
       jest.spyOn(repository, 'save').mockRejectedValue(new Error('Database error'));
   
       await expect(service.update('1', {})).rejects.toThrow(
-        new BusinessLogicException('Failed to update restaurant due to a server error.', HttpStatus.INTERNAL_SERVER_ERROR),
+        new BusinessLogicException('Error al actualizar el restaurante debido a un error del servidor', HttpStatus.INTERNAL_SERVER_ERROR),
       );
     });
-    
   });
 
   describe('remove', () => {
@@ -242,5 +241,4 @@ describe('RestaurantesService', () => {
       expect(result).toEqual({ ...mockRestaurante, culturas: [{ id: '3' }] });
     });
   });
-
 });

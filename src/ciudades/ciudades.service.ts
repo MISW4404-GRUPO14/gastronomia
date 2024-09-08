@@ -36,7 +36,7 @@ export class CiudadesService {
       const ciudades = await this.ciudadRepository.find();
       return ciudades;
     } catch (error) {
-      throw new BusinessLogicException('Failed to get ciudades due to a server error', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new BusinessLogicException('Error al obtener ciudades debido a un error del servidor', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -47,7 +47,7 @@ export class CiudadesService {
       }
     );
     if(!ciudad){
-      throw new BusinessLogicException(`The ciudad with the given id was not found`, HttpStatus.NOT_FOUND);
+      throw new BusinessLogicException(`La ciudad con el ID proporcionado no fue encontrado`, HttpStatus.NOT_FOUND);
       }
     return ciudad;
   }
@@ -58,13 +58,13 @@ export class CiudadesService {
       ...updateCiudadDto
     })
     if(!ciudad) { 
-      throw new BusinessLogicException(`The ciudad with the given id was not found`, HttpStatus.NOT_FOUND);}
+      throw new BusinessLogicException(`La ciudad con el ID proporcionado no fue encontrado`, HttpStatus.NOT_FOUND);}
     try{
       
       await this.ciudadRepository.save(ciudad);
       return ciudad;
     } catch(error){
-      throw new BusinessLogicException('Failed to update ciudad due to a server error.', HttpStatus.INTERNAL_SERVER_ERROR)
+      throw new BusinessLogicException('Error al actualizar el país debido a un error del servidor.', HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
   async remove(id: string){
@@ -73,7 +73,7 @@ export class CiudadesService {
       await this.ciudadRepository.remove(ciudad);
       return ciudad;
     } catch(error){
-      throw new BusinessLogicException('The ciudad with the given id was not found', HttpStatus.NOT_FOUND);
+      throw new BusinessLogicException('La ciudad con el ID proporcionado no fue encontrado', HttpStatus.NOT_FOUND);
     }
   }
 
@@ -133,5 +133,4 @@ export class CiudadesService {
     }
     return ciudad.restaurantes;
   }
-
 }
