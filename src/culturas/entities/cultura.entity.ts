@@ -19,7 +19,6 @@ import { Pais } from '../../paises/entities/pais.entity';
         paises: Pais[];
       
         @ManyToMany(() => Restaurante, (restaurante) => restaurante.culturas)
-        @JoinTable()
         restaurantes: Restaurante[];
       
         @OneToMany(() => Receta, receta => receta.cultura)
