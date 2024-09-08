@@ -1,9 +1,9 @@
-import { IsUUID } from 'class-validator';
+// import { IsUUID } from 'class-validator';
 
-export class EliminarPaisDto {
-  @IsUUID()
-  culturaId: string;
+// export class EliminarPaisDto {
+//   @IsUUID()
+//   culturaId: string;
 
-  @IsUUID()
-  paisId: string;
-}
+//   @IsUUID()
+//   paisId: string;
+// }

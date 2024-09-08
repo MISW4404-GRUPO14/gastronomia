@@ -14,13 +14,13 @@ import { Pais } from '../../paises/entities/pais.entity';
         @Column('text')
         descripcion: string;
 
-        @ManyToMany(() => Pais, pais => pais.culturas)
+        @ManyToMany(() => Pais, (pais) => pais.culturas)
         @JoinTable()
         paises: Pais[];
       
         @ManyToMany(() => Restaurante, (restaurante) => restaurante.culturas)
         restaurantes: Restaurante[];
       
-        @OneToMany(() => Receta, receta => receta.cultura)
+        @OneToMany(() => Receta, (receta) => receta.cultura, { cascade: true})
         recetas: Receta[];
 }
