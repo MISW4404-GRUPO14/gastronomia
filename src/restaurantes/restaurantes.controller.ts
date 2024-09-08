@@ -3,6 +3,7 @@ import { RestaurantesService } from './restaurantes.service';
 import { CreateRestauranteDto } from './dto/create-restaurante.dto';
 import { UpdateRestauranteDto } from './dto/update-restaurante.dto';
 import { AgregarCulturasDto } from './dto/agregar-culturas.dto';
+import { EliminarCulturaDto } from './dto/eliminar-culturas.dto';
 
 @Controller('restaurantes')
 export class RestaurantesController {
@@ -61,6 +62,12 @@ export class RestaurantesController {
     return this.restaurantesService.actualizarCulturasEnRestaurante(id, agregarCulturasDto.culturaIds);
   }
 
-  
+  @Delete(':id/culturas/:culturaId')
+  async eliminarCultura(
+    @Param() params: EliminarCulturaDto
+  ){
+    const {restauranteId, culturaId} = params;
+    return this.restaurantesService.eliminarCulturaDeRestaurante(restauranteId, culturaId);
+  }
 
 }
