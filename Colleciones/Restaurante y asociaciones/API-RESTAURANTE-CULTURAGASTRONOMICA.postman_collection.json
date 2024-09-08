@@ -1,26 +1,49 @@
 {
 	"info": {
-		"_postman_id": "a480ba51-55ae-4340-81b6-392b27ced76f",
-		"name": "API-RESTAURANTE/CULTURAGASTRONOMICA",
+		"_postman_id": "60fb4f23-17d2-44e0-a1bb-f25cfa785534",
+		"name": "Restaurante - Cultura gastronomica",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "26687890"
+		"_exporter_id": "29499381"
 	},
 	"item": [
 		{
 			"name": "Asociar una cultura gastronomica a un restaurante",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"   pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"culturaIds\": [\"{{culturaId}}\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturasGastronomicas/{{id_cultura}}",
+					"raw": "{{baseURL}}/restaurantes/{{restauranteId}}/culturas/",
 					"host": [
-						"{{base_url}}"
+						"{{baseURL}}"
 					],
 					"path": [
 						"restaurantes",
-						"{{id_restaurante}}",
-						"culturasGastronomicas",
-						"{{id_cultura}}"
+						"{{restauranteId}}",
+						"culturas",
+						""
 					]
 				}
 			},
@@ -92,73 +115,55 @@
 			]
 		},
 		{
-			"name": "Asociar una Cultura Gastronómica que no existe a un Restaurante",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturasGastronomicas/0000-0000-0000",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"restaurantes",
-						"{{id_restaurante}}",
-						"culturasGastronomicas",
-						"0000-0000-0000"
-					]
-				}
-			},
-			"response": [
+			"name": "Asociar una Cultura Gastronómica a un restaurante que no existe",
+			"event": [
 				{
-					"name": "Asociar una Cultura Gastronómica que no existe a un Restaurante",
-					"originalRequest": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturasGastronomicas/0000-0000-0000",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"restaurantes",
-								"{{id_restaurante}}",
-								"culturasGastronomicas",
-								"0000-0000-0000"
-							]
-						}
-					},
-					"status": "Not Found",
-					"code": 404,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json",
-							"description": "",
-							"type": "text"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"error\": \"Cultura Gastronómica no encontrada\",\n    \"message\": \"La cultura gastronómica con ID {culturaId} no existe.\",\n    \"status\": 404\n}"
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"const paisId = pm.variables.get(\"paisId\");\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"   pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"if (paisId) {\r",
+							"  const id = paisId;  \r",
+							"  pm.test(`Get expected error message`, function() {\r",
+							"    if (response.error) {\r",
+							"      pm.expect(response.message).to.include(`The restaurante with the given id ${id} was not found`);\r",
+							"    }\r",
+							"  });\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
 				}
-			]
-		},
-		{
-			"name": "Asociar una Cultura Gastronómica a un Restaurante que no existe",
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"culturaIds\": [\"{{culturaId}}\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "{{base_url}}/restaurantes/0000-0000-0000/culturasGastronomicas/{{id_cultura}}",
+					"raw": "{{baseURL}}/restaurantes/{{culturaId}}/culturas",
 					"host": [
-						"{{base_url}}"
+						"{{baseURL}}"
 					],
 					"path": [
 						"restaurantes",
-						"0000-0000-0000",
-						"culturasGastronomicas",
-						"{{id_cultura}}"
+						"{{culturaId}}",
+						"culturas"
 					]
 				}
 			},
@@ -198,20 +203,430 @@
 			]
 		},
 		{
+			"name": "Obtener todas las Culturas Gastronómicas asociadas a un Restaurante",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"   pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/restaurantes/{{restauranteId}}/culturas",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"restaurantes",
+						"{{restauranteId}}",
+						"culturas"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Obtener todas las Culturas Gastronómicas asociadas a un Restaurante",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturasGastronomicas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"restaurantes",
+								"{{id_restaurante}}",
+								"culturasGastronomicas"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"restaurante\": {\n        \"id\": 1,\n        \"nombre\": \"Restaurante El Buen Sabor\",\n        \"descripcion\": \"Comida tradicional con un toque moderno.\",\n        \"estrellas\": 4\n    },\n    \"culturasGastronomicas\": [\n        {\n            \"id\": 2,\n            \"nombre\": \"Cultura Mediterránea\",\n            \"descripcion\": \"Sabores frescos y saludables del Mediterráneo.\"\n        },\n        {\n            \"id\": 3,\n            \"nombre\": \"Cultura Asiática\",\n            \"descripcion\": \"Sabores exóticos y variados de Asia.\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "Obtener todas las Culturas Gastronómicas asociadas a un Restaurante no existente",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturasGastronomicas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"restaurantes",
+								"{{id_restaurante}}",
+								"culturasGastronomicas"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"error\": \"Restaurante no encontrado o sin culturas gastronómicas asociadas.\"\n}\n"
+				}
+			]
+		},
+		{
+			"name": "Obtener una cultura Gastronómica de un restaurante que no existe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"const culturaId = pm.variables.get(\"culturaId\");\r",
+							"\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"   pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"if (culturaId) {\r",
+							"  const id = culturaId;  \r",
+							"  pm.test(`Get expected error message`, function() {\r",
+							"    if (response.error) {\r",
+							"      pm.expect(response.message).to.include(`The restaurante with the given id ${id} was not found`);\r",
+							"    }\r",
+							"  });\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/restaurantes/{{paisId}}/culturas",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"restaurantes",
+						"{{paisId}}",
+						"culturas"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Obtener una Cultura Gastronómica que no está asociada a un Restaurante",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturasGastronomicas/{{id_cultura}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"restaurantes",
+								"{{id_restaurante}}",
+								"culturasGastronomicas",
+								"{{id_cultura}}"
+							]
+						}
+					},
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\": \"Cultura Gastronómica no asociada\",\n    \"message\": \"La cultura gastronómica con ID {culturaId} no está asociada al restaurante con ID {id}.\",\n    \"status\": 404\n}"
+				}
+			]
+		},
+		{
+			"name": "Actualizar las cultura de un restaurante",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"   pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"culturaIds\": [\"{{culturaId}}\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/restaurantes/{{restauranteId}}/culturas",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"restaurantes",
+						"{{restauranteId}}",
+						"culturas"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Actualizar las cultura de un restaurante",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"culturaIds\": [\"{{culturaId}}\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/restaurantes/{{restauranteId}}/culturas",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"restaurantes",
+								"{{restauranteId}}",
+								"culturas"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "282"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"11a-i0/2zZWbzXmgLMnMlM9ooUOr6so\""
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 08 Sep 2024 04:26:05 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"153ac83e-94a5-4bc0-afde-d73f9f049208\",\n    \"nombre\": \"Restaurante El Gourmet\",\n    \"estrellas\": \"5\",\n    \"fechasConsecucionEstrellas\": \"2024-09-05\",\n    \"culturas\": [\n        {\n            \"id\": \"2118bee4-13b7-4841-a6ea-5349a7eb42ae\",\n            \"nombre\": \"Cultura Gastronómica Actualizada\",\n            \"descripcion\": \"Descripción actualizada\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Actualizar las cultura de un restaurante que no existe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"const restauranteId = pm.variables.get(\"restauranteId\");\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"   pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"if (restauranteId) {\r",
+							"  const id = restauranteId;  \r",
+							"  pm.test(`Get expected error message`, function() {\r",
+							"    if (response.error) {\r",
+							"      pm.expect(response.message).to.include(`The restaurante with the given id ${id} was not found`);\r",
+							"    }\r",
+							"  });\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"culturaIds\": [\"{{culturaId}}\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/restaurantes/{{culturaId}}/culturas",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"restaurantes",
+						"{{culturaId}}",
+						"culturas"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Actualizar las cultura de un restaurante que no existe",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"culturaIds\": [\"{{culturaId}}\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/restaurantes/{{culturaId}}/culturas",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"restaurantes",
+								"{{culturaId}}",
+								"culturas"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "78"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"4e-zDxpVBDTf0Uq/bsNzWna/hkaS6w\""
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 08 Sep 2024 04:26:20 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 404,\n    \"message\": \"The restaurante with the given id was not found\"\n}"
+				}
+			]
+		},
+		{
 			"name": "Eliminar la asociación de una cultura gastronomica de un restaurante",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"   pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturasGastronomicas/{{id_cultura}}",
+					"raw": "{{baseURL}}/restaurantes/{{restauranteId}}/culturas/{{culturaId}}",
 					"host": [
-						"{{base_url}}"
+						"{{baseURL}}"
 					],
 					"path": [
 						"restaurantes",
-						"{{id_restaurante}}",
-						"culturasGastronomicas",
-						"{{id_cultura}}"
+						"{{restauranteId}}",
+						"culturas",
+						"{{culturaId}}"
 					]
 				}
 			},
@@ -283,266 +698,45 @@
 			]
 		},
 		{
-			"name": "Obtener todas las Culturas Gastronómicas asociadas a un Restaurante",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturasGastronomicas",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"restaurantes",
-						"{{id_restaurante}}",
-						"culturasGastronomicas"
-					]
-				}
-			},
-			"response": [
-				{
-					"name": "Obtener todas las Culturas Gastronómicas asociadas a un Restaurante",
-					"originalRequest": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturasGastronomicas",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"restaurantes",
-								"{{id_restaurante}}",
-								"culturasGastronomicas"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json",
-							"description": "",
-							"type": "text"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"restaurante\": {\n        \"id\": 1,\n        \"nombre\": \"Restaurante El Buen Sabor\",\n        \"descripcion\": \"Comida tradicional con un toque moderno.\",\n        \"estrellas\": 4\n    },\n    \"culturasGastronomicas\": [\n        {\n            \"id\": 2,\n            \"nombre\": \"Cultura Mediterránea\",\n            \"descripcion\": \"Sabores frescos y saludables del Mediterráneo.\"\n        },\n        {\n            \"id\": 3,\n            \"nombre\": \"Cultura Asiática\",\n            \"descripcion\": \"Sabores exóticos y variados de Asia.\"\n        }\n    ]\n}"
-				},
-				{
-					"name": "Obtener todas las Culturas Gastronómicas asociadas a un Restaurante no existente",
-					"originalRequest": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturasGastronomicas",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"restaurantes",
-								"{{id_restaurante}}",
-								"culturasGastronomicas"
-							]
-						}
-					},
-					"status": "Not Found",
-					"code": 404,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json",
-							"description": "",
-							"type": "text"
-						}
-					],
-					"cookie": [],
-					"body": "{\n  \"error\": \"Restaurante no encontrado o sin culturas gastronómicas asociadas.\"\n}\n"
-				}
-			]
-		},
-		{
-			"name": "Obtener todos los Restaurantes asociados a una Cultura Gastronómica",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": [
-				{
-					"name": "Obtener todos los Restaurantes asociados a una Cultura Gastronómica",
-					"originalRequest": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/culturasGastronomicas/{{id_cultura}}/restaurantes",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"culturasGastronomicas",
-								"{{id_cultura}}",
-								"restaurantes"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json",
-							"description": "",
-							"type": "text"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"culturaGastronomica\": {\n        \"id\": 2,\n        \"nombre\": \"Cultura Mediterránea\",\n        \"descripcion\": \"Sabores frescos y saludables del Mediterráneo.\"\n    },\n    \"restaurantes\": [\n        {\n            \"id\": 1,\n            \"nombre\": \"Restaurante El Buen Sabor\",\n            \"descripcion\": \"Comida tradicional con un toque moderno.\",\n            \"estrellas\": 4\n        },\n        {\n            \"id\": 4,\n            \"nombre\": \"Restaurante Gourmet\",\n            \"descripcion\": \"Experiencia culinaria de alta cocina.\",\n            \"estrellas\": 5\n        }\n    ]\n}"
-				},
-				{
-					"name": "Obtener todos los Restaurantes asociados a una Cultura Gastronómica no existente",
-					"originalRequest": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/culturasGastronomicas/0000-0000-0000/restaurantes",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"culturasGastronomicas",
-								"0000-0000-0000",
-								"restaurantes"
-							]
-						}
-					},
-					"status": "Not Found",
-					"code": 404,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json",
-							"description": "",
-							"type": "text"
-						}
-					],
-					"cookie": [],
-					"body": "{\n  \"error\": \"Cultura Gastronómica no encontrada o sin restaurantes asociados.\"\n}\n"
-				}
-			]
-		},
-		{
-			"name": "Obtener una Cultura Gastronómica de un Restaurante",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": [
-				{
-					"name": "Obtener una Cultura Gastronómica de un Restaurante",
-					"originalRequest": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturasGastronomicas/{{id_cultura}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"restaurantes",
-								"{{id_restaurante}}",
-								"culturasGastronomicas",
-								"{{id_cultura}}"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json",
-							"description": "",
-							"type": "text"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"culturaGastronomicaId\": \"{culturaId}\",\n    \"nombre\": \"Nombre de la Cultura\",\n    \"descripcion\": \"Descripción de la cultura gastronómica.\",\n    \"paisOrigen\": \"País de origen\",\n    \"restauranteId\": \"{id}\"\n}"
-				}
-			]
-		},
-		{
-			"name": "Obtener una Cultura Gastronómica que no está asociada a un Restaurante",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturasGastronomicas/{{id_cultura}}",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"restaurantes",
-						"{{id_restaurante}}",
-						"culturasGastronomicas",
-						"{{id_cultura}}"
-					]
-				}
-			},
-			"response": [
-				{
-					"name": "Obtener una Cultura Gastronómica que no está asociada a un Restaurante",
-					"originalRequest": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturasGastronomicas/{{id_cultura}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"restaurantes",
-								"{{id_restaurante}}",
-								"culturasGastronomicas",
-								"{{id_cultura}}"
-							]
-						}
-					},
-					"code": 404,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json",
-							"description": "",
-							"type": "text"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"error\": \"Cultura Gastronómica no asociada\",\n    \"message\": \"La cultura gastronómica con ID {culturaId} no está asociada al restaurante con ID {id}.\",\n    \"status\": 404\n}"
-				}
-			]
-		},
-		{
 			"name": "Eliminar una Cultura Gastronómica que no existe de un Restaurante",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response;\r",
+							"try {\r",
+							"  response = pm.response.json();\r",
+							"} catch (e) {\r",
+							"  console.error('Response is not valid JSON');\r",
+							"  response = {}; \r",
+							"}\r",
+							"const paisId = pm.variables.get(\"restauranteId\");\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"  pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturasGastronomicas/0000-0000-0000",
+					"raw": "{{baseURL}}/restaurantes/{{culturaId}}/culturas/{{culturaId}}",
 					"host": [
-						"{{base_url}}"
+						"{{baseURL}}"
 					],
 					"path": [
 						"restaurantes",
-						"{{id_restaurante}}",
-						"culturasGastronomicas",
-						"0000-0000-0000"
+						"{{culturaId}}",
+						"culturas",
+						"{{culturaId}}"
 					]
 				}
 			},
