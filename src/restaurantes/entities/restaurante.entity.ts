@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Cultura } from "../../culturas/entities/cultura.entity";
 import { Ciudad } from "../../ciudades/entities/ciudad.entity";
 
@@ -17,8 +17,7 @@ export class Restaurante {
     @Column('date')
     fechasConsecucionEstrellas: Date;
 
-    @ManyToMany(() => Cultura, (cultura) => cultura.restaurantes)
-    @JoinTable()
+    @ManyToMany(()=> Cultura, (cultura) => cultura.restaurantes)
     culturas: Cultura[];
 
     @ManyToOne(() => Ciudad, ciudad => ciudad.restaurantes)

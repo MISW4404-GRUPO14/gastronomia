@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, ParseUUIDPipe, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, ParseUUIDPipe, Res, HttpStatus } from '@nestjs/common';
 import { RestaurantesService } from './restaurantes.service';
 import { CreateRestauranteDto } from './dto/create-restaurante.dto';
 import { UpdateRestauranteDto } from './dto/update-restaurante.dto';
 import { AgregarCulturasDto } from './dto/agregar-culturas.dto';
-import { EliminarCulturaDto } from './dto/eliminar-culturas.dto';
+import { Response } from 'express';
 
 @Controller('restaurantes')
 export class RestaurantesController {
@@ -38,19 +38,13 @@ export class RestaurantesController {
   @Post(':id/culturas')
   async agregarCulturas(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() agregarCulturasDto: AgregarCulturasDto
+    @Body() AgregarCulturasDto: AgregarCulturasDto
   ){
-    console.log('Recibido culturaIds', agregarCulturasDto.culturaIds);
-    console.log('Recibido restauranteid', id);
-    const restaurante = await this.restaurantesService.findOne(id);
-    console.log('Restaurante encontrado', restaurante);
-    return this.restaurantesService.agregarCulturasARestaurante(id, agregarCulturasDto.culturaIds);
+    return this.restaurantesService.agregarCulturaARestaurante(id, AgregarCulturasDto.culturaIds);
   }
 
   @Get(':id/culturas')
-  async obtenerCulturas(
-    @Param('id', ParseUUIDPipe) id: string
-  ){
+  async obtenerCulturasDeRestaurante(@Param('id', ParseUUIDPipe) id: string) {
     return this.restaurantesService.obtenerCulturasDeRestaurante(id);
   }
 
@@ -58,26 +52,17 @@ export class RestaurantesController {
   async actualizarCulturas(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() agregarCulturasDto: AgregarCulturasDto
-  ){
-    return this.restaurantesService.actualizarCulturasEnRestaurante(id, agregarCulturasDto.culturaIds);
+  ) {
+    return this.restaurantesService.actualizarCulturasDeRestaurante(id, agregarCulturasDto.culturaIds);
   }
-
-  @Get(':restauranteId/culturas/:culturaId')
-  async obtenerCulturaDeRestaurante(@Param('restauranteId') restauranteId: string, @Param('culturaId') culturaId: string) {
-    try {
-      const cultura = await this.restaurantesService.obtenerCulturaDeRestaurante(restauranteId, culturaId);
-      return cultura;
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
-  }
-
+  
   @Delete(':restauranteId/culturas/:culturaId')
   async eliminarCultura(
-    @Param() params: EliminarCulturaDto
-  ){
-    const {restauranteId, culturaId} = params;
-    return this.restaurantesService.eliminarCulturaDeRestaurante(restauranteId, culturaId);
+    @Param('restauranteId', ParseUUIDPipe) restauranteId: string,
+    @Param('culturaId', ParseUUIDPipe) culturaId: string,
+    @Res() res: Response,
+  ): Promise<void> {
+    await this.restaurantesService.eliminarCulturaDeRestaurante(restauranteId, culturaId);
+    res.status(HttpStatus.NO_CONTENT).send();
   }
-
 }

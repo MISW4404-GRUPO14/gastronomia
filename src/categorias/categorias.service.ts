@@ -32,10 +32,11 @@ export class CategoriasService {
     const existeCategoria: Categoria = await this.categoriaRepository.findOne({where:{id}});
     if (!existeCategoria)
       throw new BusinessLogicException("No existe una categoria con ese id", HttpStatus.NOT_FOUND);
-   
-    updateCategoriaDto.id = id; 
-   
-    return await this.categoriaRepository.save(updateCategoriaDto);  }
+    existeCategoria.nombre = updateCategoriaDto.nombre || existeCategoria.nombre;
+    existeCategoria.descripcion = updateCategoriaDto.descripcion || existeCategoria.descripcion;
+
+    return await this.categoriaRepository.save(existeCategoria);  
+  }
 
   async remove(id: string) {
     const categoria: Categoria = await this.categoriaRepository.findOne({

@@ -3,17 +3,18 @@ import { RestaurantesController } from './restaurantes.controller';
 import { RestaurantesService } from './restaurantes.service';
 import { CreateRestauranteDto } from './dto/create-restaurante.dto';
 import { UpdateRestauranteDto } from './dto/update-restaurante.dto';
-import { AgregarCulturasDto } from './dto/agregar-culturas.dto';
-import { EliminarCulturaDto } from './dto/eliminar-culturas.dto';
 import { Restaurante } from './entities/restaurante.entity';
 import { Cultura } from '../culturas/entities/cultura.entity';
-import { NotFoundException } from '@nestjs/common';
-import { BusinessLogicException } from '../shared/errors/business-errors';
-import { HttpStatus } from '@nestjs/common';
+import { AgregarCulturasDto } from './dto/agregar-culturas.dto';
+import { Response } from 'express';
 
 describe('RestaurantesController', () => {
   let controller: RestaurantesController;
   let service: RestaurantesService;
+  let mockResponse: Partial<Response>;
+
+  const restauranteId = '0e07e82b-0a71-465e-ad13-cdf7c8c16c45';
+  const culturaId = '0e07e82b-0a71-465e-ad13-cdf7c8c16c40';
 
   const mockRestaurante: Restaurante = {
     id: 'some-uuid',
@@ -41,13 +42,14 @@ describe('RestaurantesController', () => {
     fechasConsecucionEstrellas: '2023-02-01',
   };
 
-  const mockAgregarCulturasDto: AgregarCulturasDto = {
-    culturaIds: ['1', '2'],
-  };
-
-  const mockEliminarCulturaDto: EliminarCulturaDto = {
-    restauranteId: 'some-uuid',
-    culturaId: '1',
+  const mockCultura: Cultura = {
+    id: 'cultura-uuid',
+    nombre: 'Cultura de Ejemplo',
+    descripcion: 'Descripción de la cultura de ejemplo',
+    paises: [],
+    restaurantes: [],
+    recetas: [],
+    productos: []
   };
 
   beforeEach(async () => {
@@ -62,20 +64,10 @@ describe('RestaurantesController', () => {
             findOne: jest.fn().mockResolvedValue(mockRestaurante),
             update: jest.fn().mockResolvedValue(mockRestaurante),
             remove: jest.fn().mockResolvedValue(mockRestaurante),
-            agregarCulturasARestaurante: jest.fn().mockResolvedValue({
-              ...mockRestaurante,
-              culturas: mockCulturas,
-            }),
-            obtenerCulturasDeRestaurante: jest.fn().mockResolvedValue(mockCulturas),
-            actualizarCulturasEnRestaurante: jest.fn().mockResolvedValue({
-              ...mockRestaurante,
-              culturas: mockCulturas,
-            }),
-            eliminarCulturaDeRestaurante: jest.fn().mockResolvedValue({
-              ...mockRestaurante,
-              culturas: mockCulturas.filter(cultura => cultura.id !== '1'),
-            }),
-            obtenerCulturaDeRestaurante: jest.fn().mockResolvedValue(mockCulturas[0]),
+            agregarCulturaARestaurante: jest.fn().mockResolvedValue(mockRestaurante),
+            obtenerCulturasDeRestaurante: jest.fn().mockResolvedValue([mockRestaurante]),
+            actualizarCulturasDeRestaurante: jest.fn().mockResolvedValue(mockRestaurante),
+            eliminarCulturaDeRestaurante: jest.fn().mockResolvedValue(undefined)
           },
         },
       ],
@@ -119,65 +111,52 @@ describe('RestaurantesController', () => {
     });
   });
 
-  describe('agregarCulturas', () => {
-    it('should add cultures to a restaurante', async () => {
-      expect(await controller.agregarCulturas('some-uuid', mockAgregarCulturasDto)).toEqual({
-        ...mockRestaurante,
-        culturas: mockCulturas,
-      });
+  //-----------------------------Cultura de un restaurante---------------------------------------------------//
+
+  describe('Agregar cultura a un restaurante', () => {
+    it('debería llamar a agregarCulturaARestaurante con los datos correctos', async () => {
+      const agregarCulturasDto: AgregarCulturasDto = {
+        culturaIds: ["0e07e82b-0a71-465e-ad13-cdf7c8c16c40"]
+    };
+      await controller.agregarCulturas(culturaId,agregarCulturasDto);
+      expect(service.agregarCulturaARestaurante).toHaveBeenCalledWith( culturaId, ["0e07e82b-0a71-465e-ad13-cdf7c8c16c40"]);
     });
   });
 
   describe('obtenerCulturas', () => {
-    it('should return cultures of a restaurante', async () => {
-      expect(await controller.obtenerCulturas('some-uuid')).toEqual(mockCulturas);
+    it('debería llamar a obtenerCulturasDePais con el ID correcto', async () => {
+      await controller.obtenerCulturasDeRestaurante(culturaId);
+      expect(service.obtenerCulturasDeRestaurante).toHaveBeenCalledWith(culturaId);
     });
   });
 
   describe('actualizarCulturas', () => {
-    it('should update cultures in a restaurante', async () => {
-      expect(await controller.actualizarCulturas('some-uuid', mockAgregarCulturasDto)).toEqual({
-        ...mockRestaurante,
-        culturas: mockCulturas,
-      });
+    it('debería llamar a actualizarCulturasDeRestaurante con los datos correctos', async () => {
+      const agregarCulturasDto: AgregarCulturasDto = {
+        culturaIds: ['0e07e82b-0a71-465e-ad13-cdf7c8c16c40'],
+      };
+      await controller.actualizarCulturas(culturaId, agregarCulturasDto);
+      expect(service.actualizarCulturasDeRestaurante).toHaveBeenCalledWith(
+        culturaId,
+        agregarCulturasDto.culturaIds,
+      );
     });
   });
 
   describe('eliminarCultura', () => {
-    it('should remove a culture from a restaurante', async () => {
-      expect(await controller.eliminarCultura(mockEliminarCulturaDto)).toEqual({
-        ...mockRestaurante,
-        culturas: mockCulturas.filter(cultura => cultura.id !== '1'),
-      });
+    it('debería llamar a eliminarCulturaDeRestaurante con los IDs correctos y enviar una respuesta con estado 204', async () => {
+      const mockRes = {
+        status: jest.fn().mockReturnThis(),
+        send: jest.fn(),
+      } as unknown as Response;
+
+      await controller.eliminarCultura(culturaId, restauranteId, mockRes);
+
+      expect(service.eliminarCulturaDeRestaurante).toHaveBeenCalledWith(culturaId, restauranteId);
+      expect(mockRes.status).toHaveBeenCalledWith(204);
+      expect(mockRes.send).toHaveBeenCalled();
     });
   });
 
-  describe('obtenerCulturaDeRestaurante', () => {
-    it('debe devolver la cultura cuando existe', async () => {
-      const mockCultura: Cultura = {
-        id: 'culturaId',
-        nombre: 'Cultura A',
-        descripcion: 'Descripción de la Cultura A',
-        paises: [],
-        restaurantes: [],
-        recetas: []
-      };
-
-      jest.spyOn(service, 'obtenerCulturaDeRestaurante').mockResolvedValue(mockCultura);
-
-      const result = await controller.obtenerCulturaDeRestaurante('restauranteId', 'culturaId');
-
-      expect(result).toEqual(mockCultura);
-      expect(service.obtenerCulturaDeRestaurante).toHaveBeenCalledWith('restauranteId', 'culturaId');
-    });
-
-    it('debe lanzar NotFoundException cuando la cultura no existe', async () => {
-      jest.spyOn(service, 'obtenerCulturaDeRestaurante').mockRejectedValue(
-        new NotFoundException('La cultura solicitada no está asociada al restaurante')
-      );
-  
-      await expect(controller.obtenerCulturaDeRestaurante('restauranteId', 'culturaId')).rejects.toThrow(NotFoundException);
-      expect(service.obtenerCulturaDeRestaurante).toHaveBeenCalledWith('restauranteId', 'culturaId');
-    });
-  });
 });
+

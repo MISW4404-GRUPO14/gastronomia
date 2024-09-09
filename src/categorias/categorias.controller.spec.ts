@@ -38,7 +38,6 @@ describe('CategoriasController', () => {
   describe('create', () => {
     it('debería llamar a CategoriaService.create con los datos correctos', async () => {
       const createCategoriaDto: CreateCategoriaDto = {
-        id:"",
         nombre: "Categoria 1",
         descripcion:"Descripción Categoria",
     };
@@ -65,9 +64,17 @@ describe('CategoriasController', () => {
   describe('update', () => {
     it('debería llamar a Categoria.update con el ID y datos correctos', async () => {
       const id = 'uuid';
-      const updateCategoriaDTO:UpdateCategoriaDto  = { id:"",descripcion:"",nombre: 'Receta Actualizada' };
+      const updateCategoriaDTO:UpdateCategoriaDto  = { descripcion:"",nombre: 'Receta Actualizada' };
       await controller.update(id, updateCategoriaDTO);
       expect(service.update).toHaveBeenCalledWith(id, updateCategoriaDTO);
+    });
+  });
+
+  describe('remove', () => {
+    it('debería llamar a Categoria.remove con el ID correcto', async () => {
+      const id = 'uuid';
+      await controller.remove(id);
+      expect(service.remove).toHaveBeenCalledWith(id);
     });
   });
 
