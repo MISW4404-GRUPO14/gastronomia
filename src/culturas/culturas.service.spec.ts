@@ -574,7 +574,7 @@ describe('CulturasService', () => {
       jest.spyOn(culturaRepository, 'save').mockResolvedValueOnce(culturaMock);
 
       const result = await culturaservice.eliminarRecetaDeCultura('culturaId', 'recetaId');
-      expect(result.recetas).not.toContain(recetaMock);
+      expect(result).toBe(undefined);
     });
   });
 

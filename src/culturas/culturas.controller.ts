@@ -108,7 +108,7 @@ export class CulturasController {
     return this.culturasService.actualizarRecetasEnCultura(id, agregarRecetasDto.recetasId);
   }
 
-  @Delete(':id/recetas/:recetaId')
+  @Delete(':culturaId/recetas/:recetaId')
   async eliminarReceta(
     @Param() params: EliminarRecetaDto
   ){

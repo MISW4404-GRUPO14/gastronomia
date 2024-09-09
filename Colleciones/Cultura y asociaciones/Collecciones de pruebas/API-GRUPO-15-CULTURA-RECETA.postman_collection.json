@@ -1,0 +1,970 @@
+{
+	"info": {
+		"_postman_id": "e9ee1109-3917-40a4-8115-32a626c0a8a4",
+		"name": "API-GRUPO-15-CULTURA-RECETA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29491980"
+	},
+	"item": [
+		{
+			"name": "Agregar una receta a una cultura",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas/{{id_receta}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"culturas",
+						"{{id_cultura}}",
+						"recetas",
+						"{{id_receta}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Agregar una receta a una cultura",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas/{{id_receta}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura}}",
+								"recetas",
+								"{{id_receta}}"
+							]
+						}
+					},
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"id\": 1,\r\n    \"nombre\": \"Paella española\",\r\n    \"descripcion\": \"La paella es un tradicional plato español originario de Valencia, famoso por su combinación de sabores mediterráneos. Se elabora con arroz como ingrediente principal, al que se añade una variedad de mariscos como gambas, mejillones y calamares, junto con pollo o conejo, verduras frescas y azafrán, que le da su característico color dorado. Cocinada a fuego lento en una sartén ancha y poco profunda, la paella es un festín que celebra la riqueza culinaria de la región.\",\r\n    \"foto\": \"https://images.pexels.com/photos/16743486/pexels-photo-16743486/free-photo-of-comida-restaurante-langosta-cocinando.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1\",\r\n    \"proceso\": \"Preparación de ingredientes: Limpia y corta los mariscos, el pollo (o conejo), y las verduras (pimiento, tomate,judías verdes). Ten listo el caldo de pescado o pollo, y disuelve el azafrán en un poco de caldo caliente.Cocción de carnes: En una paellera con aceite de oliva, dora el pollo o conejo, retíralo y resérvalo. Luego, sofríe los mariscos hasta que estén ligeramente cocidos y también resérvalos. Sofrito: En la misma paellera, añade más aceite si es necesario, sofríe el pimiento, tomate rallado y ajo hasta que estén tiernos. Añadir arroz: Incorpora el arroz al sofrito y mézclalo bien para que absorba los sabores. Añadir caldo y azafrán: Vierte el caldo caliente y el azafrán disuelto. Coloca las carnes y verduras reservadas, distribuyéndolas uniformemente. Cocina a fuego medio-alto hasta que el arroz esté tierno y el caldo se haya absorbido. Cocción final: Añade los mariscos en los últimos minutos de cocción, dejando que se terminen de cocinar sobre el arroz. Deja reposar unos minutos antes de servir.\"\r\n}"
+				},
+				{
+					"name": "Falla al agregar una receta a una cultura",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas/{{id_receta}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura}}",
+								"recetas",
+								"{{id_receta}}"
+							]
+						}
+					},
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\": \"Internal Server Error\",\n    \"message\": \"Failed to add recipe due to a server error.\"\n}"
+				},
+				{
+					"name": "Falla autenticacion agregar una receta a una cultura",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas/{{id_receta}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura}}",
+								"recetas",
+								"{{id_receta}}"
+							]
+						}
+					},
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"error\":\"401 Unauthorized\",\r\n    \"message\":\"Authentication token is missing or invalid\"\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Agregar una receta a una cultura que no existe",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/culturas/{{id_cultura_fail}}/recetas/{{id_receta}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"culturas",
+						"{{id_cultura_fail}}",
+						"recetas",
+						"{{id_receta}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Agregar una receta a una cultura que no existe",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura_fail}}/recetas/{{id_receta}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura_fail}}",
+								"recetas",
+								"{{id_receta}}"
+							]
+						}
+					},
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"statusCode\": 404,\r\n    \"message\": \"The culture with the given id was not found\"\r\n}"
+				},
+				{
+					"name": "Falla al agregar una receta a una cultura que no existe",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura_fail}}/recetas/{{id_receta}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura_fail}}",
+								"recetas",
+								"{{id_receta}}"
+							]
+						}
+					},
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\": \"Internal Server Error\",\n    \"message\": \"Failed to add recipe due to a server error.\"\n}"
+				},
+				{
+					"name": "Falla autenticacion agregar una receta a una cultura que no existe",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura_fail}}/recetas/{{id_receta}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura_fail}}",
+								"recetas",
+								"{{id_receta}}"
+							]
+						}
+					},
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"error\":\"401 Unauthorized\",\r\n    \"message\":\"Authentication token is missing or invalid\"\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Agregar una receta que no existe a una cultura",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas/{{id_receta_fail}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"culturas",
+						"{{id_cultura}}",
+						"recetas",
+						"{{id_receta_fail}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Agregar una receta que no existe a una cultura",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas/{{id_receta_fail}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura}}",
+								"recetas",
+								"{{id_receta_fail}}"
+							]
+						}
+					},
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"statusCode\": 404,\r\n    \"message\": \"The recipe with the given id was not found\"\r\n}"
+				},
+				{
+					"name": "Falla al agregar una receta que no existe a una cultura",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas/{{id_receta}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura}}",
+								"recetas",
+								"{{id_receta}}"
+							]
+						}
+					},
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\": \"Internal Server Error\",\n    \"message\": \"Failed to add recipe due to a server error.\"\n}"
+				},
+				{
+					"name": "Falla autenticacion agregar una receta que no existe a una cultura",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas/{{id_receta}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura}}",
+								"recetas",
+								"{{id_receta}}"
+							]
+						}
+					},
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"error\":\"401 Unauthorized\",\r\n    \"message\":\"Authentication token is missing or invalid\"\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Obtener todas las recetas de una cultura",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"culturas",
+						"{{id_cultura}}",
+						"recetas"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Obtener todas las recetas de una cultura",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura}}",
+								"recetas"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "[\r\n    {\r\n        \"nombre\": \"Paella española\",\r\n        \"descripcion\":\"La paella es un tradicional plato español originario de Valencia, famoso por su combinación de sabores mediterráneos. Se elabora con arroz como ingrediente principal, al que se añade una variedad de mariscos como gambas, mejillones y calamares, junto con pollo o conejo, verduras frescas y azafrán, que le da su característico color dorado. Cocinada a fuego lento en una sartén ancha y poco profunda, la paella es un festín que celebra la riqueza culinaria de la región.\",\r\n        \"foto\":\"https://images.pexels.com/photos/16743486/pexels-photo-16743486/free-photo-of-comida-restaurante-langosta-cocinando.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1\",\r\n        \"proceso\":\"Preparación de ingredientes: Limpia y corta los mariscos, el pollo (o conejo), y las verduras (pimiento, tomate,judías verdes). Ten listo el caldo de pescado o pollo, y disuelve el azafrán en un poco de caldo caliente.Cocción de carnes: En una paellera con aceite de oliva, dora el pollo o conejo, retíralo y resérvalo. Luego, sofríe los mariscos hasta que estén ligeramente cocidos y también resérvalos. Sofrito: En la misma paellera, añade más aceite si es necesario, sofríe el pimiento, tomate rallado y ajo hasta que estén tiernos. Añadir arroz: Incorpora el arroz al sofrito y mézclalo bien para que absorba los sabores. Añadir caldo y azafrán: Vierte el caldo caliente y el azafrán disuelto. Coloca las carnes y verduras reservadas, distribuyéndolas uniformemente. Cocina a fuego medio-alto hasta que el arroz esté tierno y el caldo se haya absorbido. Cocción final: Añade los mariscos en los últimos minutos de cocción, dejando que se terminen de cocinar sobre el arroz. Deja reposar unos minutos antes de servir.\", \r\n        \"cultura\": \"Española\",\r\n        \"productos\":[\r\n            {\r\n            \"id\":\"819e7da4-96f4-4c45-81fc-1e5416544598\",\r\n            \"nombre\":\"Mariscos\", \r\n            \"descripcion\":\"Producto usado en platos de alta cocina\"\r\n            }, \r\n            {\r\n            \"id\":\"a4178cd4-dc0e-4f99-8b9d-617e8a3d257f\",\r\n            \"nombre\":\"Pimiento\",\r\n            \"descripcion\":\"Producto usado en platos de alta cocina\"\r\n            }\r\n        ]\r\n    }\r\n]"
+				},
+				{
+					"name": "Falla al obtener todas las recetas de una cultura",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura}}",
+								"recetas"
+							]
+						}
+					},
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\": \"Internal Server Error\",\n    \"message\": \"Failed to add recipe due to a server error.\"\n}"
+				},
+				{
+					"name": "Falla autenticacion obtener recetas de una cultura",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura}}",
+								"recetas"
+							]
+						}
+					},
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"error\":\"401 Unauthorized\",\r\n    \"message\":\"Authentication token is missing or invalid\"\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Obtener una receta de una cultura",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas/{{id_receta}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"culturas",
+						"{{id_cultura}}",
+						"recetas",
+						"{{id_receta}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Obtener una receta de una cultura",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas/{{id_receta}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura}}",
+								"recetas",
+								"{{id_receta}}"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"nombre\": \"Paella española\",\r\n    \"descripcion\":\"La paella es un tradicional plato español originario de Valencia, famoso por su combinación de sabores mediterráneos. Se elabora con arroz como ingrediente principal, al que se añade una variedad de mariscos como gambas, mejillones y calamares, junto con pollo o conejo, verduras frescas y azafrán, que le da su característico color dorado. Cocinada a fuego lento en una sartén ancha y poco profunda, la paella es un festín que celebra la riqueza culinaria de la región.\",\r\n    \"foto\":\"https://images.pexels.com/photos/16743486/pexels-photo-16743486/free-photo-of-comida-restaurante-langosta-cocinando.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1\",\r\n    \"proceso\":\"Preparación de ingredientes: Limpia y corta los mariscos, el pollo (o conejo), y las verduras (pimiento, tomate,judías verdes). Ten listo el caldo de pescado o pollo, y disuelve el azafrán en un poco de caldo caliente.Cocción de carnes: En una paellera con aceite de oliva, dora el pollo o conejo, retíralo y resérvalo. Luego, sofríe los mariscos hasta que estén ligeramente cocidos y también resérvalos. Sofrito: En la misma paellera, añade más aceite si es necesario, sofríe el pimiento, tomate rallado y ajo hasta que estén tiernos. Añadir arroz: Incorpora el arroz al sofrito y mézclalo bien para que absorba los sabores. Añadir caldo y azafrán: Vierte el caldo caliente y el azafrán disuelto. Coloca las carnes y verduras reservadas, distribuyéndolas uniformemente. Cocina a fuego medio-alto hasta que el arroz esté tierno y el caldo se haya absorbido. Cocción final: Añade los mariscos en los últimos minutos de cocción, dejando que se terminen de cocinar sobre el arroz. Deja reposar unos minutos antes de servir.\", \r\n    \"cultura\": \"Española\",\r\n    \"productos\":[\r\n        {\r\n        \"id\":\"819e7da4-96f4-4c45-81fc-1e5416544598\",\r\n        \"nombre\":\"Mariscos\", \r\n        \"descripcion\":\"Producto usado en platos de alta cocina\"\r\n        }, \r\n        {\r\n        \"id\":\"a4178cd4-dc0e-4f99-8b9d-617e8a3d257f\",\r\n        \"nombre\":\"Pimiento\",\r\n        \"descripcion\":\"Producto usado en platos de alta cocina\"\r\n        }\r\n    ]\r\n}\r\n"
+				},
+				{
+					"name": "Falla al obtener una receta de una cultura",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura}}",
+								"recetas"
+							]
+						}
+					},
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\": \"Internal Server Error\",\n    \"message\": \"Failed to add recipe due to a server error.\"\n}"
+				},
+				{
+					"name": "Falla autenticacion obtener una receta de una cultura",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura}}",
+								"recetas"
+							]
+						}
+					},
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"error\":\"401 Unauthorized\",\r\n    \"message\":\"Authentication token is missing or invalid\"\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Obtener una receta que no existe en una cultura",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas/{{id_receta_fail}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"culturas",
+						"{{id_cultura}}",
+						"recetas",
+						"{{id_receta_fail}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Obtener una receta que no existe en una cultura",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas/{{id_receta_fail}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura}}",
+								"recetas",
+								"{{id_receta_fail}}"
+							]
+						}
+					},
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"statusCode\": 404,\r\n    \"message\": \"The recipe with the given id was not found\"\r\n}"
+				},
+				{
+					"name": "Falla al obtener una receta que no existe en una cultura",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas/{{id_receta}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura}}",
+								"recetas",
+								"{{id_receta}}"
+							]
+						}
+					},
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\": \"Internal Server Error\",\n    \"message\": \"Failed to add recipe due to a server error.\"\n}"
+				},
+				{
+					"name": "Falla autenticacion obtener una receta que no existe en una cultura",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas/{{id_receta}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura}}",
+								"recetas",
+								"{{id_receta}}"
+							]
+						}
+					},
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"error\":\"401 Unauthorized\",\r\n    \"message\":\"Authentication token is missing or invalid\"\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Obtener una receta de una cultura que no existe",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/culturas/{{id_cultura_fail}}/recetas/{{id_receta}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"culturas",
+						"{{id_cultura_fail}}",
+						"recetas",
+						"{{id_receta}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Obtener una receta de una cultura que no existe",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura_fail}}/recetas/{{id_receta}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura_fail}}",
+								"recetas",
+								"{{id_receta}}"
+							]
+						}
+					},
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"statusCode\": 404,\r\n    \"message\": \"The culture with the given id was not found\"\r\n}"
+				},
+				{
+					"name": "Falla al obtener una receta de una cultura que no existe",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura_fail}}/recetas/{{id_receta}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura_fail}}",
+								"recetas",
+								"{{id_receta}}"
+							]
+						}
+					},
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\": \"Internal Server Error\",\n    \"message\": \"Failed to add recipe due to a server error.\"\n}"
+				},
+				{
+					"name": "Falla autenticacion obtener una receta de una cultura que no existe",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura_fail}}/recetas/{{id_receta}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura_fail}}",
+								"recetas",
+								"{{id_receta}}"
+							]
+						}
+					},
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"error\":\"401 Unauthorized\",\r\n    \"message\":\"Authentication token is missing or invalid\"\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Eliminar una receta de una cultura",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas/{{id_receta}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"culturas",
+						"{{id_cultura}}",
+						"recetas",
+						"{{id_receta}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Eliminar una receta de una cultura",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas/{{id_receta}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura}}",
+								"recetas",
+								"{{id_receta}}"
+							]
+						}
+					},
+					"code": 204,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "Falla al eliminar una receta de una cultura",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas/{{id_receta}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura}}",
+								"recetas",
+								"{{id_receta}}"
+							]
+						}
+					},
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\": \"Internal Server Error\",\n    \"message\": \"Failed to add recipe due to a server error.\"\n}"
+				},
+				{
+					"name": "Falla autenticacion agregar una receta a una cultura",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/culturas/{{id_cultura}}/recetas/{{id_receta}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"culturas",
+								"{{id_cultura}}",
+								"recetas",
+								"{{id_receta}}"
+							]
+						}
+					},
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"error\":\"401 Unauthorized\",\r\n    \"message\":\"Authentication token is missing or invalid\"\r\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "123456",
+			"type": "string"
+		},
+		{
+			"key": "base_url",
+			"value": "localhost:3000/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "id_receta",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "id_receta_fail",
+			"value": "0",
+			"type": "string"
+		},
+		{
+			"key": "id_cultura",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "id_cultura_fail",
+			"value": "0",
+			"type": "string"
+		}
+	]
+}

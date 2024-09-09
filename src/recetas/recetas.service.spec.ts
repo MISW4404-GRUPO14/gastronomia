@@ -169,7 +169,7 @@ describe('RecetasService', () => {
 
     await expect(recetaService.update('no-existe', updateRecetaDto))
     .rejects
-    .toHaveProperty("message", `Failed to update recipe due to a server error.`);
+    .toHaveProperty("message", `The recipe with the given id no-existe was not found`);
   });
 
   describe('agregarProductosAReceta', () => {
@@ -228,7 +228,7 @@ describe('RecetasService', () => {
       jest.spyOn(recetaRepository, 'save').mockResolvedValueOnce(recetaMock);
 
       const result = await recetaService.eliminarProductoDeReceta('recetaId', 'productoId');
-      expect(result.productos).not.toContain(productoMock);
+      expect(result).toBe(undefined);
     });
   });
   

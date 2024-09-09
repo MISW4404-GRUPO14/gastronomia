@@ -6,15 +6,59 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { BusinessLogicException } from '../shared/errors/business-errors';
 import { CreateRestauranteDto } from './dto/create-restaurante.dto';
 import { UpdateRestauranteDto } from './dto/update-restaurante.dto';
+import { Cultura } from '../culturas/entities/cultura.entity';
+import { NotFoundException } from '@nestjs/common';
 
 describe('RestaurantesService', () => {
   let service: RestaurantesService;
   let repository: Repository<Restaurante>;
+  let culturaRepository: Repository<Cultura>;
+
+  const mockRestaurante: Restaurante = {
+    id: '1',
+    nombre: 'vista del mar',
+    estrellas: 0,
+    fechasConsecucionEstrellas: undefined,
+    idCiudad: '',
+    culturas: []
+  };
+
+  const mockCultura: Cultura = {
+    id: '1',
+    nombre: 'Colombiana',
+    descripcion: 'Descripción de la cultura',
+    paises: [],
+    restaurantes: [mockRestaurante],
+    recetas: []
+  };
+
+
+  const mockRestauranteRepository = {
+    create: jest.fn().mockReturnValue(mockRestaurante),
+    save: jest.fn().mockResolvedValue(mockRestaurante),
+    find: jest.fn().mockResolvedValue([mockRestaurante]),
+    findOne: jest.fn().mockResolvedValue(mockRestaurante),    
+    findBy: jest.fn().mockResolvedValue(mockRestaurante),
+    preload: jest.fn().mockResolvedValue(mockRestaurante),
+    remove: jest.fn().mockResolvedValue(mockRestaurante),
+  };
+
+  const mockCulturaRepository = {
+    create: jest.fn().mockReturnValue(mockCultura),
+    save: jest.fn().mockResolvedValue(mockCultura),
+    find: jest.fn().mockResolvedValue([mockCultura]),
+    findOne: jest.fn().mockResolvedValue(mockCultura),
+    findBy: jest.fn().mockResolvedValue(mockCultura),
+    preload: jest.fn().mockResolvedValue(mockCultura),
+    remove: jest.fn().mockResolvedValue(mockCultura),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         RestaurantesService,
+        { provide: getRepositoryToken(Restaurante), useValue: mockRestauranteRepository },
+        { provide: getRepositoryToken(Cultura), useValue: mockCulturaRepository },
         {
           provide: getRepositoryToken(Restaurante),
           useValue: {
@@ -31,6 +75,7 @@ describe('RestaurantesService', () => {
 
     service = module.get<RestaurantesService>(RestaurantesService);
     repository = module.get<Repository<Restaurante>>(getRepositoryToken(Restaurante));
+    culturaRepository = module.get<Repository<Cultura>>(getRepositoryToken(Cultura));
   });
 
   it('should be defined', () => {
@@ -114,8 +159,130 @@ describe('RestaurantesService', () => {
       jest.spyOn(repository, 'remove').mockResolvedValue(restaurante as any);
 
       await expect(service.remove('1')).resolves.not.toThrow();
+    });    
+  });
+
+
+  //-----------------------------Cultura de un restaurante---------------------------------------------------//
+
+  describe('agregarCulturaARestaurante', () => {
+    it('debería agregar culturas a un restaurante', async () => {
+      const mockRestaurante = { id: '1', culturas: [] } as Restaurante;
+      const mockCulturas = [mockCultura];
+
+      jest.spyOn(service, 'findOne').mockResolvedValue(mockRestaurante);
+      jest.spyOn(culturaRepository, 'find').mockResolvedValue(mockCulturas);
+      jest.spyOn(repository, 'save').mockResolvedValue(mockRestaurante);
+
+      const result = await service.agregarCulturaARestaurante('1', ['1']);
+      expect(result.culturas.length).toBe(1);
     });
 
-    
+    it('debería lanzar un error si una cultura no existe', async () => {
+      const mockRestaurante = { id: '1', culturas: [] } as Restaurante;
+
+      jest.spyOn(service, 'findOne').mockResolvedValue(mockRestaurante);
+      jest.spyOn(culturaRepository, 'find').mockResolvedValue([]);
+
+      await expect(service.agregarCulturaARestaurante('1', ['1']))
+        .rejects
+        .toThrow(BusinessLogicException);
+    });
   });
+
+  describe('obtenerCulturasDeRestaurante', () => {
+    it('debería obtener las culturas de un restaurante', async () => {
+      const mockRestaurante = { id: '1', culturas: [{ id: '1' }] } as Restaurante;
+
+      jest.spyOn(service, 'findOne').mockResolvedValue(mockRestaurante);
+
+      const result = await service.obtenerCulturasDeRestaurante('1');
+      expect(result.culturas.length).toBe(1);
+    });
+
+    it('debería lanzar un error si el restaurante no existe', async () => {
+      jest.spyOn(service, 'findOne').mockResolvedValue(null);
+
+      await expect(service.obtenerCulturasDeRestaurante('1'))
+        .rejects
+        .toThrow(BusinessLogicException);
+    });
+  });
+
+  describe('actualizarCulturasDeRestaurante', () => {
+    it('debería actualizar las culturas de un restaurante', async () => {
+      const mockRestaurante = { id: '1', culturas: [] } as Restaurante;
+      const mockCulturas = [{ id: '1' } as Cultura];
+
+      jest.spyOn(service, 'findOne').mockResolvedValue(mockRestaurante);
+      jest.spyOn(culturaRepository, 'findBy').mockResolvedValue(mockCulturas);
+      jest.spyOn(repository, 'save').mockResolvedValue(mockRestaurante);
+
+      const result = await service.actualizarCulturasDeRestaurante('1', ['1']);
+      expect(result.culturas.length).toBe(1);
+    });
+
+    it('debería lanzar un error si una cultura no existe', async () => {
+      const mockRestaurante = { id: '1', culturas: [] } as Restaurante;
+
+      jest.spyOn(service, 'findOne').mockResolvedValue(mockRestaurante);
+      jest.spyOn(culturaRepository, 'findBy').mockResolvedValue([]);
+
+      await expect(service.actualizarCulturasDeRestaurante('1', ['1']))
+        .rejects
+        .toThrow(BusinessLogicException);
+    });
+  });
+
+  describe('eliminarCulturaDeRestaurante', () => {
+    it('debería eliminar una cultura de un restaurante', async () => {
+      const restauranteConCulturas = {
+        id: '1',
+        culturas: [{ id: '1' }, { id: '2' }] as Cultura[],
+      };
+      const restauranyteSinCultura = {
+        id: '1',
+        culturas: [{ id: '2' }] as Cultura[],
+      };
+  
+      jest.spyOn(repository, 'findOne').mockResolvedValue(restauranteConCulturas as any);
+      jest.spyOn(repository, 'save').mockResolvedValue(restauranyteSinCultura as any);
+  
+      const result = await service.eliminarCulturaDeRestaurante('1', '1');
+      expect(result.culturas.length).toBe(1);
+      expect(result.culturas[0].id).toBe('2');
+    });
+  
+    it('debería lanzar un error si el restaurante no existe', async () => {
+      jest.spyOn(repository, 'findOne').mockResolvedValue(null);
+  
+      await expect(service.eliminarCulturaDeRestaurante('1', '1'))
+        .rejects
+        .toThrow(NotFoundException);
+    });
+  
+    it('debería lanzar un error si el restaurante no tiene culturas asociadas', async () => {
+      const restauranyteSinCulturas = { id: '1', culturas: [] } as Restaurante;
+  
+      jest.spyOn(repository, 'findOne').mockResolvedValue(restauranyteSinCulturas as any);
+  
+      await expect(service.eliminarCulturaDeRestaurante('1', '1'))
+        .rejects
+        .toThrow(NotFoundException);
+    });
+  
+    it('debería lanzar un error si la cultura no está asociada al restaurante', async () => {
+      const restauranteConCulturas = {
+        id: '1',
+        culturas: [{ id: '2' }] as Cultura[],
+      };
+  
+      jest.spyOn(repository, 'findOne').mockResolvedValue(restauranteConCulturas as any);
+  
+      await expect(service.eliminarCulturaDeRestaurante('1', '1'))
+        .rejects
+        .toThrow(NotFoundException);
+    });
+  });
+
 });
