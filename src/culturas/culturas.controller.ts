@@ -147,5 +147,3 @@ export class CulturasController {
 
 
 }
-
-//-----------------------------Restaurantes de una cultura---------------------------------------------------//

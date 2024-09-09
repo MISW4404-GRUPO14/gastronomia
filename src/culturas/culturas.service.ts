@@ -231,8 +231,6 @@ export class CulturasService {
   async eliminarRecetaDeCultura(culturaId: string, recetaId: string){
     const cultura = await this.obtenerRecetasDeCultura(culturaId);
     cultura.recetas = cultura.recetas.filter(receta => receta.id !== recetaId);
-
-    return;
   }
 
   validateArrayRecetas(recetas, recetasIds){

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, ParseUUIDPipe, HttpCode, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, ParseUUIDPipe, Res, HttpStatus } from '@nestjs/common';
 import { PaisesService } from './paises.service';
 import { CreatePaisDto } from './dto/create-pais.dto';
 import { UpdatePaisDto } from './dto/update-pais.dto';
