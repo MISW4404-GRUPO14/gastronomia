@@ -25,11 +25,6 @@ describe('RestaurantesController', () => {
     culturas: [],
   };
 
-  const mockCulturas: Cultura[] = [
-    { id: '1', nombre: 'Cultura A' } as any,
-    { id: '2', nombre: 'Cultura B' } as any,
-  ];
-
   const mockCreateRestauranteDto: CreateRestauranteDto = {
     nombre: 'Restaurante El Gourmet',
     estrellas: 5,
@@ -159,4 +154,3 @@ describe('RestaurantesController', () => {
   });
 
 });
-

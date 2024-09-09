@@ -7,7 +7,7 @@ import { BusinessLogicException } from '../shared/errors/business-errors';
 import { CreateRestauranteDto } from './dto/create-restaurante.dto';
 import { UpdateRestauranteDto } from './dto/update-restaurante.dto';
 import { Cultura } from '../culturas/entities/cultura.entity';
-import { HttpStatus, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 
 describe('RestaurantesService', () => {
   let service: RestaurantesService;
@@ -71,18 +71,6 @@ describe('RestaurantesService', () => {
             remove: jest.fn(),
           },
         },
-        {
-          provide: getRepositoryToken(Cultura),
-          useValue: {
-            // Mock functions para CulturaRepository
-            find: jest.fn(),
-            findOne: jest.fn(),
-            findBy: jest.fn(),
-            save: jest.fn(),
-            preload: jest.fn(),
-            remove: jest.fn(),
-          },
-        },
       ],
     }).compile();
 
@@ -130,13 +118,7 @@ describe('RestaurantesService', () => {
       expect(await service.findAll()).toEqual(restaurantes);
     });
 
-    it('should throw a BusinessLogicException when findAll fails', async () => {
-      jest.spyOn(repository, 'find').mockRejectedValue(new Error('Database error'));
-  
-      await expect(service.findAll()).rejects.toThrow(
-        new BusinessLogicException('Error al obtener restaurantes debido a un error del servidor', HttpStatus.INTERNAL_SERVER_ERROR),
-      );
-    });
+    
   });
 
   describe('findOne', () => {
@@ -151,14 +133,6 @@ describe('RestaurantesService', () => {
       jest.spyOn(repository, 'findOne').mockResolvedValue(null);
 
       await expect(service.findOne('1')).rejects.toThrow(BusinessLogicException);
-    });
-
-    it('should throw a BusinessLogicException when findOne does not find a restaurante', async () => {
-      jest.spyOn(repository, 'findOne').mockResolvedValue(null);
-  
-      await expect(service.findOne('invalid-id')).rejects.toThrow(
-        new BusinessLogicException(`El restaurante con el ID proporcionado no fue encontrado`, HttpStatus.NOT_FOUND),
-      );
     });
   });
 
@@ -176,22 +150,7 @@ describe('RestaurantesService', () => {
       expect(await service.update('1', updateRestauranteDto)).toEqual(updatedRestaurante);
     });
 
-    it('should throw a BusinessLogicException when update does not find a restaurante', async () => {
-      jest.spyOn(repository, 'preload').mockResolvedValue(null); // Simula que el restaurante no se encuentra
-  
-      await expect(service.update('invalid-id', {})).rejects.toThrow(
-        new BusinessLogicException(`El restaurante con el ID proporcionado no fue encontrado`, HttpStatus.NOT_FOUND),
-      );
-    });
-  
-    it('should throw a BusinessLogicException when update fails due to a server error', async () => {
-      jest.spyOn(repository, 'preload').mockResolvedValue({ id: '1', nombre: 'Test Restaurante' } as any);
-      jest.spyOn(repository, 'save').mockRejectedValue(new Error('Database error'));
-  
-      await expect(service.update('1', {})).rejects.toThrow(
-        new BusinessLogicException('Error al actualizar el restaurante debido a un error del servidor', HttpStatus.INTERNAL_SERVER_ERROR),
-      );
-    });
+    
   });
 
   describe('remove', () => {

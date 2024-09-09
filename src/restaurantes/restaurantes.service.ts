@@ -19,6 +19,7 @@ export class RestaurantesService {
     @InjectRepository(Cultura)
     private culturaRepository: Repository<Cultura>
   ){}
+  
   async create(createRestauranteDto: CreateRestauranteDto) {
     try{
       const restaurante = this.restauranteRepository.create(createRestauranteDto);
@@ -34,19 +35,18 @@ export class RestaurantesService {
       const restaurantes = await this.restauranteRepository.find();
       return restaurantes;
     } catch(error){
-      throw new BusinessLogicException('Error al obtener restaurantes debido a un error del servidor', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new BusinessLogicException('Failed to get restaurantes due to a server error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   async findOne(id: string) {
     const restaurante = await this.restauranteRepository.findOne(
       {
-        where: { id: id },
-        relations: ['culturas']
+        where: { id: id }
       }
     );
     if(!restaurante){
-      throw new BusinessLogicException(`El restaurante con el ID proporcionado no fue encontrado`, HttpStatus.NOT_FOUND);
+      throw new BusinessLogicException(`The restaurante with the given id was not found`, HttpStatus.NOT_FOUND);
       }
     return restaurante;
   }
@@ -57,13 +57,13 @@ export class RestaurantesService {
       ...updateRestauranteDto
     })
     if(!restaurante) { 
-      throw new BusinessLogicException(`El restaurante con el ID proporcionado no fue encontrado`, HttpStatus.NOT_FOUND);}
+      throw new BusinessLogicException(`The restaurante with the given id was not found`, HttpStatus.NOT_FOUND);}
     try{
       
       await this.restauranteRepository.save(restaurante);
       return restaurante;
     } catch(error){
-      throw new BusinessLogicException('Error al actualizar el restaurante debido a un error del servidor', HttpStatus.INTERNAL_SERVER_ERROR)
+      throw new BusinessLogicException('Failed to update restaurant due to a server error.', HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
 
