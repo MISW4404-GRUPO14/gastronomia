@@ -296,10 +296,10 @@ async actualizarProductosDeLaCultura(culturaId: string, productos: Producto[]){
 
   const productosValidos: Producto[] = [];
 
-  for (let i = 0; i < productos.length; i++) {
-    const productoExistente: Producto = await this.productoRepository.findOne({where: {id: productos[i].id}});
+  for (let produc of productos) {
+    const productoExistente: Producto = await this.productoRepository.findOne({where: {id: produc.id}});
     if (!productoExistente)
-      throw new BusinessLogicException("The artwork with the given id was not found", HttpStatus.NOT_FOUND)
+      throw new BusinessLogicException("El producto no existe con ese id", HttpStatus.NOT_FOUND)
     
     productosValidos.push(productoExistente)
   }
