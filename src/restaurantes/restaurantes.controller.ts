@@ -8,7 +8,6 @@ import { Response } from 'express';
 @Controller('restaurantes')
 export class RestaurantesController {
   constructor(private readonly restaurantesService: RestaurantesService) {}
-
   @Post()
   create(@Body() createRestauranteDto: CreateRestauranteDto) {
     return this.restaurantesService.create(createRestauranteDto);

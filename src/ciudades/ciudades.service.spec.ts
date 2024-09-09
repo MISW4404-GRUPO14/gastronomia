@@ -29,6 +29,15 @@ describe('CiudadesService', () => {
     ]
   };
 
+  const mockRestaurante: Restaurante = {
+    id: '1',
+    nombre: 'Restaurante Test',
+    estrellas: 5,
+    fechasConsecucionEstrellas: new Date('2023-01-01'),
+    culturas: [],
+    idCiudad: '1' // Cambiado de idCiudad a ciudad
+  };
+
   const createCiudadDto = { nombre: 'Bogotá' };
   const updatedCiudadDto = { nombre: 'Updated City' };
 
@@ -42,6 +51,7 @@ describe('CiudadesService', () => {
   });
 
   const mockRestauranteRepository = {
+    findOne: jest.fn().mockResolvedValue(mockRestaurante),
   };
 
   beforeEach(async () => {
@@ -113,7 +123,7 @@ describe('CiudadesService', () => {
   });
 
   describe('update', () => {
-    it('should update and return the pais', async () => {
+    it('should update and return the ciudad', async () => {
       jest.spyOn(ciudadRepository, 'preload').mockResolvedValue(mockCiudad);
       jest.spyOn(ciudadRepository, 'save').mockResolvedValue(mockCiudad);
 
@@ -121,6 +131,17 @@ describe('CiudadesService', () => {
       expect(result).toEqual(mockCiudad);
       expect(ciudadRepository.preload).toHaveBeenCalledWith({ id: '1', ...updatedCiudadDto });
       expect(ciudadRepository.save).toHaveBeenCalledWith(mockCiudad);
+    });
+
+    it('should throw an error if ciudad to update is not found', async () => {
+      jest.spyOn(ciudadRepository, 'preload').mockResolvedValue(null);
+      await expect(service.update('1', updatedCiudadDto)).rejects.toThrow(BusinessLogicException);
+    });
+
+    it('should throw an error if update fails', async () => {
+      jest.spyOn(ciudadRepository, 'preload').mockResolvedValue(mockCiudad);
+      jest.spyOn(ciudadRepository, 'save').mockRejectedValue(new Error('Update failed'));
+      await expect(service.update('1', updatedCiudadDto)).rejects.toThrow(BusinessLogicException);
     });
   });
 
@@ -137,6 +158,101 @@ describe('CiudadesService', () => {
       jest.spyOn(service, 'findOne').mockResolvedValue(mockCiudad);
       jest.spyOn(ciudadRepository, 'remove').mockRejectedValue(new Error('Remove failed'));
       await expect(service.remove('1')).rejects.toThrow(BusinessLogicException);
+    });
+  });
+
+
+  describe('asociarRestauranteACiudad', () => {
+    it('should associate a restaurant with a city', async () => {
+      jest.spyOn(ciudadRepository, 'findOne').mockResolvedValue({
+        ...mockCiudad,
+        restaurantes: []
+      });
+      jest.spyOn(restauranteRepository, 'findOne').mockResolvedValue(mockRestaurante);
+      jest.spyOn(ciudadRepository, 'save').mockResolvedValue({
+        ...mockCiudad,
+        restaurantes: [mockRestaurante]
+      });
+      const result = await service.asociarRestauranteACiudad('1', '1');
+      expect(result.restaurantes).toContain(mockRestaurante);
+      expect(ciudadRepository.save).toHaveBeenCalledWith({
+        ...mockCiudad,
+        restaurantes: [mockRestaurante]
+      });
+    });
+
+    it('should throw an error if ciudad is not found', async () => {
+      jest.spyOn(ciudadRepository, 'findOne').mockResolvedValue(null);
+      await expect(service.asociarRestauranteACiudad('1', '1')).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw an error if restaurante is not found', async () => {
+      jest.spyOn(ciudadRepository, 'findOne').mockResolvedValue(mockCiudad);
+      jest.spyOn(restauranteRepository, 'findOne').mockResolvedValue(null);
+      await expect(service.asociarRestauranteACiudad('1', '1')).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw an error if restaurant is already associated', async () => {
+      jest.spyOn(ciudadRepository, 'findOne').mockResolvedValue({
+        ...mockCiudad,
+        restaurantes: [mockRestaurante]
+      });
+      jest.spyOn(restauranteRepository, 'findOne').mockResolvedValue(mockRestaurante);
+      await expect(service.asociarRestauranteACiudad('1', '1')).rejects.toThrow(Error);
+    });
+  });
+  
+
+  describe('eliminarRestauranteDeCiudad', () => {
+    it('should remove a restaurant from a city', async () => {
+      jest.spyOn(ciudadRepository, 'findOne').mockResolvedValue({
+        ...mockCiudad,
+        restaurantes: [mockRestaurante]
+      });
+      await service.eliminarRestauranteDeCiudad('1', '1');
+      expect(ciudadRepository.save).toHaveBeenCalledWith({
+        ...mockCiudad,
+        restaurantes: []
+      });
+    });
+
+    it('should throw an error if ciudad is not found', async () => {
+      jest.spyOn(ciudadRepository, 'findOne').mockResolvedValue(null);
+      await expect(service.eliminarRestauranteDeCiudad('1', '1')).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw an error if restaurante is not found', async () => {
+      jest.spyOn(ciudadRepository, 'findOne').mockResolvedValue(mockCiudad);
+      jest.spyOn(restauranteRepository, 'findOne').mockResolvedValue(null);
+      await expect(service.eliminarRestauranteDeCiudad('1', '1')).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw an error if restaurant is not associated with the city', async () => {
+      jest.spyOn(ciudadRepository, 'findOne').mockResolvedValue({
+        ...mockCiudad,
+        restaurantes: []
+      });
+      jest.spyOn(restauranteRepository, 'findOne').mockResolvedValue(mockRestaurante);
+      await expect(service.eliminarRestauranteDeCiudad('1', '1')).rejects.toThrow(Error);
+    });
+  });
+
+  describe('obtenerRestaurantesDeCiudad', () => {
+    it('should return a list of restaurants for a city', async () => {
+      jest.spyOn(ciudadRepository, 'findOne').mockResolvedValue(mockCiudad as any);
+      
+      const result = await service.obtenerRestaurantesDeCiudad('1');
+      expect(result).toEqual(mockCiudad.restaurantes);
+      expect(ciudadRepository.findOne).toHaveBeenCalledWith({
+        where: { id: '1' },
+        relations: ['restaurantes'],
+      });
+    });
+
+    it('should throw NotFoundException if city is not found', async () => {
+      jest.spyOn(ciudadRepository, 'findOne').mockResolvedValue(null);
+      
+      await expect(service.obtenerRestaurantesDeCiudad('1')).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -238,7 +354,4 @@ describe('CiudadesService', () => {
       expect(result).toEqual(undefined);
     }); 
   });
-
-  
-
 });
