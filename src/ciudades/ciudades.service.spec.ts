@@ -235,7 +235,6 @@ describe('CiudadesService', () => {
       jest.spyOn(ciudadRepository, 'save').mockResolvedValueOnce(ciudadMock);
 
       const result = await service.eliminarRestauranteDeCiudad('ciudadId', 'restauranteId');
-      console.log(result)
       expect(result).toEqual(undefined);
     }); 
   });

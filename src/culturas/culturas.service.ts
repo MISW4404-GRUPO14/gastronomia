@@ -291,7 +291,6 @@ async obtenerTodoLosProductosDeCultura(culturaId: string){
 }
 
 async actualizarProductosDeLaCultura(culturaId: string, productos: Producto[]){
-  console.log(productos)
   const cultura: Cultura = await this.culturaRepository.findOne({where: {id: culturaId}, relations: ["productos"]});
    
   if (!cultura)
@@ -302,10 +301,9 @@ async actualizarProductosDeLaCultura(culturaId: string, productos: Producto[]){
   for (let i = 0; i < productos.length; i++) {
     const productoExistente: Producto = await this.productoRepository.findOne({where: {id: productos[i].id}});
     if (!productoExistente)
-      throw new BusinessLogicException("El producto no existe con ese id", HttpStatus.NOT_FOUND)
+      throw new BusinessLogicException("The artwork with the given id was not found", HttpStatus.NOT_FOUND)
     
     productosValidos.push(productoExistente)
-    console.log(productosValidos)
   }
 
   cultura.productos = productosValidos;

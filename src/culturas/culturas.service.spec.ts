@@ -49,9 +49,9 @@ describe('CulturasService', () => {
   let restauranteRepository: Repository<Restaurante>;
   const culturaID = 'd84d19a6-2cfd-439e-96ca-01d694920de5';
   const paisID = '03e029d1-d0b5-4623-a96c-35685fcbe944';
-  let recetaRepository: Repository<Receta>;
-  let productoRepository: Repository<Producto>;
-
+  let recetaRepository: Repository<Receta>
+  let productoRepository: Repository<Producto>
+  
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -585,7 +585,6 @@ describe('CulturasService', () => {
     it('debería retornar todas los productos de una cultura', async () => {
       culturaRepository.findOne.mockResolvedValue(cultura);
       const resultado = await culturaservice.obtenerTodoLosProductosDeCultura('mock-uuid');
-      console.log(resultado);
       expect(resultado).toEqual(cultura.productos);
     });
 

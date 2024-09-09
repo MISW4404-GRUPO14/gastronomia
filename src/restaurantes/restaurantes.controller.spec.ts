@@ -44,6 +44,7 @@ describe('RestaurantesController', () => {
     paises: [],
     restaurantes: [],
     recetas: [],
+    productos: []
   };
 
   beforeEach(async () => {

@@ -29,7 +29,8 @@ describe('RestaurantesService', () => {
     descripcion: 'Descripción de la cultura',
     paises: [],
     restaurantes: [mockRestaurante],
-    recetas: []
+    recetas: [],
+    productos: []
   };
 
 
