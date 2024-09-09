@@ -52,7 +52,6 @@ describe('CategoriasService', () => {
   
   it('create retorna una categoria nueva', async () => {
     const categoria= {
-      id: "",
       nombre: "Nueva Categoria", 
       descripcion: "Descripción nueva categoria", 
       productos: []
@@ -72,6 +71,22 @@ describe('CategoriasService', () => {
     categoriaRepositoryMock.find.mockResolvedValue(categorias);
 
     expect(categorias).not.toBeNull();
+  });
+
+  it('findOne retornar una categoria', async () => {
+    const categorias: Categoria[] = [{ id: '1',descripcion:'', nombre: 'Categoria 1', productos: [] }];
+    jest.spyOn(service, 'findAll').mockResolvedValue(categorias);
+    categoriaRepositoryMock.findOne.mockResolvedValue(categorias[0]);
+  
+    const categoria: Categoria = await service.findOne(categorias[0].id);
+  
+    expect(categoria).not.toBeNull();
+    expect(categoria.id).toEqual(categorias[0].id);
+    expect(categoria.nombre).toEqual('Categoria 1');
+    expect(categoriaRepositoryMock.findOne).toHaveBeenCalledWith({
+      where: { id: categorias[0].id },
+      relations: ["productos"],
+    });
   });
 
   it('findOne retorna error si una categoria no existe', async () => {
@@ -121,8 +136,41 @@ describe('CategoriasService', () => {
     });
   });
 
-  it('delete retorna error al elimina una categoria', async () => {
-    await expect(() => service.remove("0")).rejects.toHaveProperty("message", "No existe una categoria con ese id")
+
+  it('debe retornar un error si la categoría no existe al eliminarla', async () => {
+    categoriaRepositoryMock.findOne.mockResolvedValue(null);
+    await expect(service.remove("0")).rejects.toHaveProperty("message", "No existe una categoria con ese id");
+
+    expect(categoriaRepositoryMock.findOne).toHaveBeenCalledWith({
+      where: { id: "0" },
+      relations: ["productos"],
+    });
   });
- 
+
+  it('debe retornar un error si la categoría tiene productos asociados', async () => {
+    const categoriaConProductos: Categoria = { id: '1', nombre: 'Categoria 1',descripcion:'', productos: [{ id: 'prod1', nombre:"Prod", descripcion:"desc", historia:"hist", recetas:[],cultura:null,categoria:'1' }] };
+  
+    categoriaRepositoryMock.findOne.mockResolvedValue(categoriaConProductos);
+    await expect(service.remove("1")).rejects.toHaveProperty("message", "La categoria se encuentra asociada con un producto");
+
+    expect(categoriaRepositoryMock.findOne).toHaveBeenCalledWith({
+      where: { id: "1" },
+      relations: ["productos"],
+    });
+  });
+
+
+  it('debe eliminar la categoría si no tiene productos asociados', async () => {
+
+    const categoriaSinProductos: Categoria = { id: '2', nombre: 'Categoria 2',descripcion:'', productos: [] };
+    categoriaRepositoryMock.findOne.mockResolvedValue(categoriaSinProductos);
+    categoriaRepositoryMock.remove.mockResolvedValue(categoriaSinProductos);
+    await service.remove("2");
+    expect(categoriaRepositoryMock.remove).toHaveBeenCalledWith(categoriaSinProductos);
+    expect(categoriaRepositoryMock.findOne).toHaveBeenCalledWith({
+      where: { id: "2" },
+      relations: ["productos"],
+    });
+  });
+
 });

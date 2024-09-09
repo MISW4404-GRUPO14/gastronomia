@@ -17,7 +17,7 @@ export class CreateProductoDto {
 
     @IsUUID()
     @IsOptional()
-    idCategoria: string;
+    categoria: string;
 
     @IsOptional()
     recetas: Receta[];

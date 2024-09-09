@@ -2,6 +2,7 @@ import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColum
 import { Receta } from '../../recetas/entities/receta.entity';
 import { Restaurante } from '../../restaurantes/entities/restaurante.entity';
 import { Pais } from '../../paises/entities/pais.entity';
+import { Producto } from '../../productos/entities/producto.entity';
 
     @Entity()
     export class Cultura {
@@ -24,4 +25,7 @@ import { Pais } from '../../paises/entities/pais.entity';
       
         @OneToMany(() => Receta, (receta) => receta.cultura, { cascade: true})
         recetas: Receta[];
+
+        @OneToMany(() => Producto, producto => producto.cultura)
+        productos: Producto[];
 }

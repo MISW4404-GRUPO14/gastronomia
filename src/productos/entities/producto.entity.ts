@@ -1,4 +1,5 @@
 
+import { Cultura } from '../../culturas/entities/cultura.entity';
 import { Categoria } from '../../categorias/entities/categoria.entity';
 import { Receta } from '../../recetas/entities/receta.entity';
 import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
@@ -18,9 +19,12 @@ export class Producto {
     historia: string;
     
     @ManyToOne(() => Categoria, categoria => categoria.productos)
-    idCategoria: string;
+    categoria: string;
 
     @ManyToMany(() => Receta, (receta) => receta.productos)
     recetas: Receta[];
+
+    @ManyToOne(() => Cultura, cultura => cultura.productos)
+    cultura: Cultura; 
  
 }

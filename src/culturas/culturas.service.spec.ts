@@ -9,6 +9,7 @@ import { HttpStatus, InternalServerErrorException, NotFoundException } from '@ne
 import { BusinessLogicException } from '../shared/errors/business-errors';
 import { CreateCulturaDto } from './dto/create-cultura.dto';
 import { Receta } from '../recetas/entities/receta.entity';
+import { Producto } from '../productos/entities/producto.entity';
 
 const cultura: Cultura = {
   id: 'mock-uuid',
@@ -27,6 +28,17 @@ const cultura: Cultura = {
       cultura: new Cultura,
       productos: []
     }
+  ],
+  productos:[
+    {
+      id: 'mock-uuid_producto',
+      nombre: "Arroz",
+      descripcion: "El arroz es un cereal básico en la dieta de muchas culturas alrededor del mundo. Es conocido por su versatilidad en la cocina, pudiéndose preparar en una amplia variedad de platos, desde acompañamientos hasta platillos principales.",
+      historia: "El arroz ha sido cultivado durante más de 8,000 años, con orígenes en Asia. A lo largo de la historia, ha sido un alimento esencial para diversas civilizaciones, especialmente en Asia, donde sigue siendo un alimento primordial en la dieta diaria.",
+      cultura: new Cultura,
+      categoria:"mock-uuid",
+      recetas: []
+    }
   ]
 }
 
@@ -38,7 +50,8 @@ describe('CulturasService', () => {
   const culturaID = 'd84d19a6-2cfd-439e-96ca-01d694920de5';
   const paisID = '03e029d1-d0b5-4623-a96c-35685fcbe944';
   let recetaRepository: Repository<Receta>
-
+  let productoRepository: Repository<Producto>
+  
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -71,6 +84,19 @@ describe('CulturasService', () => {
           provide: getRepositoryToken(Receta),
           useClass: Repository,
         },
+        {
+          provide: getRepositoryToken(Producto),
+          useValue: {
+            findBy: jest.fn(),
+            find: jest.fn(),
+            findOneBy: jest.fn(),
+            create: jest.fn(),
+            save: jest.fn(),
+            preload: jest.fn(),
+            remove: jest.fn(),
+            findOne: jest.fn(),
+          }
+        },
       ],
     }).compile();
 
@@ -79,6 +105,7 @@ describe('CulturasService', () => {
     paisRepository = module.get(getRepositoryToken(Pais));
     restauranteRepository = module.get(getRepositoryToken(Restaurante));
     recetaRepository = module.get<Repository<Receta>>(getRepositoryToken(Receta));
+    productoRepository = module.get(getRepositoryToken(Producto));
   });
 
   it('should be defined', () => {
@@ -551,4 +578,132 @@ describe('CulturasService', () => {
     });
   });
 
+
+
+  
+  describe('Obtener producto De Cultura', () => {
+    it('debería retornar todas los productos de una cultura', async () => {
+      culturaRepository.findOne.mockResolvedValue(cultura);
+      const resultado = await culturaservice.obtenerTodoLosProductosDeCultura('mock-uuid');
+      expect(resultado).toEqual(cultura.productos);
+    });
+
+    it('debería retornar error por al obtener recetas de una cultura que no existe', async () => {
+      culturaRepository.findOne.mockResolvedValue(undefined); // Mock del método findOneBy
+      await expect(culturaservice.obtenerTodoLosProductosDeCultura('no-existe'))
+      .rejects
+      .toHaveProperty("message", `La cultura no existe con ese id`)
+    });
+  });
+
+  describe('Agregar productos a cultura', () => {
+    it('debería agregar productos a la cultura correctamente', async () => {
+      const culturaMock = new Cultura();
+      culturaMock.id = 'culturaId';
+      culturaMock.productos = [];
+      const productoMock = new Producto();
+      productoMock.id = 'productoId';
+
+      jest.spyOn(culturaRepository, 'findOne').mockResolvedValueOnce(culturaMock);
+      jest.spyOn(culturaRepository, 'save').mockResolvedValueOnce(culturaMock);
+      jest.spyOn(productoRepository, 'findOne').mockResolvedValueOnce(productoMock);
+      jest.spyOn(productoRepository, 'save').mockResolvedValueOnce(productoMock);
+
+      const result = await culturaservice.agregarProductoAcultura('culturaId', 'productoId');
+      expect(result.productos).toContain(productoMock);
+    });
+
+    it('debería lanzar NotFoundException si la cultura no existe', async () => {
+      jest.spyOn(culturaRepository, 'findOne').mockResolvedValueOnce(null);
+      await expect(culturaservice.agregarRecetaACultura('culturaId', ['recetasId']))
+        .rejects
+        .toHaveProperty("message", `La cultura ingresada no existe`);
+    });
+
+    it('debería lanzar BadRequestException si una receta no existe', async () => {
+      const culturaMock = new Cultura();
+      culturaMock.id = 'culturaId';
+      jest.spyOn(culturaRepository, 'findOne').mockResolvedValueOnce(culturaMock);
+      jest.spyOn(recetaRepository, 'findBy').mockResolvedValueOnce([]);
+
+      await expect(culturaservice.agregarRecetaACultura('culturaId', ['recetasId']))
+        .rejects
+        .toHaveProperty("message", `Algunas de las recetas existe`);
+    });
+  });
+
+  describe('Actualizar  productos De Cultura', () => {
+    it('debería actualizar listado de productos de una cultura correctamente', async () => {
+      const culturaMock = new Cultura();
+      culturaMock.id = 'culturaId';
+      culturaMock.productos = [];
+      const productoMock = new Producto();
+      productoMock.id = 'productoId';
+
+      jest.spyOn(culturaRepository, 'findOne').mockResolvedValueOnce(culturaMock);
+      jest.spyOn(culturaRepository, 'save').mockResolvedValueOnce(culturaMock);
+      jest.spyOn(productoRepository, 'findOne').mockResolvedValueOnce(productoMock);
+      jest.spyOn(productoRepository, 'save').mockResolvedValueOnce(productoMock);
+
+      const result = await culturaservice.actualizarProductosDeLaCultura('culturaId', [productoMock]);
+      expect(result.productos).toContain(productoMock);
+    });
+    
+    it('debería retornar error por al actualizar productos de una cultura que no existe', async () => {
+      culturaRepository.findOne.mockResolvedValue(undefined);
+      const culturaMock = new Cultura();
+      culturaMock.id = 'culturaId';
+      culturaMock.productos = [];
+      const productoMock = new Producto();
+      productoMock.id = 'productoId';
+      jest.spyOn(productoRepository, 'findOne').mockResolvedValueOnce(productoMock);
+      jest.spyOn(productoRepository, 'save').mockResolvedValueOnce(productoMock);
+
+      await expect(culturaservice.actualizarProductosDeLaCultura('no-existe', [productoMock]))
+      .rejects
+      .toHaveProperty("message", `La cultura no existe con ese id`)
+    });
+  });
+
+  describe('eliminar producto De Cultura', () => {
+    
+    it('debería eliminar un producto de una cultura correctamente', async () => {
+      const productoMock = new Producto();
+      productoMock.id = 'productoId';
+
+      const culturaMock = new Cultura();
+      culturaMock.id = 'culturaId';
+      culturaMock.productos = [productoMock];
+
+      jest.spyOn(culturaRepository, 'findOne').mockResolvedValueOnce(culturaMock);
+      jest.spyOn(culturaRepository, 'save').mockResolvedValueOnce(culturaMock);
+      jest.spyOn(productoRepository, 'findOne').mockResolvedValueOnce(productoMock);
+      jest.spyOn(productoRepository, 'save').mockResolvedValueOnce(productoMock);
+
+      const result = await culturaservice.eliminarProductoDeCultura('culturaId', 'productoId');
+      expect(result).toBeUndefined()
+    });
+    
+    it('debería retornar error al eliminar un producto que no existe de una cultura ', async () => {
+      await expect(culturaservice.eliminarProductoDeCultura('culturaId', 'productoId_no_existe'))
+      .rejects
+      .toHaveProperty("message", `El producto no existe con ese id`)
+    });
+
+    it('debería retornar error al eliminar un producto  de una cultura que no existe', async () => {
+      const productoMock = new Producto();
+      productoMock.id = 'productoId';
+
+      const culturaMock = new Cultura();
+      culturaMock.id = 'culturaId';
+
+      jest.spyOn(productoRepository, 'findOne').mockResolvedValueOnce(productoMock);
+      jest.spyOn(productoRepository, 'save').mockResolvedValueOnce(productoMock);
+
+      await expect(culturaservice.eliminarProductoDeCultura('culturaId', 'productoId'))
+      .rejects
+      .toHaveProperty("message", `La cultura no existe con ese id`)
+    });
+
+  });
 });

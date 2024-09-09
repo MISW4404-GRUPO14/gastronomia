@@ -19,13 +19,13 @@ export class ProductosService {
   ){}
 
   async create(createProductoDto: CreateProductoDto) {
-    const categoriaId = createProductoDto.idCategoria;
+    const categoriaId = createProductoDto.categoria;
     
     if (categoriaId) {
       const cate: Categoria = await this.categoriaRepository.findOne({where: {id: categoriaId}});
         
       if (!cate){
-        throw new BusinessLogicException("La categoría no existe", HttpStatus.BAD_REQUEST);
+        throw new BusinessLogicException("No existe una categoria con ese id", HttpStatus.BAD_REQUEST);
       }
     }
     
@@ -34,12 +34,12 @@ export class ProductosService {
 
   
 
-  async findAll() : Promise<Producto[]>{
-    return await this.productoRepository.find({ relations: ["idCategoria"] });
+  async findAll(){
+    return await this.productoRepository.find({ relations: ["categoria"] });
   }
 
-  async findOne(id: string): Promise<{}> {
-    const producto: Producto = await this.productoRepository.findOne({where: {id}, relations: ["idCategoria"] } );
+  async findOne(id: string){
+    const producto = await this.productoRepository.findOne({where: {id}, relations: ["categoria"] } );
     if (!producto)
       throw new BusinessLogicException("No existe un producto con ese id", HttpStatus.NOT_FOUND);
 
@@ -51,7 +51,7 @@ export class ProductosService {
     if (!existeProducto)
       throw new BusinessLogicException("No existe un producto con ese id", HttpStatus.NOT_FOUND);
       
-    const categoriaId = updateProductoDto.idCategoria;
+    const categoriaId = updateProductoDto.categoria;
     
     if (categoriaId) {
       const cate: Categoria = await this.categoriaRepository.findOne({where: {id: categoriaId}});
@@ -59,10 +59,14 @@ export class ProductosService {
       if (!cate){
         throw new BusinessLogicException("La categoría no existe", HttpStatus.BAD_REQUEST);
       }
-    } 
-    return await this.productoRepository.save(updateProductoDto);
+    }
+    existeProducto.nombre = updateProductoDto.nombre;
+    existeProducto.descripcion = updateProductoDto.descripcion;
+    existeProducto.historia = updateProductoDto.historia;
+    existeProducto.categoria = updateProductoDto.categoria;
+    return await this.productoRepository.save(existeProducto);
 
-}
+  }
 
   async remove(id: string)  {
     const producto: Producto = await this.productoRepository.findOne({where:{id}});
@@ -71,4 +75,51 @@ export class ProductosService {
    
     await this.productoRepository.remove(producto);
   }
+
+  async agregarCategoriaAProducto(productoId: string, categoriaId: string) {
+    const categoriaExiste: Categoria = await this.categoriaRepository.findOne({where: {id: categoriaId}});
+
+    if (!categoriaExiste){
+      throw new BusinessLogicException("La categoría no existe", HttpStatus.BAD_REQUEST);
+    }
+    const producto  = await this.findOne(productoId);
+
+    if (!producto){
+      throw new BusinessLogicException("El producto no existe con ese id", HttpStatus.BAD_REQUEST);
+    }
+    producto.categoria = categoriaId;
+    return await this.productoRepository.save(producto);
+  }
+
+   async obtenerCategoriaDeProducto(productoId: string) {
+    const producto = await this.findOne(productoId);
+    return producto
+  }
+
+  async actualizarCategoriaEnProductos(productoId: string, categoriaId: string){
+    const producto = await this.findOne(productoId);
+
+    
+    if (!producto){
+      throw new BusinessLogicException("El producto no existe con ese id", HttpStatus.BAD_REQUEST);
+    }
+    
+    const categoriaExiste: Categoria = await this.categoriaRepository.findOne({where: {id: categoriaId}});
+    if (!categoriaExiste){
+      throw new BusinessLogicException("La categoría no existe", HttpStatus.BAD_REQUEST);
+    }
+
+    producto.categoria = categoriaId;
+    return await this.productoRepository.save(producto);
+  }
+
+  async eliminarCategoriaDeProducto(productoId: string){
+    const producto = await this.findOne(productoId);
+    producto.categoria = null;
+
+    return await this.productoRepository.save(producto);
+  }
+
+
+
 }

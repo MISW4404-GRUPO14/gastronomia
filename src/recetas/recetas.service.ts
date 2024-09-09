@@ -103,7 +103,6 @@ export class RecetasService {
     const recipe = await this.findOne(recetaId);
     recipe.productos = recipe.productos.filter(producto => producto.id !== productoId);
     await this.recetaRepository.save(recipe);
-    return 
   }
 
 

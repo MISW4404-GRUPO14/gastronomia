@@ -25,7 +25,8 @@ describe('PaisesService', () => {
     descripcion: 'Descripción de la cultura',
     paises: [mockPais],
     restaurantes: [],
-    recetas: []
+    recetas: [],
+    productos:[]
   };
 
   const createPaisDto = { nombre: 'Colombia' };

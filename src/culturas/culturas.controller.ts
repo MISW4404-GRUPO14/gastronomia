@@ -3,6 +3,9 @@ import { CulturasService } from './culturas.service';
 import { CreateCulturaDto } from './dto/create-cultura.dto';
 import { UpdateCulturaDto } from './dto/update-cultura.dto';
 import { AgregarPaisesDto } from './dto/agregar-paises.dto';
+import { ActualizarProductosDto } from './dto/actualizar-productos.dto';
+import { plainToInstance } from 'class-transformer';
+import { Producto } from '../productos/entities/producto.entity';
 import { Response } from 'express';
 import { AgregarRecetasDto } from './dto/agregar-receta.dto';
 import { EliminarRecetaDto } from './dto/eliminar-receta.dtos';
@@ -112,6 +115,35 @@ export class CulturasController {
     const {culturaId, recetaId} = params
     return this.culturasService.eliminarRecetaDeCultura(culturaId, recetaId);
   }
-}
 
-//-----------------------------Restaurantes de una cultura---------------------------------------------------//
+  
+  @Post(':culturaId/productos/:productoId')
+  async agregarProductoAcultura(@Param('culturaId') culturaId: string, @Param('productoId') productoId: string){
+      return await this.culturasService.agregarProductoAcultura(culturaId, productoId);
+  }
+
+  @Get(':culturaId/productos/:productoId')
+  async obtenerProductoDeCultura(@Param('culturaId') culturaId: string, @Param('productoId') productoId: string){
+      return await this.culturasService.obtenerProductoDeCultura(culturaId, productoId);
+  }
+
+  @Get(':culturaId/productos')
+  async obtenerTodoLosProductosDeCultura(@Param('culturaId') culturaId: string){
+      return await this.culturasService.obtenerTodoLosProductosDeCultura(culturaId);
+  }
+
+  @Put(':culturaId/productos')
+  async actualizarProductosDeLaCultura(@Param('culturaId') culturaId: string, @Body() actualizarProductosDto: ActualizarProductosDto){
+    const productos = plainToInstance(Producto, actualizarProductosDto.productosIds)  
+    return await this.culturasService.actualizarProductosDeLaCultura(culturaId, productos);
+  }
+  
+  @Delete(':culturaId/productos/:productoId')
+  @HttpCode(204)
+  async eliminarProductoDeCultura(@Param('culturaId') culturaId: string, @Param('productoId') productoId: string){
+      return await this.culturasService.eliminarProductoDeCultura(culturaId, productoId);
+  }
+  
+
+
+}
