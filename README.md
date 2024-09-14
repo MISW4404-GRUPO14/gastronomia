@@ -16,6 +16,11 @@
 6. Levantar la aplicación localmente: ``` npm run start:dev ```
 
 
+## Pasos para ejecutar request de colecciones Postman
+1. Importar cada colección en Postman
+2. Para cada colecciones se dejó disponible un request de login el cual crea el token y este se convierte en una variable usada por los demás request
+3. Antes de ejecutar cualquier request de las colecciones es necesario ejecutar el login.
+
 
 # Enlaces de interés
 
