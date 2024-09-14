@@ -1,11 +1,117 @@
 {
 	"info": {
-		"_postman_id": "43e97837-5e1d-4f48-9959-27eb3223c8c9",
+		"_postman_id": "0c7fa23b-b928-4025-9c6b-109438f328b0",
 		"name": "CULTURA-PRODUCTO",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "29550126"
+		"_exporter_id": "29491980"
 	},
 	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()\r",
+							"pm.globals.set(\"token\", data.token);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"   pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"admin\",\r\n    \"password\":\"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/usuarios/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"usuarios",
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Login",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"admin\",\r\n    \"password\":\"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/usuarios/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"login"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "200"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"c8-cm1ho4H7tPdrPkWRdy+lWteZErU\""
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 14 Sep 2024 22:07:36 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwic3ViIjoxLCJyb2xlcyI6WyJhZG1pbiJdLCJpYXQiOjE3MjYzNTE2NTYsImV4cCI6MTcyNjM1ODg1Nn0.PKeLsf6GLq-H8HBdXxmxeBtjtVkM44Z5CBbXBXAdQ9g\"\n}"
+				}
+			]
+		},
 		{
 			"name": "Agregar un producto a una cultura",
 			"event": [
@@ -35,6 +141,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"url": {
@@ -150,6 +266,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"url": {
@@ -274,6 +400,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -389,6 +525,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -572,6 +718,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
@@ -657,6 +813,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
@@ -746,6 +912,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"url": {
@@ -895,11 +1071,6 @@
 		{
 			"key": "base_url",
 			"value": "localhost:3000/api/v1",
-			"type": "string"
-		},
-		{
-			"key": "token",
-			"value": "Autorizacion",
 			"type": "string"
 		},
 		{
