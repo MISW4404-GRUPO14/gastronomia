@@ -8,6 +8,34 @@
 	"item": [
 		{
 			"name": "Añadir una cultura",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Obtén la respuesta en formato JSON\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"// ID está en response.id\r",
+							"const cultureId = response.id;\r",
+							"\r",
+							"// Almacena el ID en una variable de colección llamada \"id\"\r",
+							"pm.collectionVariables.set(\"id\", cultureId);\r",
+							"pm.globals.set(\"culturaId\", cultureId);\r",
+							"\r",
+							"\r",
+							"var data = pm.response.json()\r",
+							"pm.globals.set(\"id\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"   pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -21,12 +49,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas",
+					"raw": "{{baseURL}}/culturas",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"culturasGastronomicas"
+						"culturas"
 					]
 				}
 			},
@@ -128,16 +156,35 @@
 		},
 		{
 			"name": "Obtener todas las culturas",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Number of culturas > ' + 0, function () {\r",
+							"   var data = pm.response.json()\r",
+							"   pm.expect(data.length).to.greaterThan(0)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"   pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas",
+					"raw": "{{baseURL}}/culturas",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"culturasGastronomicas"
+						"culturas"
 					]
 				}
 			},
@@ -168,16 +215,31 @@
 		},
 		{
 			"name": "Obtener una cultura",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"   pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/{{id}}",
+					"raw": "{{baseURL}}/culturas/{{id}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"culturasGastronomicas",
+						"culturas",
 						"{{id}}"
 					]
 				}
@@ -210,17 +272,36 @@
 		},
 		{
 			"name": "Obtener una cultura inexistente",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"   pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Get expected error message\", function () {\r",
+							"   var data = pm.response.json();\r",
+							"   pm.expect(data.message).to.eql(\"The culture with the given id 53c65852-db00-4eae-ad7b-a99b88c674f5 was not found\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/12-44",
+					"raw": "{{baseURL}}/culturas/53c65852-db00-4eae-ad7b-a99b88c674f5",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"culturasGastronomicas",
-						"12-44"
+						"culturas",
+						"53c65852-db00-4eae-ad7b-a99b88c674f5"
 					]
 				}
 			},
@@ -252,6 +333,20 @@
 		},
 		{
 			"name": "Actualizar una cultura",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"   pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [],
@@ -265,12 +360,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/{{id}}",
+					"raw": "{{baseURL}}/culturas/{{id}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"culturasGastronomicas",
+						"culturas",
 						"{{id}}"
 					]
 				}
@@ -312,6 +407,34 @@
 		},
 		{
 			"name": "Actualizar una cultura inexistente",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const url = pm.request.url.toString();\r",
+							"const idMatch = url.match(/\\/culturas\\/([0-9a-fA-F\\-]{36})$/);\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"   pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"if (idMatch) {\r",
+							"  const id = idMatch[1];  \r",
+							"  const response = pm.response.json();  \r",
+							"  pm.test(`Get expected error message`, function() {\r",
+							"    if (response.error) {\r",
+							"      pm.response.to.have.status(404);\r",
+							"      pm.expect(response.message).to.include(`The culture with the given id ${id} was not found`);\r",
+							"    }\r",
+							"  });\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [],
@@ -325,13 +448,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/12-44",
+					"raw": "{{baseURL}}/culturas/53c65852-db00-4eae-ad7b-a99b88c674f6",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"culturasGastronomicas",
-						"12-44"
+						"culturas",
+						"53c65852-db00-4eae-ad7b-a99b88c674f6"
 					]
 				}
 			},
@@ -372,16 +495,30 @@
 		},
 		{
 			"name": "Eliminar una cultura",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"   pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/{{id}}",
+					"raw": "{{baseURL}}/culturas/{{id}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"culturasGastronomicas",
+						"culturas",
 						"{{id}}"
 					]
 				}
@@ -403,8 +540,8 @@
 							]
 						}
 					},
-					"status": "OK",
-					"code": 200,
+					"status": "No Content",
+					"code": 204,
 					"_postman_previewlanguage": null,
 					"header": null,
 					"cookie": [],
@@ -414,17 +551,44 @@
 		},
 		{
 			"name": "Borrar una cultura que no existe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const url = pm.request.url.toString();\r",
+							"const idMatch = url.match(/\\/culturas\\/([0-9a-fA-F\\-]{36})$/);\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"   pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"if (idMatch) {\r",
+							"  const id = idMatch[1];  \r",
+							"  const response = pm.response.json();  \r",
+							"  pm.test(`Get expected error message`, function() {\r",
+							"    if (response.error) {\r",
+							"      pm.expect(response.message).to.include(`The culture with the given id ${id} was not found`);\r",
+							"    }\r",
+							"  });\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/culturasGastronomicas/12-44",
+					"raw": "{{baseURL}}/culturas/53c65852-db00-4eae-ad7b-a99b88c674f6",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"culturasGastronomicas",
-						"12-44"
+						"culturas",
+						"53c65852-db00-4eae-ad7b-a99b88c674f6"
 					]
 				}
 			},
@@ -455,10 +619,32 @@
 			]
 		}
 	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
 	"variable": [
 		{
 			"key": "id",
-			"value": "{id}"
+			"value": "c974a896-449b-4026-ad7d-4a9a583bfac2"
 		}
 	]
 }
