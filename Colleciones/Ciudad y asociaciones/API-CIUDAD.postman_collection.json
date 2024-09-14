@@ -1,115 +1,68 @@
 {
 	"info": {
-		"_postman_id": "15d915e6-b11a-478f-ac88-337f43ab3823",
-		"name": "API-CIUDAD",
+		"_postman_id": "10df98a5-6936-49f5-ba5e-ee9d16859617",
+		"name": "API-CIUDAD-ACTUALIZADO",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "26687890"
 	},
 	"item": [
 		{
-			"name": "Obtener todas las Ciudades",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{base_url}}/ciudades",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"ciudades"
-					]
-				}
-			},
-			"response": [
-				{
-					"name": "Obtener todas las Ciudades",
-					"originalRequest": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/ciudades",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"ciudades"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json",
-							"description": "",
-							"type": "text"
-						}
-					],
-					"cookie": [],
-					"body": "[\n    {\n        \"id\": 1,\n        \"nombre\": \"Ciudad 1\",\n        \"pais\": {\n            \"id\": 1,\n            \"nombre\": \"País 1\"\n        },\n        \"restaurantes\": [\n            {\n                \"id\": 1,\n                \"nombre\": \"Restaurante 1\",\n                \"descripcion\": \"Descripción del restaurante\",\n                \"estrellas\": 3,\n                \"fechasConsecucionEstrellas\": [\n                    \"2024-08-01\"\n                ],\n                \"ciudad\": 1,\n                \"culturasGastronomicas\": []\n            }\n        ]\n    }\n]"
-				}
-			]
-		},
-		{
-			"name": "Obtener una Ciudad por ID",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{base_url}}/ciudades/{{id_ciudad}}",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"ciudades",
-						"{{id_ciudad}}"
-					]
-				}
-			},
-			"response": [
-				{
-					"name": "Obtener una Ciudad por ID",
-					"originalRequest": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/ciudades/{{id_ciudad}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"ciudades",
-								"{{id_ciudad}}"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json",
-							"description": "",
-							"type": "text"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"id\": 1,\n    \"nombre\": \"Ciudad 1\",\n    \"pais\": {\n        \"id\": 1,\n        \"nombre\": \"País 1\"\n    },\n    \"restaurantes\": [\n        {\n            \"id\": 1,\n            \"nombre\": \"Restaurante 1\",\n            \"descripcion\": \"Descripción del restaurante\",\n            \"estrellas\": 3,\n            \"fechasConsecucionEstrellas\": [\n                \"2024-08-01\"\n            ],\n            \"ciudad\": 1,\n            \"culturasGastronomicas\": []\n        }\n    ]\n}"
-				}
-			]
-		},
-		{
 			"name": "Crear una Ciudad",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 201\", function () {",
+							"  pm.response.to.have.status(201);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is within an acceptable range\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.lessThan(1000);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields - id, nombre\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.id).to.exist;",
+							"    pm.expect(responseData.nombre).to.exist;",
+							"});",
+							"",
+							"",
+							"",
+							"pm.test(\"Nombre is a non-empty string\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData).to.be.an('object');",
+							"  pm.expect(responseData.nombre).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Nombre should be a non-empty string\");",
+							"});",
+							"",
+							"const response = pm.response.json();",
+							"",
+							"// Asegúrate de que la respuesta contiene el campo 'id'",
+							"if (response.id) {",
+							"    // Guarda el 'id' en una variable de entorno",
+							"    pm.collectionVariables.set(\"id_ciudad\", response.id);",
+							"    console.log(\"ID de la ciudad guardado:\", response.id);",
+							"} else {",
+							"    console.error(\"ID no encontrado en la respuesta.\");",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"nombre\": \"Ciudad 1\",\n  \"paisId\": 1\n}\n",
+					"raw": "{\n  \"nombre\": \"Bogota\"\n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -168,13 +121,251 @@
 			]
 		},
 		{
+			"name": "Obtener todas las Ciudades",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields - id, nombre, pais, restaurantes\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('array');",
+							"    ",
+							"    responseData.forEach(function(ciudad) {",
+							"        pm.expect(ciudad).to.have.property('id');",
+							"        pm.expect(ciudad).to.have.property('nombre');",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Id is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    responseData.forEach(function(item) {",
+							"        pm.expect(item.id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Id should not be empty\");",
+							"    });",
+							"});",
+							"",
+							"pm.test(\"Nombre is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    responseData.forEach(function(item) {",
+							"        pm.expect(item.nombre).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Nombre should not be empty\");",
+							"    });",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/ciudades",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"ciudades"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Obtener todas las Ciudades",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/ciudades",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"ciudades"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": 1,\n        \"nombre\": \"Ciudad 1\",\n        \"pais\": {\n            \"id\": 1,\n            \"nombre\": \"País 1\"\n        },\n        \"restaurantes\": [\n            {\n                \"id\": 1,\n                \"nombre\": \"Restaurante 1\",\n                \"descripcion\": \"Descripción del restaurante\",\n                \"estrellas\": 3,\n                \"fechasConsecucionEstrellas\": [\n                    \"2024-08-01\"\n                ],\n                \"ciudad\": 1,\n                \"culturasGastronomicas\": []\n            }\n        ]\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Obtener una Ciudad por ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields - id, nombre, pais, restaurantes\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.id).to.exist;",
+							"    pm.expect(responseData.nombre).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Id and nombre fields are non-empty strings\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData).to.be.an('object');",
+							"  pm.expect(responseData.id).to.be.a('string').and.to.have.length.at.least(1, \"ID should be a non-empty string\");",
+							"  pm.expect(responseData.nombre).to.be.a('string').and.to.have.length.at.least(1, \"Nombre should be a non-empty string\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validate the structure of the response object\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    // Verifica que la respuesta sea un objeto",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    ",
+							"    // Verifica que el objeto tenga las propiedades 'id' y 'nombre'",
+							"    pm.expect(responseData.id).to.be.a('string');",
+							"    pm.expect(responseData.nombre).to.be.a('string');",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/ciudades/{{id_ciudad}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"ciudades",
+						"{{id_ciudad}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Obtener una Ciudad por ID",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/ciudades/{{id_ciudad}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"ciudades",
+								"{{id_ciudad}}"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"nombre\": \"Ciudad 1\",\n    \"pais\": {\n        \"id\": 1,\n        \"nombre\": \"País 1\"\n    },\n    \"restaurantes\": [\n        {\n            \"id\": 1,\n            \"nombre\": \"Restaurante 1\",\n            \"descripcion\": \"Descripción del restaurante\",\n            \"estrellas\": 3,\n            \"fechasConsecucionEstrellas\": [\n                \"2024-08-01\"\n            ],\n            \"ciudad\": 1,\n            \"culturasGastronomicas\": []\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
 			"name": "Actualizar una Ciudad",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields - id, nombre, pais, and restaurantes\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData).to.be.an('object');",
+							"  pm.expect(responseData.id).to.exist;",
+							"  pm.expect(responseData.nombre).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Id is a non-negative integer\", function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData.id).to.be.a('string');",
+							"});",
+							"",
+							"pm.test(\"Nombre is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData.nombre).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							"pm.test(\"Response time is in an acceptable range\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"nombre\": \"Ciudad Actualizada\",\n  \"paisId\": 2\n}\n",
+					"raw": "{\n  \"nombre\": \"Ciudad Actualizada\"\n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -182,12 +373,11 @@
 					}
 				},
 				"url": {
-					"raw": "{{base_url}}//ciudades/{{id_ciudad}}",
+					"raw": "{{base_url}}/ciudades/{{id_ciudad}}",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
-						"",
 						"ciudades",
 						"{{id_ciudad}}"
 					]
@@ -209,12 +399,11 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}//ciudades/{{id_ciudad}}",
+							"raw": "{{base_url}}/ciudades/{{id_ciudad}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"",
 								"ciudades",
 								"{{id_ciudad}}"
 							]
@@ -249,12 +438,11 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}//ciudades/0000-0000-0000",
+							"raw": "{{base_url}}/ciudades/0000-0000-0000",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"",
 								"ciudades",
 								"0000-0000-0000"
 							]
@@ -278,6 +466,47 @@
 		},
 		{
 			"name": "Eliminar una Ciudad",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test to check the response time",
+							"pm.test(\"Response time is less than 500ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							"",
+							"pm.test(\"status code is 200\", function(){",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"La estructura de la respuesta es correcta\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"nombre\"); ",
+							"    pm.expect(Object.keys(jsonData).length).to.eql(1); ",
+							"});",
+							"",
+							"pm.test(\"El nombre de la ciudad no está vacío\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData.nombre).to.not.be.empty;",
+							"});",
+							"",
+							"pm.test(\"No hay errores en la respuesta\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.not.have.property(\"error\");",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "DELETE",
 				"header": [],
@@ -437,13 +666,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{base_url}}/ciudades/0000-0000-0000/restaurantes/{{id_restaurante}}",
+					"raw": "{{base_url}}/ciudades/{{id_ciudad_fail}}/restaurantes/{{id_restaurante}}",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
 						"ciudades",
-						"0000-0000-0000",
+						"{{id_ciudad_fail}}",
 						"restaurantes",
 						"{{id_restaurante}}"
 					]
@@ -585,6 +814,69 @@
 					"body": "{\n    \"error\": \"Ciudad no encontrada.\"\n}"
 				}
 			]
+		},
+		{
+			"name": "Obtener restaurantes de una ciudad",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/ciudades/{{id_ciudad}}/restaurantes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"ciudades",
+						"{{id_ciudad}}",
+						"restaurantes"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "id_ciudad",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "id_restaurante",
+			"value": "72353a06-c342-4da5-9c4a-4d4b91575473",
+			"type": "string"
+		},
+		{
+			"key": "id_ciudad_fail",
+			"value": "b775eb47-3218-43d1-9f77-d708141f3864",
+			"type": "string"
 		}
 	]
 }
