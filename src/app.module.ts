@@ -10,6 +10,8 @@ import { ProductosModule } from './productos/productos.module';
 import { RestaurantesModule } from './restaurantes/restaurantes.module';
 import { CiudadesModule } from './ciudades/ciudades.module';
 import { PaisesModule } from './paises/paises.module';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -31,6 +33,8 @@ import { PaisesModule } from './paises/paises.module';
     RestaurantesModule,
     CiudadesModule,
     PaisesModule,
+    UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
