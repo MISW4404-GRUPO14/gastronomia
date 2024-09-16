@@ -17,7 +17,7 @@ export class RolesGuard implements CanActivate {
 
         console.log('User from request:', user); 
 
-        if (!user || !user.roles) {
+        if (!user?.roles) {
             throw new UnauthorizedException('Usuario o roles no definidos');
         }
 
