@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "1dd88209-7b81-4c7c-813d-9e3201caaed8",
-		"name": "API-GRUPO-15-RECETAS-TEST",
+		"_postman_id": "cc022905-d2cf-4ec9-a862-c8e5b791f82f",
+		"name": "RECETAS - ASOCIACIONES",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "29491980"
+		"_exporter_id": "29550126"
 	},
 	"item": [
 		{

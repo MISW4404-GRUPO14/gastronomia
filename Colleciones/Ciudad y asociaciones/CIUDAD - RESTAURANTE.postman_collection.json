@@ -1,14 +1,58 @@
 {
 	"info": {
-		"_postman_id": "6363acbe-a90c-433b-88ad-f7212badee59",
+		"_postman_id": "a1698a50-3baf-4721-bca3-491ca889f000",
 		"name": "CIUDAD - RESTAURANTE",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "29491980"
+		"_exporter_id": "26687890"
 	},
 	"item": [
 		{
 			"name": "Operaciones Ciudad - Restaurante",
 			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json()",
+									"pm.globals.set(\"token\", data.token);",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"   pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"admin\",\n    \"password\":\"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/usuarios/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "Agregar un restaurante a una ciudad",
 					"event": [
@@ -704,15 +748,15 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/culturas/{{id_cultura_fail}}/recetas/{{recetaId0}}",
+							"raw": "{{base_url}}/culturas/{{id_cultura_fail}}/restaurantes/{{restauranteId}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"culturas",
 								"{{id_cultura_fail}}",
-								"recetas",
-								"{{recetaId0}}"
+								"restaurantes",
+								"{{restauranteId}}"
 							]
 						}
 					},
@@ -800,11 +844,6 @@
 	],
 	"variable": [
 		{
-			"key": "token",
-			"value": "123456",
-			"type": "string"
-		},
-		{
 			"key": "base_url",
 			"value": "localhost:3000/api/v1",
 			"type": "string"
@@ -817,6 +856,16 @@
 		{
 			"key": "id_restaurante_fail",
 			"value": "2f542657-8b65-406c-9928-9a47b997b3ef",
+			"type": "string"
+		},
+		{
+			"key": "ciudadId",
+			"value": "dfdf0a84-4a88-41f1-9809-ea7744d62818",
+			"type": "string"
+		},
+		{
+			"key": "restauranteId",
+			"value": "72353a06-c342-4da5-9c4a-4d4b91575473",
 			"type": "string"
 		}
 	]
