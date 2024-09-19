@@ -1,10 +1,9 @@
 {
 	"info": {
-		"_postman_id": "25644982-9846-4cd4-b28e-63e65c287393",
-		"name": "CIUDAD - RESTAURANTE1",
+		"_postman_id": "4a0fae00-0a4b-42c0-a2f1-7d23a92c571b",
+		"name": "CIUDAD - RESTAURANTE",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "26687890",
-		"_collection_link": "https://www.postman.com/sw-nube-uniandes/workspace/api-desing/collection/26687890-25644982-9846-4cd4-b28e-63e65c287393?action=share&source=collection_link&creator=26687890"
+		"_exporter_id": "29491980"
 	},
 	"item": [
 		{
@@ -64,6 +63,9 @@
 									"const createCiudadtaUrl = 'localhost:3000/api/v1/ciudades'; \r",
 									"const createRestauranteUrl = 'localhost:3000/api/v1/restaurantes'; \r",
 									"\r",
+									"var token = pm.environment.get(\"token\") || pm.globals.get(\"token\");\r",
+									"\r",
+									"\r",
 									"const escapeJSON = (str) => {\r",
 									"    if (!str) return '';\r",
 									"    return str\r",
@@ -73,7 +75,7 @@
 									"        .replace(/\\r/g, '\\\\r'); // Escapa los retornos de carro\r",
 									"};\r",
 									"\r",
-									"\r",
+									"console.log(\"Bearer\"+ pm.globals.get('token'))\r",
 									"\r",
 									"const ciudadPayload = {\r",
 									"    nombre: escapeJSON(pm.variables.replaceIn('{{$randomWords}}'))\r",
@@ -83,7 +85,8 @@
 									"    url: createCiudadtaUrl,\r",
 									"    method: 'POST',\r",
 									"    header: {\r",
-									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': 'Bearer ' + token,\r",
+									"        'Content-Type': 'application/json'\r",
 									"    },\r",
 									"    body: {\r",
 									"        mode: 'raw',\r",
@@ -111,7 +114,8 @@
 									"    url: createRestauranteUrl,\r",
 									"    method: 'POST',\r",
 									"    header: {\r",
-									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': 'Bearer ' + token,\r",
+									"        'Content-Type': 'application/json'\r",
 									"    },\r",
 									"    body: {\r",
 									"        mode: 'raw',\r",
@@ -869,16 +873,6 @@
 		{
 			"key": "id_restaurante_fail",
 			"value": "2f542657-8b65-406c-9928-9a47b997b3ef",
-			"type": "string"
-		},
-		{
-			"key": "ciudadId",
-			"value": "dfdf0a84-4a88-41f1-9809-ea7744d62818",
-			"type": "string"
-		},
-		{
-			"key": "restauranteId",
-			"value": "72353a06-c342-4da5-9c4a-4d4b91575473",
 			"type": "string"
 		}
 	]

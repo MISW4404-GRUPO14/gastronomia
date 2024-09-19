@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "293a9ac4-3f93-4412-ba33-7f338896ada5",
+		"_postman_id": "5af17636-012d-42cc-ab2e-0116864f4f57",
 		"name": "CULTURA - RECETA",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "26687890"
+		"_exporter_id": "29491980"
 	},
 	"item": [
 		{
@@ -63,6 +63,8 @@
 									"const createRecetaUrl = 'localhost:3000/api/v1/recetas'; \r",
 									"const createCulturaUrl = 'localhost:3000/api/v1/culturas'; \r",
 									"\r",
+									"var token = pm.environment.get(\"token\") || pm.globals.get(\"token\");\r",
+									"\r",
 									"const escapeJSON = (str) => {\r",
 									"    if (!str) return '';\r",
 									"    return str\r",
@@ -83,6 +85,7 @@
 									"    url: createCulturaUrl,\r",
 									"    method: 'POST',\r",
 									"    header: {\r",
+									"        'Authorization': 'Bearer ' + token,\r",
 									"        'Content-Type': 'application/json',\r",
 									"    },\r",
 									"    body: {\r",
@@ -113,6 +116,7 @@
 									"        url: createRecetaUrl,\r",
 									"        method: 'POST',\r",
 									"        header: {\r",
+									"            'Authorization': 'Bearer ' + token,\r",
 									"            'Content-Type': 'application/json',\r",
 									"        },\r",
 									"        body: {\r",
@@ -388,6 +392,9 @@
 									"const createRecetaUrl = 'localhost:3000/api/v1/recetas'; \r",
 									"const createCulturaUrl = 'localhost:3000/api/v1/culturas'; \r",
 									"\r",
+									"var token = pm.environment.get(\"token\") || pm.globals.get(\"token\");\r",
+									"\r",
+									"\r",
 									"const escapeJSON = (str) => {\r",
 									"    if (!str) return '';\r",
 									"    return str\r",
@@ -411,6 +418,7 @@
 									"        url: createRecetaUrl,\r",
 									"        method: 'POST',\r",
 									"        header: {\r",
+									"            'Authorization': 'Bearer ' + token,\r",
 									"            'Content-Type': 'application/json',\r",
 									"        },\r",
 									"        body: {\r",
@@ -656,6 +664,7 @@
 								"exec": [
 									"const createRecetaUrl = 'localhost:3000/api/v1/recetas'; \r",
 									"const createCulturaUrl = 'localhost:3000/api/v1/culturas'; \r",
+									"var token = pm.environment.get(\"token\") || pm.globals.get(\"token\");\r",
 									"\r",
 									"const escapeJSON = (str) => {\r",
 									"    if (!str) return '';\r",
@@ -680,6 +689,7 @@
 									"        url: createRecetaUrl,\r",
 									"        method: 'POST',\r",
 									"        header: {\r",
+									"            'Authorization': 'Bearer ' + token,\r",
 									"            'Content-Type': 'application/json',\r",
 									"        },\r",
 									"        body: {\r",
@@ -715,6 +725,16 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
@@ -942,6 +962,7 @@
 								"exec": [
 									"const createRecetaUrl = 'localhost:3000/api/v1/recetas'; \r",
 									"const createCulturaUrl = 'localhost:3000/api/v1/culturas'; \r",
+									"var token = pm.environment.get(\"token\") || pm.globals.get(\"token\");\r",
 									"\r",
 									"const escapeJSON = (str) => {\r",
 									"    if (!str) return '';\r",
@@ -966,6 +987,7 @@
 									"        url: createRecetaUrl,\r",
 									"        method: 'POST',\r",
 									"        header: {\r",
+									"            'Authorization': 'Bearer ' + token,\r",
 									"            'Content-Type': 'application/json',\r",
 									"        },\r",
 									"        body: {\r",
@@ -1367,11 +1389,6 @@
 		{
 			"key": "id_receta_fail",
 			"value": "2f542657-8b65-406c-9928-9a47b997b3ef",
-			"type": "string"
-		},
-		{
-			"key": "culturaId",
-			"value": "33bf04f4-1368-45a4-8b44-b52df1c3c9ee",
 			"type": "string"
 		}
 	]

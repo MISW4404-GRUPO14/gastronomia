@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "cc022905-d2cf-4ec9-a862-c8e5b791f82f",
+		"_postman_id": "c9952b5f-14c1-483f-91df-31e23ab79255",
 		"name": "RECETAS - ASOCIACIONES",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "29550126"
+		"_exporter_id": "29491980"
 	},
 	"item": [
 		{
@@ -981,6 +981,7 @@
 								"exec": [
 									"const createRecetaUrl = 'localhost:3000/api/v1/recetas'; \r",
 									"const createProductoUrl = 'localhost:3000/api/v1/productos'; \r",
+									"var token = pm.environment.get(\"token\") || pm.globals.get(\"token\");\r",
 									"\r",
 									"const escapeJSON = (str) => {\r",
 									"    if (!str) return '';\r",
@@ -1010,6 +1011,7 @@
 									"    url: createRecetaUrl,\r",
 									"    method: 'POST',\r",
 									"    header: {\r",
+									"        'Authorization': 'Bearer ' + token,\r",
 									"        'Content-Type': 'application/json',\r",
 									"    },\r",
 									"    body: {\r",
@@ -1038,6 +1040,7 @@
 									"        url: createProductoUrl,\r",
 									"        method: 'POST',\r",
 									"        header: {\r",
+									"            'Authorization': 'Bearer ' + token,\r",
 									"            'Content-Type': 'application/json',\r",
 									"        },\r",
 									"        body: {\r",
@@ -1322,6 +1325,7 @@
 							"script": {
 								"exec": [
 									"const createProductoUrl = 'localhost:3000/api/v1/productos'; \r",
+									"var token = pm.environment.get(\"token\") || pm.globals.get(\"token\");\r",
 									"const escapeJSON = (str) => {\r",
 									"    if (!str) return '';\r",
 									"    return str\r",
@@ -1342,6 +1346,7 @@
 									"        url: createProductoUrl,\r",
 									"        method: 'POST',\r",
 									"        header: {\r",
+									"            'Authorization': 'Bearer ' + token,\r",
 									"            'Content-Type': 'application/json',\r",
 									"        },\r",
 									"        body: {\r",
@@ -1545,6 +1550,7 @@
 							"script": {
 								"exec": [
 									"const createProductoUrl = 'localhost:3000/api/v1/productos'; \r",
+									"var token = pm.environment.get(\"token\") || pm.globals.get(\"token\");\r",
 									"\r",
 									"const escapeJSON = (str) => {\r",
 									"    if (!str) return '';\r",
@@ -1566,6 +1572,8 @@
 									"        url: createProductoUrl,\r",
 									"        method: 'POST',\r",
 									"        header: {\r",
+									"            \r",
+									"            'Authorization': 'Bearer ' + token,\r",
 									"            'Content-Type': 'application/json',\r",
 									"        },\r",
 									"        body: {\r",
@@ -1697,6 +1705,7 @@
 							"script": {
 								"exec": [
 									"const createProductoUrl = 'localhost:3000/api/v1/productos'; \r",
+									"var token = pm.environment.get(\"token\") || pm.globals.get(\"token\");\r",
 									"\r",
 									"const escapeJSON = (str) => {\r",
 									"    if (!str) return '';\r",
@@ -1718,6 +1727,8 @@
 									"        url: createProductoUrl,\r",
 									"        method: 'POST',\r",
 									"        header: {\r",
+									"            \r",
+									"            'Authorization': 'Bearer ' + token,\r",
 									"            'Content-Type': 'application/json',\r",
 									"        },\r",
 									"        body: {\r",
@@ -1866,6 +1877,8 @@
 							"script": {
 								"exec": [
 									"const createProductoUrl = 'localhost:3000/api/v1/productos'; \r",
+									"var token = pm.environment.get(\"token\") || pm.globals.get(\"token\");\r",
+									"\r",
 									"\r",
 									"const escapeJSON = (str) => {\r",
 									"    if (!str) return '';\r",
@@ -1887,6 +1900,7 @@
 									"        url: createProductoUrl,\r",
 									"        method: 'POST',\r",
 									"        header: {\r",
+									"            'Authorization': 'Bearer ' + token,\r",
 									"            'Content-Type': 'application/json',\r",
 									"        },\r",
 									"        body: {\r",
