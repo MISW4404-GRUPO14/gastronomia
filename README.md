@@ -8,7 +8,7 @@
 1. Clonar proyecto
 2. ``` npm install ```
 3. Clonar archivo ``` env.template ``` Y renombrarlo a ``` .env  ```
-4. Cambiar las variables de entorno
+4. Cambiar las variables de entorno de ser necesario.
 5. Levantar la base de datos
 ```
   docker-compose up -d
