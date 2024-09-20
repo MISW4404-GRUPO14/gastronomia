@@ -1,23 +1,42 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { UpdateCategoriaDto } from './dto/update-categoria.dto';
 import { Categoria } from './entities/categoria.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BusinessLogicException } from '../shared/errors/business-errors';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class CategoriasService {
+  cacheKey: string = "categorias";
+
   constructor( 
     @InjectRepository(Categoria)
-    private categoriaRepository: Repository<Categoria>
+    private categoriaRepository: Repository<Categoria>,
+
+    @Inject(CACHE_MANAGER)
+       private  cacheManager: Cache
   ){}
   create(createCategoriaDto: CreateCategoriaDto) {
     return this.categoriaRepository.save(createCategoriaDto);
   }
 
-  async findAll() : Promise<Categoria[]>{
-    return await this.categoriaRepository.find({ relations: ["productos"] });
+  async findAll() {
+
+    try{
+      const cached = await this.cacheManager.get(this.cacheKey);
+
+      if(!cached){
+        const recipes = await this.categoriaRepository.find({relations: ['productos']});
+        await this.cacheManager.set(this.cacheKey, recipes, 1000*600)
+        return recipes;
+      }
+      return cached;
+    } catch(error){
+      throw new BusinessLogicException('Failed to get recipes due to a server error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async findOne(id: string) {
