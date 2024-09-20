@@ -44,7 +44,7 @@ export class RecetasService {
 
       if(!cached){
         const recipes = await this.recetaRepository.find({relations: ['productos']});
-        await this.cacheManager.set(this.cacheKey, recipes)
+        await this.cacheManager.set(this.cacheKey, recipes, 1000*600)
         return recipes;
       }
       return cached;
