@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "00a442af-8ff7-45ff-b81e-14611ae98da1",
+		"_postman_id": "fdc79827-9c16-459b-90fd-6917f9f9cc7a",
 		"name": "PRODUCTOS",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "29491980"
+		"_exporter_id": "29550126"
 	},
 	"item": [
 		{
@@ -1600,11 +1600,6 @@
 		{
 			"key": "baseURL",
 			"value": "http://localhost:3000/api/v1"
-		},
-		{
-			"key": "token",
-			"value": "Autorizacion",
-			"type": "string"
 		},
 		{
 			"key": "id_producto_que_no_existe",
