@@ -10,7 +10,7 @@ import { Cultura } from '../culturas/entities/cultura.entity';
   controllers: [RecetasController],
   providers: [RecetasService],
   imports: [
-    TypeOrmModule.forFeature([ Receta, Producto, Cultura ])
+    TypeOrmModule.forFeature([ Receta, Producto, Cultura ]),
   ]
 })
 export class RecetasModule {}

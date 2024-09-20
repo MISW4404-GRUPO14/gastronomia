@@ -1,4 +1,4 @@
-import { HttpStatus ,Injectable, Logger } from '@nestjs/common';
+import { HttpStatus ,Inject,Injectable, Logger } from '@nestjs/common';
 import { CreateRecetaDto } from './dto/create-receta.dto';
 import { UpdateRecetaDto } from './dto/update-receta.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,10 +6,13 @@ import { Receta } from './entities/receta.entity';
 import { In, Repository } from 'typeorm';
 import { Producto } from '../productos/entities/producto.entity';
 import { BusinessLogicException } from '../shared/errors/business-errors';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class RecetasService {
 
+  cacheKey: string = "recetas";
   private readonly logger = new Logger('RecetasService')
 
   constructor( 
@@ -17,7 +20,10 @@ export class RecetasService {
     private readonly recetaRepository: Repository<Receta>,
 
     @InjectRepository(Producto)
-    private readonly productoRepository: Repository<Producto>
+    private readonly productoRepository: Repository<Producto>,
+
+    @Inject(CACHE_MANAGER)
+       private  cacheManager: Cache
   ){}
 
   async create(createRecetaDto: CreateRecetaDto) {
@@ -34,8 +40,14 @@ export class RecetasService {
 
   async findAll() {
     try{
-      const recipes = await this.recetaRepository.find({relations: ['productos']});
-      return recipes;
+      const cached = await this.cacheManager.get(this.cacheKey);
+
+      if(!cached){
+        const recipes = await this.recetaRepository.find({relations: ['productos']});
+        await this.cacheManager.set(this.cacheKey, recipes, 1000*600)
+        return recipes;
+      }
+      return cached;
     } catch(error){
       this.logger.error(error)
       throw new BusinessLogicException('Failed to get recipes due to a server error', HttpStatus.INTERNAL_SERVER_ERROR);
