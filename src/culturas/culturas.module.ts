@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CacheModule } from '@nestjs/cache-manager';
 import { CulturasService } from './culturas.service';
 import { CulturasController } from './culturas.controller';
 import { Cultura } from './entities/cultura.entity';
@@ -14,8 +13,7 @@ import { Producto } from '../productos/entities/producto.entity';
   controllers: [CulturasController],
   providers: [CulturasService],
   imports: [
-    TypeOrmModule.forFeature([ Cultura, Restaurante, Pais,Producto, Receta]),
-    CacheModule.register()
+    TypeOrmModule.forFeature([ Cultura, Restaurante, Pais,Producto, Receta])
   ]
 })
 export class CulturasModule {}

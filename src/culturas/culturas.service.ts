@@ -52,18 +52,15 @@ export class CulturasService {
 
   async findAll() {
     try{
-      const culturas = await this.culturaRepository.find();
-      return culturas;
-
       const cached = await this.cacheManager.get(this.cacheKey);
 
       if(!cached){
-        const recipes = await this.recetaRepository.find({relations: ['productos']});
-        await this.cacheManager.set(this.cacheKey, recipes)
-        return recipes;
+        const culturas = await this.culturaRepository.find();
+        await this.cacheManager.set(this.cacheKey, culturas, 1000*600)
+        return culturas;
       }
       return cached;
-      
+
     } catch(error){
       this.logger.error(error)
       throw new InternalServerErrorException('Failed to find a resource due to a server error.')
