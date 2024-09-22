@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, Logger,HttpStatus } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger,HttpStatus, Inject } from '@nestjs/common';
 import { CreateCiudadDto } from './dto/create-ciudad.dto';
 import { UpdateCiudadDto } from './dto/update-ciudad.dto';
 import { BusinessLogicException } from '../shared/errors/business-errors';
@@ -6,11 +6,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Ciudad } from './entities/ciudad.entity';
 import { Repository } from 'typeorm';
 import { Restaurante } from '../restaurantes/entities/restaurante.entity';
-
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class CiudadesService {
 
+  cacheKey: string = "ciudades";
   private readonly logger = new Logger('CiudadesService')
 
   constructor(
@@ -18,7 +20,10 @@ export class CiudadesService {
     private readonly ciudadRepository: Repository<Ciudad>,
 
     @InjectRepository(Restaurante)
-    private readonly restauranteRepository: Repository<Restaurante>
+    private readonly restauranteRepository: Repository<Restaurante>,
+
+    @Inject(CACHE_MANAGER)
+    private cacheManager: Cache
   ){}
 
   async create(createCiudadDto: CreateCiudadDto) {
@@ -33,8 +38,14 @@ export class CiudadesService {
 
   async findAll() {
     try {
-      const ciudades = await this.ciudadRepository.find();
-      return ciudades;
+      const cached = await this.cacheManager.get(this.cacheKey);
+
+      if (!cached) {
+        const ciudades = await this.ciudadRepository.find({ relations: ['restaurantes'] });
+        await this.cacheManager.set(this.cacheKey, ciudades, 1000 * 600)
+        return ciudades;
+      }
+      return cached;
     } catch (error) {
       throw new BusinessLogicException('Error al obtener ciudades debido a un error del servidor', HttpStatus.INTERNAL_SERVER_ERROR);
     }
