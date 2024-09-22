@@ -1,4 +1,4 @@
-import { Injectable, HttpStatus, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, HttpStatus, Logger, NotFoundException, Inject } from '@nestjs/common';
 import { CreateRestauranteDto } from './dto/create-restaurante.dto';
 import { UpdateRestauranteDto } from './dto/update-restaurante.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,10 +6,13 @@ import { Restaurante } from './entities/restaurante.entity';
 import { In, Repository } from 'typeorm';
 import { BusinessLogicException } from '../shared/errors/business-errors';
 import { Cultura } from '../culturas/entities/cultura.entity';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class RestaurantesService {
 
+  cacheKey: string = "restaurantes";
   private readonly logger = new Logger('RestaurantesService')
 
   constructor(
@@ -17,7 +20,10 @@ export class RestaurantesService {
     private readonly restauranteRepository: Repository<Restaurante>,
 
     @InjectRepository(Cultura)
-    private culturaRepository: Repository<Cultura>
+    private culturaRepository: Repository<Cultura>,
+
+    @Inject(CACHE_MANAGER)
+    private cacheManager: Cache
   ){}
   
   async create(createRestauranteDto: CreateRestauranteDto) {
@@ -32,8 +38,13 @@ export class RestaurantesService {
 
   async findAll() {
     try{
-      const restaurantes = await this.restauranteRepository.find();
-      return restaurantes;
+      const cached = await this.cacheManager.get(this.cacheKey);
+      if (!cached) {
+        const restaurantes = await this.restauranteRepository.find({ relations: ['culturas'] });
+        await this.cacheManager.set(this.cacheKey, restaurantes, 1000 * 600)
+        return restaurantes;
+      }
+      return cached;
     } catch(error){
       throw new BusinessLogicException('Failed to get restaurantes due to a server error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
