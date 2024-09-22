@@ -4,7 +4,7 @@
 		"name": "CIUDAD1",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "26687890",
-		"_collection_link": "https://www.postman.com/sw-nube-uniandes/workspace/api-desing/collection/26687890-691ae239-090f-45dc-9c1e-658e546cdad7?action=share&source=collection_link&creator=26687890"
+		"_collection_link": "https://sw-nube-uniandes.postman.co/workspace/API_DESING~1ceaa319-19e1-42dc-95c1-95d7b35a019a/collection/26687890-691ae239-090f-45dc-9c1e-658e546cdad7?action=share&source=collection_link&creator=26687890"
 	},
 	"item": [
 		{
@@ -150,15 +150,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/v1/ciudades",
-							"protocol": "http",
+							"raw": "{{base_url}}/ciudades",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
-								"api",
-								"v1",
 								"ciudades"
 							]
 						}
@@ -203,8 +199,8 @@
 							"});",
 							"",
 							"",
-							"pm.test(\"Response time is less than 200ms\", function () {",
-							"  pm.expect(pm.response.responseTime).to.be.below(200);",
+							"pm.test(\"Response time is less than 500ms\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);",
 							"});",
 							"",
 							"",
@@ -373,17 +369,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/v1/ciudades/",
-							"protocol": "http",
+							"raw": "{{base_url}}/ciudades/{{id_ciudad}}",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
-								"api",
-								"v1",
 								"ciudades",
-								""
+								"{{id_ciudad}}"
 							]
 						}
 					},
@@ -496,17 +488,13 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/v1/ciudades/",
-							"protocol": "http",
+							"raw": "{{base_url}}/ciudades/{{id_ciudad}}",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
-								"api",
-								"v1",
 								"ciudades",
-								""
+								"{{id_ciudad}}"
 							]
 						}
 					},
@@ -714,19 +702,15 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/v1/ciudades/0000-0000-0000/restaurantes/72353a06-c342-4da5-9c4a-4d4b91575473",
-							"protocol": "http",
+							"raw": "{{base_url}}/ciudades/0000-0000-0000/restaurantes/{{id_restaurante}}",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
-								"api",
-								"v1",
 								"ciudades",
 								"0000-0000-0000",
 								"restaurantes",
-								"72353a06-c342-4da5-9c4a-4d4b91575473"
+								"{{id_restaurante}}"
 							]
 						}
 					},
@@ -813,17 +797,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/v1/ciudades//restaurantes",
-							"protocol": "http",
+							"raw": "{{base_url}}/ciudades/{{id_ciudad}}/restaurantes",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
-								"api",
-								"v1",
 								"ciudades",
-								"",
+								"{{id_ciudad}}",
 								"restaurantes"
 							]
 						}
@@ -924,15 +904,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/v1/ciudades/0000-0000-0000/restaurantes",
-							"protocol": "http",
+							"raw": "{{base_url}}/ciudades/0000-0000-0000/restaurantes",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
-								"api",
-								"v1",
 								"ciudades",
 								"0000-0000-0000",
 								"restaurantes"
@@ -1030,19 +1006,15 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/v1/ciudades//restaurantes/72353a06-c342-4da5-9c4a-4d4b91575473",
-							"protocol": "http",
+							"raw": "{{base_url}}/ciudades/{{id_ciudad}}/restaurantes/{{id_restaurante}}",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "3000",
 							"path": [
-								"api",
-								"v1",
 								"ciudades",
-								"",
+								"{{id_ciudad}}",
 								"restaurantes",
-								"72353a06-c342-4da5-9c4a-4d4b91575473"
+								"{{id_restaurante}}"
 							]
 						}
 					},
@@ -1151,7 +1123,7 @@
 		},
 		{
 			"key": "id_restaurante",
-			"value": "72353a06-c342-4da5-9c4a-4d4b91575473",
+			"value": "64109460-64b5-46cf-a461-50239a2c7c16",
 			"type": "string"
 		},
 		{

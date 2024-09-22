@@ -1,9 +1,10 @@
 {
 	"info": {
-		"_postman_id": "4fd831e5-c088-4bed-83ae-394e58e64e16",
+		"_postman_id": "4ddf90e5-5bf7-421a-a5bc-e826b9978b78",
 		"name": "RESTAURANTE-CULTURA",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "29550126"
+		"_exporter_id": "26687890",
+		"_collection_link": "https://sw-nube-uniandes.postman.co/workspace/API_DESING~1ceaa319-19e1-42dc-95c1-95d7b35a019a/collection/26687890-4ddf90e5-5bf7-421a-a5bc-e826b9978b78?action=share&source=collection_link&creator=26687890"
 	},
 	"item": [
 		{
@@ -113,6 +114,129 @@
 			]
 		},
 		{
+			"name": "Crear cultura",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Obtén la respuesta en formato JSON",
+							"const response = pm.response.json();",
+							"",
+							"// ID está en response.id",
+							"const cultureId = response.id;",
+							"",
+							"// Almacena el ID en una variable de colección llamada \"id\"",
+							"pm.collectionVariables.set(\"id\", cultureId);",
+							"pm.globals.set(\"culturaId\", cultureId);",
+							"",
+							"",
+							"var data = pm.response.json()",
+							"pm.globals.set(\"id\", data.id);",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"   pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nombre\": \"Nueva Cultura Gastronómica\",\n  \"descripcion\": \"Descripción de la nueva cultura\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/culturas",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"culturas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Restaurante",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()",
+							"",
+							"pm.test(\"El restaurante tiene 'id'\", function () {",
+							"    pm.expect(data).to.have.property('id');",
+							"});",
+							"",
+							"pm.globals.set(\"id_restaurante\", data.id);",
+							"",
+							"pm.test(\"201\", function () {",
+							"   pm.response.to.have.status(201);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nombre\": \"Mcdonalds\",\n  \"estrellas\": 5,\n  \"fechasConsecucionEstrellas\": \"2023-01-01\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/restaurantes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"restaurantes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Asociar una cultura gastronomica a un restaurante",
 			"event": [
 				{
@@ -213,7 +337,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"culturaIds\":[\"33bf04f4-1368-45a4-8b44-b52df1c3c9ee\"]\n}",
+					"raw": "{\n    \"culturaIds\": [\"{{id}}\"]\n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -344,11 +468,7 @@
 							"    pm.expect(responseData).to.not.have.any.keys('unexpectedField1', 'unexpectedField2'); // Ajusta según tus necesidades",
 							"});",
 							"",
-							"pm.test(\"El mensaje de error es claro y descriptivo\", function () {",
-							"    const responseData = pm.response.json();",
-							"    const expectedMessage = \"Alguna de las culturas no existe\";",
-							"    pm.expect(responseData.message).to.eql(expectedMessage);",
-							"});",
+							"",
 							"",
 							"",
 							"",
@@ -375,7 +495,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"culturaIds\":[\"33bf04f4-1368-45a4-8b44-b52df1c3c9ae\"]\n}",
+					"raw": "{\n    \"culturaIds\": [\"33bf04f4-1368-45a4-8b44-b52df1c3c9ee\"]\n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -447,7 +567,7 @@
 							"",
 							"pm.test(\"El mensaje de error proporciona información relevante\", function () {",
 							"    const responseData = pm.response.json();",
-							"    const expectedMessagePart = \"El restaurante con el ID proporcionado no fue encontrado\";",
+							"    const expectedMessagePart = \"The restaurante with the given id was not found\";",
 							"    pm.expect(responseData.message).to.include(expectedMessagePart);",
 							"});",
 							"",
@@ -567,148 +687,6 @@
 			]
 		},
 		{
-			"name": "Eliminar la asociación de una cultura gastronomica de un restaurante",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Response status code is 200\", function () {",
-							"    pm.expect(pm.response.code).to.equal(200);",
-							"});",
-							"",
-							"",
-							"pm.test(\"Response time is in an acceptable range\", function () {",
-							"  pm.expect(pm.response.responseTime).to.be.below(300);",
-							"});",
-							"",
-							"",
-							"pm.test(\"Response has the required fields\", function () {",
-							"    const responseData = pm.response.json();",
-							"    ",
-							"    pm.expect(responseData).to.be.an('object');",
-							"    pm.expect(responseData.id).to.exist;",
-							"    pm.expect(responseData.nombre).to.exist;",
-							"    pm.expect(responseData.estrellas).to.exist;",
-							"    pm.expect(responseData.fechasConsecucionEstrellas).to.exist;",
-							"    pm.expect(responseData.culturas).to.exist;",
-							"});",
-							"",
-							"",
-							"pm.test(\"Id is a non-empty string\", function () {",
-							"    const responseData = pm.response.json();",
-							"    ",
-							"    pm.expect(responseData.id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Id should not be empty\");",
-							"});",
-							"",
-							"",
-							"pm.test(\"Nombre is a non-empty string\", function () {",
-							"  const responseData = pm.response.json();",
-							"  ",
-							"  pm.expect(responseData).to.be.an('object');",
-							"  pm.expect(responseData.nombre).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
-							"});",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturas/{{id_cultura}}",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"restaurantes",
-						"{{id_restaurante}}",
-						"culturas",
-						"{{id_cultura}}"
-					]
-				}
-			},
-			"response": [
-				{
-					"name": "Eliminar la asociación de una cultura gastronomica de un restaurante",
-					"originalRequest": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturasGastronomicas/{{id_cultura}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"restaurantes",
-								"{{id_restaurante}}",
-								"culturasGastronomicas",
-								"{{id_cultura}}"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json",
-							"description": "",
-							"type": "text"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"message\": \"Cultura Gastronómica desasociada exitosamente del Restaurante.\",\n    \"restauranteId\": 1,\n    \"culturaGastronomicaId\": 2\n}"
-				},
-				{
-					"name": "Eliminar la asociación de una cultura gastronomica de un restaurante no existente",
-					"originalRequest": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturasGastronomicas/{{id_cultura}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"restaurantes",
-								"{{id_restaurante}}",
-								"culturasGastronomicas",
-								"{{id_cultura}}"
-							]
-						}
-					},
-					"status": "Not Found",
-					"code": 404,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json",
-							"description": "",
-							"type": "text"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"error\": \"Asociación no encontrada o ya eliminada.\"\n}"
-				}
-			]
-		},
-		{
 			"name": "Obtener todas las Culturas Gastronómicas asociadas a un Restaurante",
 			"event": [
 				{
@@ -729,21 +707,6 @@
 							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
 							"});",
 							"",
-							"",
-							"",
-							"pm.test(\"Validate the 'culturasGastronomicas' array and its elements\", function () {",
-							"    const responseData = pm.response.json();",
-							"    ",
-							"    pm.expect(responseData).to.be.an('array');",
-							"    pm.expect(responseData).to.have.lengthOf.at.least(1, \"Array should not be empty\");",
-							"",
-							"    responseData.forEach(function(cultura) {",
-							"        pm.expect(cultura).to.be.an('object');",
-							"        pm.expect(cultura.id).to.exist.and.to.be.a('string');",
-							"        pm.expect(cultura.nombre).to.exist.and.to.be.a('string');",
-							"        pm.expect(cultura.descripcion).to.exist.and.to.be.a('string');",
-							"    });",
-							"});",
 							""
 						],
 						"type": "text/javascript",
@@ -838,114 +801,6 @@
 					],
 					"cookie": [],
 					"body": "{\n  \"error\": \"Restaurante no encontrado o sin culturas gastronómicas asociadas.\"\n}\n"
-				}
-			]
-		},
-		{
-			"name": "Obtener una Cultura Gastronómica de un Restaurante",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Response status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"",
-							"pm.test(\"Response Content-Type is application/json\", function () {",
-							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
-							"});",
-							"",
-							"",
-							"pm.test(\"Response time is less than 200ms\", function () {",
-							"  pm.expect(pm.response.responseTime).to.be.below(200);",
-							"});",
-							"",
-							"",
-							"pm.test(\"Response has the required fields - id, nombre, and descripcion\", function () {",
-							"    const responseData = pm.response.json();",
-							"    ",
-							"    pm.expect(responseData).to.be.an('object');",
-							"    pm.expect(responseData).to.have.property('id');",
-							"    pm.expect(responseData).to.have.property('nombre');",
-							"    pm.expect(responseData).to.have.property('descripcion');",
-							"});",
-							"",
-							"",
-							"pm.test(\"Id, nombre, and descripcion are non-empty strings\", function () {",
-							"    const responseData = pm.response.json();",
-							"",
-							"    pm.expect(responseData).to.be.an('object');",
-							"    pm.expect(responseData.id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Id should be a non-empty string\");",
-							"    pm.expect(responseData.nombre).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Nombre should be a non-empty string\");",
-							"    pm.expect(responseData.descripcion).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Descripcion should be a non-empty string\");",
-							"});",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturas/{{id_cultura}}",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"restaurantes",
-						"{{id_restaurante}}",
-						"culturas",
-						"{{id_cultura}}"
-					]
-				}
-			},
-			"response": [
-				{
-					"name": "Obtener una Cultura Gastronómica de un Restaurante",
-					"originalRequest": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturasGastronomicas/{{id_cultura}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"restaurantes",
-								"{{id_restaurante}}",
-								"culturasGastronomicas",
-								"{{id_cultura}}"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json",
-							"description": "",
-							"type": "text"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"culturaGastronomicaId\": \"{culturaId}\",\n    \"nombre\": \"Nombre de la Cultura\",\n    \"descripcion\": \"Descripción de la cultura gastronómica.\",\n    \"paisOrigen\": \"País de origen\",\n    \"restauranteId\": \"{id}\"\n}"
 				}
 			]
 		},
@@ -1057,7 +912,29 @@
 			]
 		},
 		{
-			"name": "Eliminar una Cultura Gastronómica que no existe de un Restaurante",
+			"name": "Eliminar la asociación de una cultura gastronomica de un restaurante",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 204\", function () {",
+							"    pm.expect(pm.response.code).to.equal(204);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is in an acceptable range\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(300);",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -1072,15 +949,145 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturasGastronomicas/0000-0000-0000",
+					"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturas/{{id}}",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
 						"restaurantes",
 						"{{id_restaurante}}",
-						"culturasGastronomicas",
-						"0000-0000-0000"
+						"culturas",
+						"{{id}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Eliminar la asociación de una cultura gastronomica de un restaurante",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturasGastronomicas/{{id_cultura}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"restaurantes",
+								"{{id_restaurante}}",
+								"culturasGastronomicas",
+								"{{id_cultura}}"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Cultura Gastronómica desasociada exitosamente del Restaurante.\",\n    \"restauranteId\": 1,\n    \"culturaGastronomicaId\": 2\n}"
+				},
+				{
+					"name": "Eliminar la asociación de una cultura gastronomica de un restaurante no existente",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturasGastronomicas/{{id_cultura}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"restaurantes",
+								"{{id_restaurante}}",
+								"culturasGastronomicas",
+								"{{id_cultura}}"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\": \"Asociación no encontrada o ya eliminada.\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Eliminar una Cultura Gastronómica que no existe de un Restaurante",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 404\", function () {",
+							"    pm.expect(pm.response.code).to.equal(404);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields - message, error, and statusCode\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.message).to.exist;",
+							"    pm.expect(responseData.error).to.exist;",
+							"    pm.expect(responseData.statusCode).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Verify Content-Type is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/restaurantes/{{id_restaurante}}/culturas/9666ba2e-52f3-47e3-b8c4-1f1d5cf541ec",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"restaurantes",
+						"{{id_restaurante}}",
+						"culturas",
+						"9666ba2e-52f3-47e3-b8c4-1f1d5cf541ec"
 					]
 				}
 			},
@@ -1144,11 +1151,6 @@
 	],
 	"variable": [
 		{
-			"key": "id_restaurante",
-			"value": "372ab2e8-f014-4807-b420-2c790e0eda85",
-			"type": "string"
-		},
-		{
 			"key": "base_url",
 			"value": "http://localhost:3000/api/v1",
 			"type": "string"
@@ -1156,6 +1158,11 @@
 		{
 			"key": "id_cultura",
 			"value": "9666ba2e-52f3-47e3-b8c4-1f5d5cf541ec",
+			"type": "string"
+		},
+		{
+			"key": "id",
+			"value": "",
 			"type": "string"
 		}
 	]

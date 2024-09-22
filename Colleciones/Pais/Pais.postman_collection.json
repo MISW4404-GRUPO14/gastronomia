@@ -1,9 +1,10 @@
 {
 	"info": {
-		"_postman_id": "01341511-00a7-4e4d-b70f-bc3c7a0e478e",
+		"_postman_id": "a751235c-c47e-453b-9b5c-06ec763eaf02",
 		"name": "PAIS",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "29550126"
+		"_exporter_id": "26687890",
+		"_collection_link": "https://sw-nube-uniandes.postman.co/workspace/API_DESING~1ceaa319-19e1-42dc-95c1-95d7b35a019a/collection/26687890-a751235c-c47e-453b-9b5c-06ec763eaf02?action=share&source=collection_link&creator=26687890"
 	},
 	"item": [
 		{
@@ -670,6 +671,25 @@
 		},
 		{
 			"name": "Actualizar un pais inexistente",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 500ms\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -693,13 +713,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseURL}}/paises/12-44",
+					"raw": "{{base_url}}/paises/2e59046a-cf07-44ae-a982-30e6b8ec3392",
 					"host": [
-						"{{baseURL}}"
+						"{{base_url}}"
 					],
 					"path": [
 						"paises",
-						"12-44"
+						"2e59046a-cf07-44ae-a982-30e6b8ec3392"
 					]
 				}
 			},
