@@ -14,6 +14,5 @@ export class Pais {
     ciudades: Ciudad[];
 
     @ManyToMany(() => Cultura, cultura => cultura.paises)
-    // @JoinTable()
     culturas: Cultura[];
 }

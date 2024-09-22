@@ -45,6 +45,7 @@
     "axios": "^1.7.5",
     "cache-manager": "^5.7.6",
     "cache-manager-redis-yet": "^5.1.4",
+    "cache-manager-sqlite": "^0.2.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "passport": "^0.7.0",

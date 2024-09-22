@@ -1,4 +1,5 @@
-import { HttpStatus, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { CreateCulturaDto } from './dto/create-cultura.dto';
 import { UpdateCulturaDto } from './dto/update-cultura.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,12 +10,14 @@ import { BusinessLogicException } from '../shared/errors/business-errors';
 import { Restaurante } from '../restaurantes/entities/restaurante.entity';
 import { Producto } from '../productos/entities/producto.entity';
 import { Receta } from '../recetas/entities/receta.entity';
+import { Cache } from 'cache-manager';
 
 
 @Injectable()
 export class CulturasService {
 
   private readonly logger = new Logger('CulturasService');
+  cacheKey: string = "cultura";
 
   constructor( 
     @InjectRepository(Cultura)
@@ -30,7 +33,10 @@ export class CulturasService {
     private readonly productoRepository: Repository<Producto>,
     
     @InjectRepository(Receta)
-    private readonly recetaRepository: Repository<Receta>
+    private readonly recetaRepository: Repository<Receta>,
+
+    @Inject(CACHE_MANAGER)
+    private  cacheManager: Cache
   ){}
   
   async create(createCulturaDto: CreateCulturaDto) {
@@ -46,8 +52,15 @@ export class CulturasService {
 
   async findAll() {
     try{
-      const culturas = await this.culturaRepository.find();
-      return culturas;
+      const cached = await this.cacheManager.get(this.cacheKey);
+
+      if(!cached){
+        const culturas = await this.culturaRepository.find();
+        await this.cacheManager.set(this.cacheKey, culturas, 1000*600)
+        return culturas;
+      }
+      return cached;
+
     } catch(error){
       this.logger.error(error)
       throw new InternalServerErrorException('Failed to find a resource due to a server error.')
