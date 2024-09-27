@@ -1,0 +1,46 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Producto {
+  id: String!
+  nombre: String!
+  descripcion: String!
+  historia: String!
+  categoria: String!
+  recetas: [Receta!]!
+}
+
+type Receta {
+  id: String!
+  nombre: String!
+  descripcion: String!
+  foto: String!
+  proceso: String!
+  video: String!
+  productos: [Producto!]!
+}
+
+type Query {
+  recetas: [Receta!]!
+  receta(id: String!): Receta!
+  getProductosByReceta(recetaId: String!): [Producto!]!
+  getProductoByReceta(recetaId: String!, productoId: String!): Producto!
+}
+
+type Mutation {
+  createReceta(receta: CreateRecetaDto!): Receta!
+  updateReceta(id: String!, receta: CreateRecetaDto!): Receta!
+  deleteReceta(id: String!): String!
+  agregarProductoAReceta(id: String!, productosIds: [String!]!): Receta!
+  updateProductosEnReceta(id: String!, productosIds: [String!]!): Receta!
+  removeProductoFromReceta(recetaId: String!, productoId: String!): Receta!
+}
+
+input CreateRecetaDto {
+  nombre: String!
+  descripcion: String!
+  foto: String!
+  proceso: String!
+  video: String!
+}
