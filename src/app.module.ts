@@ -14,6 +14,9 @@ import { PaisesModule } from './paises/paises.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { redisStore } from 'cache-manager-redis-yet';
+import { GraphQLModule } from '@nestjs/graphql';
+import { join } from 'path';
+import { ApolloDriver } from '@nestjs/apollo';
 
 @Module({
   imports: [
@@ -38,6 +41,10 @@ import { redisStore } from 'cache-manager-redis-yet';
           }
         })
       }),
+    }),
+    GraphQLModule.forRoot({
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      driver: ApolloDriver
     }),
     CulturasModule,
     RecetasModule,

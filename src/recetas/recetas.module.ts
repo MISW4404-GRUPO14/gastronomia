@@ -5,10 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Receta } from './entities/receta.entity';
 import { Producto } from '../productos/entities/producto.entity';
 import { Cultura } from '../culturas/entities/cultura.entity';
+import { RecetasResolver } from './recetas.resolver';
 
 @Module({
   controllers: [RecetasController],
-  providers: [RecetasService],
+  providers: [RecetasService, RecetasResolver],
   imports: [
     TypeOrmModule.forFeature([ Receta, Producto, Cultura ]),
   ]
