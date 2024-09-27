@@ -30,45 +30,20 @@ type Receta {
   productos: [Producto!]!
 }
 
-type Pais {
-  id: String!
-  nombre: String!
-  ciudades: [Ciudad!]!
-  culturas: [Cultura!]!
-}
-
-type Ciudad {
-  id: String!
-  nombre: String!
-  restaurantes: [Restaurante!]!
-  idPais: String!
-}
-
-type Restaurante {
-  id: String!
-  nombre: String!
-  estrellas: Float!
-  fechasConsecucionEstrellas: DateTime!
-  culturas: [Cultura!]!
-  idCiudad: String!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 type Cultura {
   id: String!
   nombre: String!
   descripcion: String!
-  paises: [Pais!]!
-  restaurantes: [Restaurante!]!
   recetas: [Receta!]!
-  productos: [Producto!]!
 }
 
 type Query {
+  getRecetasByCultura(culturaId: String!): [Receta!]!
+  getRecetaByCultura(culturaId: String!, recetaId: String!): Receta!
+  recetas: [Receta!]!
+  receta(id: String!): Receta!
+  getProductosByReceta(recetaId: String!): [Producto!]!
+  getProductoByReceta(recetaId: String!, productoId: String!): Producto!
   categorias: [Categoria!]!
   categoria(id: String!): Categoria!
   productos: [Producto!]!
@@ -77,6 +52,15 @@ type Query {
 }
 
 type Mutation {
+  agregarRecetasACultura(id: String!, recetasId: [String!]!): Cultura!
+  updateRecetaEnCulturas(id: String!, recetasId: [String!]!): Cultura!
+  removeRecetaFromCultura(culturaId: String!, recetaId: String!): Cultura!
+  createReceta(receta: CreateRecetaDto!): Receta!
+  updateReceta(id: String!, receta: CreateRecetaDto!): Receta!
+  deleteReceta(id: String!): String!
+  agregarProductoAReceta(id: String!, productosIds: [String!]!): Receta!
+  updateProductosEnReceta(id: String!, productosIds: [String!]!): Receta!
+  removeProductoFromReceta(recetaId: String!, productoId: String!): Receta!
   createCategoria(categoria: CreateCategoriaDto!): Categoria!
   updateCategoria(id: String!, categoria: UpdateCategoriaDto!): Categoria!
   deleteCategoria(id: String!): String!
@@ -86,6 +70,14 @@ type Mutation {
   agregarCategoriaAProducto(productoId: String!): Producto!
   actualizarCategoriaEnProductos(productoId: String!): Producto!
   eliminarCategoriaDeProducto(productoId: String!): String!
+}
+
+input CreateRecetaDto {
+  nombre: String!
+  descripcion: String!
+  foto: String!
+  proceso: String!
+  video: String!
 }
 
 input CreateCategoriaDto {

@@ -10,6 +10,7 @@ import { BusinessLogicException } from '../shared/errors/business-errors';
 import { CreateCulturaDto } from './dto/create-cultura.dto';
 import { Receta } from '../recetas/entities/receta.entity';
 import { Producto } from '../productos/entities/producto.entity';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 const cultura: Cultura = {
   id: 'mock-uuid',
@@ -51,6 +52,7 @@ describe('CulturasService', () => {
   const paisID = '03e029d1-d0b5-4623-a96c-35685fcbe944';
   let recetaRepository: Repository<Receta>
   let productoRepository: Repository<Producto>
+  let cacheManager: Cache;
   
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -97,6 +99,14 @@ describe('CulturasService', () => {
             findOne: jest.fn(),
           }
         },
+        {
+          provide: CACHE_MANAGER,
+          useValue: {
+            get: jest.fn(),
+            set: jest.fn(),
+            del: jest.fn(),
+          },
+        }
       ],
     }).compile();
 
@@ -106,6 +116,7 @@ describe('CulturasService', () => {
     restauranteRepository = module.get(getRepositoryToken(Restaurante));
     recetaRepository = module.get<Repository<Receta>>(getRepositoryToken(Receta));
     productoRepository = module.get(getRepositoryToken(Producto));
+    cacheManager = module.get<Cache>(CACHE_MANAGER);
   });
 
   it('should be defined', () => {
