@@ -52,7 +52,6 @@ describe('ProductosController', () => {
         descripcion:"Descripción Producto",
         historia:"historia Producto",
         categoria:"",
-        recetas:[],
     };
       await controller.create(createProductoDto);
       expect(service.create).toHaveBeenCalledWith(createProductoDto);
@@ -77,7 +76,7 @@ describe('ProductosController', () => {
   describe('update', () => {
     it('debería llamar a Categoria.update con el ID y datos correctos', async () => {
       const id = 'uuid';
-      const updateProductoDto:UpdateProductoDto  = { descripcion:"",nombre: 'Receta Actualizada',historia:"", categoria:"", recetas:[] };
+      const updateProductoDto:UpdateProductoDto  = { descripcion:"",nombre: 'Receta Actualizada',historia:"", categoria:"" };
       await controller.update(id, updateProductoDto);
       expect(service.update).toHaveBeenCalledWith(id, updateProductoDto);
     });

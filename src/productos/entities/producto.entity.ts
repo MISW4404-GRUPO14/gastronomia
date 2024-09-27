@@ -6,6 +6,7 @@ import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 't
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
+@ObjectType()
 @Entity()
 export class Producto {
 
@@ -16,7 +17,7 @@ export class Producto {
     @Field()
     @Column()
     nombre: string;
- 
+    
     @Field()
     @Column()
     descripcion: string;
@@ -29,10 +30,11 @@ export class Producto {
     @ManyToOne(() => Categoria, categoria => categoria.productos)
     categoria: string;
 
-    @Field(() => [Receta])
+    @Field(type => [Receta])
     @ManyToMany(() => Receta, (receta) => receta.productos)
     recetas: Receta[];
 
+    @Field(type => Cultura)
     @ManyToOne(() => Cultura, cultura => cultura.productos)
     cultura: Cultura; 
  
