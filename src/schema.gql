@@ -18,7 +18,15 @@ type Receta {
   foto: String!
   proceso: String!
   video: String!
+  cultura: Cultura!
   productos: [Producto!]!
+}
+
+type Cultura {
+  id: String!
+  nombre: String!
+  descripcion: String!
+  recetas: [Receta!]!
 }
 
 type Query {
@@ -29,6 +37,8 @@ type Query {
 }
 
 type Mutation {
+  agregarRecetasACultura(id: String!, recetasId: [String!]!): Cultura!
+  updateRecetaEnCulturas(id: String!, recetasId: [String!]!): Cultura!
   createReceta(receta: CreateRecetaDto!): Receta!
   updateReceta(id: String!, receta: CreateRecetaDto!): Receta!
   deleteReceta(id: String!): String!

@@ -32,6 +32,7 @@ export class Receta {
     video: string;
 
 
+    @Field(() => Cultura)
     @ManyToOne(() => Cultura, (cultura) => cultura.recetas, { onDelete: 'CASCADE' })
     cultura: Cultura;
 

@@ -7,6 +7,7 @@ import { Producto } from '../productos/entities/producto.entity';
 import { CreateRecetaDto } from './dto/create-receta.dto';
 import { UpdateRecetaDto } from './dto/update-receta.dto';
 import { Cultura } from '../culturas/entities/cultura.entity';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 const mockRecetaRepository = () => ({
   create: jest.fn(),
@@ -38,7 +39,7 @@ describe('RecetasService', () => {
   let recetaRepository: Repository<Receta>;
   let recetaRepositoryMock: jest.Mocked<Repository<Receta>>;
   let productoRepository: Repository<Producto>;
-
+  let cacheManager: Cache;
   
 
   beforeEach(async () => {
@@ -53,6 +54,14 @@ describe('RecetasService', () => {
           provide: getRepositoryToken(Producto),
           useClass: Repository,
         },
+        {
+          provide: CACHE_MANAGER,
+          useValue: {
+            get: jest.fn(),
+            set: jest.fn(),
+            del: jest.fn(),
+          },
+        }
       ],
     }).compile();
 
@@ -60,6 +69,7 @@ describe('RecetasService', () => {
     recetaRepository = module.get<Repository<Receta>>(getRepositoryToken(Receta));
     recetaRepositoryMock = module.get(getRepositoryToken(Receta));
     productoRepository = module.get<Repository<Producto>>(getRepositoryToken(Producto));
+    cacheManager = module.get<Cache>(CACHE_MANAGER);
   });
 
   it('should be defined', () => {

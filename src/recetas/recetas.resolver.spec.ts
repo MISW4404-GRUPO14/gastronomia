@@ -57,7 +57,7 @@ describe('RecetasResolver', () => {
     agregarProductosAReceta: jest.fn().mockResolvedValue(mockReceta),
     actualizarProductosEnReceta: jest.fn().mockResolvedValue(mockReceta),
     eliminarProductoDeReceta: jest.fn().mockResolvedValue(mockReceta),
-};
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
