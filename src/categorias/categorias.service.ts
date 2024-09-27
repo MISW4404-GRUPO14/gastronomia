@@ -23,13 +23,13 @@ export class CategoriasService {
     return this.categoriaRepository.save(createCategoriaDto);
   }
 
-  async findAll() {
+  async findAll(): Promise<Categoria[]>  {
 
     try{
-      const cached = await this.cacheManager.get(this.cacheKey);
+      const cached: Categoria[]  = await this.cacheManager.get(this.cacheKey);
 
       if(!cached){
-        const recipes = await this.categoriaRepository.find({relations: ['productos']});
+        const recipes: Categoria[]  = await this.categoriaRepository.find({relations: ['productos']});
         await this.cacheManager.set(this.cacheKey, recipes, 1000*600)
         return recipes;
       }

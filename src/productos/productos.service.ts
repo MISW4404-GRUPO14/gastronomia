@@ -41,12 +41,12 @@ export class ProductosService {
 
   
 
-  async findAll(){
+  async findAll(): Promise<Producto[]> {
     try{
-      const cached = await this.cacheManager.get(this.cacheKey);
+      const cached:Producto[] = await this.cacheManager.get(this.cacheKey);
 
       if(!cached){
-        const recipes = await this.productoRepository.find({ relations: ["categoria"] });
+        const recipes:Producto[] = await this.productoRepository.find({ relations: ["categoria"] });
         await this.cacheManager.set(this.cacheKey, recipes, 1000*600)
         return recipes;
       }

@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Categoria } from '../categorias/entities/categoria.entity';
 import { Cultura } from '../culturas/entities/cultura.entity';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 describe('ProductosService', () => {
   let service: ProductosService;
@@ -14,6 +15,7 @@ describe('ProductosService', () => {
   let categoriaRepositoryMock: jest.Mocked<Repository<Categoria>>;
   let productosList: Producto[];
   let categoriasList: Categoria[];
+  let cacheManager: Cache;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -43,6 +45,14 @@ describe('ProductosService', () => {
             update: jest.fn(),
           },
         },
+        {
+          provide: CACHE_MANAGER,
+          useValue: {
+            get: jest.fn(),
+            set: jest.fn(),
+            del: jest.fn(),
+          },
+        },
       ],
     }).compile();
     
@@ -51,6 +61,8 @@ describe('ProductosService', () => {
     productoRepositoryMock = module.get(getRepositoryToken(Producto));
     repositoryCategoria = module.get<Repository<Categoria>>(getRepositoryToken(Categoria));
     categoriaRepositoryMock = module.get(getRepositoryToken(Categoria));
+    cacheManager = module.get<Cache>(CACHE_MANAGER);
+
     await seedDatabaseProducto();
     await seedDatabaseCategoria();
   });
@@ -324,4 +336,5 @@ describe('ProductosService', () => {
     });
     expect(result.categoria).toBeNull();
   });
+  
 });
