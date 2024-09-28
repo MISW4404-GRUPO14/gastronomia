@@ -26,6 +26,7 @@ export class Restaurante {
     @ManyToMany(()=> Cultura, (cultura) => cultura.restaurantes)
     culturas: Cultura[];
 
+    @Field(() => Ciudad, { nullable: true })
     @ManyToOne(() => Ciudad, ciudad => ciudad.restaurantes)
     idCiudad: string;
 }

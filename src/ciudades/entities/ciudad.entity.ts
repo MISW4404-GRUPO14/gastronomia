@@ -6,7 +6,6 @@ import { Field, ObjectType } from '@nestjs/graphql';
 @ObjectType()
 @Entity()
 export class Ciudad {
-
     @Field()
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -19,6 +18,7 @@ export class Ciudad {
     @OneToMany(() => Restaurante   , restaurante => restaurante.idCiudad)   
     restaurantes: Restaurante[];
 
+    @Field(() => [Pais], { nullable: true })
     @ManyToOne(() => Pais, pais => pais.ciudades)
     idPais: string;
 }

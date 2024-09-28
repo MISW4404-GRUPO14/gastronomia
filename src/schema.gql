@@ -33,7 +33,15 @@ type Receta {
 type Pais {
   id: String!
   nombre: String!
+  ciudades: [Ciudad!]
   culturas: [Cultura!]
+}
+
+type Ciudad {
+  id: String!
+  nombre: String!
+  restaurantes: [Restaurante!]
+  idPais: [Pais!]
 }
 
 type Restaurante {
@@ -42,6 +50,7 @@ type Restaurante {
   estrellas: Float!
   fechasConsecucionEstrellas: DateTime!
   culturas: [Cultura!]
+  idCiudad: Ciudad
 }
 
 """
@@ -74,6 +83,13 @@ type Query {
   productos: [Producto!]!
   producto(id: String!): Producto!
   categoriaDeProducto(id: String!): Producto!
+  restaurantes: [Restaurante!]!
+  restaurante: Restaurante!
+  ciudades: [Ciudad!]!
+  ciudad(id: String!): Ciudad!
+  getRestaurantesByCiudad(id: String!): [Ciudad!]!
+  paises: [Pais!]!
+  pais(id: String!): Pais!
 }
 
 type Mutation {
@@ -104,6 +120,17 @@ type Mutation {
   agregarCategoriaAProducto(productoId: String!): Producto!
   actualizarCategoriaEnProductos(productoId: String!): Producto!
   eliminarCategoriaDeProducto(productoId: String!): String!
+  createRestaurante(restaurante: CreateRestauranteDto!): Restaurante!
+  updateRestaurante(id: String!, restaurante: CreateRestauranteDto!): Restaurante!
+  deleteRestaurante(id: String!): String!
+  createCiudad(ciudad: CreateCiudadDto!): Ciudad!
+  updateCiudad(id: String!, ciudad: CreateCiudadDto!): Ciudad!
+  deleteCiudad(id: String!): Ciudad!
+  agregarRestauranteACiudad(id: String!, restauranteId: String!): Ciudad!
+  removeRestauranteDeCiudad(id: String!, restauranteId: String!): Ciudad!
+  createPais(pais: CreatePaisDto!): Pais!
+  updatePais(id: String!, pais: CreatePaisDto!): Pais!
+  deletePais(id: String!): String!
 }
 
 input CreateCulturaDto {
@@ -146,4 +173,18 @@ input UpdateProductoDto {
   descripcion: String!
   historia: String!
   categoria: String!
+}
+
+input CreateRestauranteDto {
+  nombre: String!
+  estrellas: Float!
+  fechasConsecucionEstrellas: DateTime!
+}
+
+input CreateCiudadDto {
+  nombre: String!
+}
+
+input CreatePaisDto {
+  nombre: String!
 }

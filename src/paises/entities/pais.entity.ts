@@ -14,6 +14,7 @@ export class Pais {
     @Column('text')
     nombre: string;
 
+    @Field(() => [Ciudad], { nullable: true })
     @OneToMany(() => Ciudad, ciudad => ciudad.idPais)
     ciudades: Ciudad[];
 
