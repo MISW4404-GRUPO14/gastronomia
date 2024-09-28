@@ -8,11 +8,13 @@ import { CreateRestauranteDto } from './dto/create-restaurante.dto';
 import { UpdateRestauranteDto } from './dto/update-restaurante.dto';
 import { Cultura } from '../culturas/entities/cultura.entity';
 import { NotFoundException } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 describe('RestaurantesService', () => {
   let service: RestaurantesService;
   let repository: Repository<Restaurante>;
   let culturaRepository: Repository<Cultura>;
+  let cacheManager: Cache;
 
   const mockRestaurante: Restaurante = {
     id: '1',
@@ -71,13 +73,23 @@ describe('RestaurantesService', () => {
             remove: jest.fn(),
           },
         },
-      ],
+        {
+          provide: CACHE_MANAGER,
+          useValue: {
+            get: jest.fn(),
+            set: jest.fn(),
+            del: jest.fn(),
+          },
+        },
+      ], // Aquí es donde estaba faltando el corchete de cierre
     }).compile();
-
+  
     service = module.get<RestaurantesService>(RestaurantesService);
     repository = module.get<Repository<Restaurante>>(getRepositoryToken(Restaurante));
     culturaRepository = module.get<Repository<Cultura>>(getRepositoryToken(Cultura));
+    cacheManager = module.get<Cache>(CACHE_MANAGER);
   });
+  
 
   it('should be defined', () => {
     expect(service).toBeDefined();
@@ -88,7 +100,7 @@ describe('RestaurantesService', () => {
       const createRestauranteDto: CreateRestauranteDto = {
         nombre: 'Test Restaurante',
         estrellas: 5,
-        fechasConsecucionEstrellas: new Date().toISOString(),
+        fechasConsecucionEstrellas: new Date('2023-01-01'),
       };
       const createdRestaurante = { id: '1', ...createRestauranteDto };
       jest.spyOn(repository, 'create').mockReturnValue(createdRestaurante as any);
@@ -101,7 +113,7 @@ describe('RestaurantesService', () => {
       const createRestauranteDto: CreateRestauranteDto = {
         nombre: 'Test Restaurante',
         estrellas: 5,
-        fechasConsecucionEstrellas: new Date().toISOString(), 
+        fechasConsecucionEstrellas: new Date('2023-01-01'), 
       };
       jest.spyOn(repository, 'create').mockReturnValue({} as any);
       jest.spyOn(repository, 'save').mockRejectedValue(new Error('Creation failed'));
@@ -112,7 +124,7 @@ describe('RestaurantesService', () => {
 
   describe('findAll', () => {
     it('should return an array of restaurantes', async () => {
-      const restaurantes = [{ id: '1', nombre: 'Test Restaurante', estrellas: 5, fechasConsecucionEstrellas: new Date().toISOString() }];
+      const restaurantes = [{ id: '1', nombre: 'Test Restaurante', estrellas: 5, fechasConsecucionEstrellas: new Date('2023-01-01') }];
       jest.spyOn(repository, 'find').mockResolvedValue(restaurantes as any);
 
       expect(await service.findAll()).toEqual(restaurantes);
@@ -123,7 +135,7 @@ describe('RestaurantesService', () => {
 
   describe('findOne', () => {
     it('should return a restaurante by id', async () => {
-      const restaurante = { id: '1', nombre: 'Test Restaurante', estrellas: 5, fechasConsecucionEstrellas: new Date().toISOString() };
+      const restaurante = { id: '1', nombre: 'Test Restaurante', estrellas: 5, fechasConsecucionEstrellas: new Date('2023-01-01') };
       jest.spyOn(repository, 'findOne').mockResolvedValue(restaurante as any);
 
       expect(await service.findOne('1')).toEqual(restaurante);
@@ -141,7 +153,7 @@ describe('RestaurantesService', () => {
       const updateRestauranteDto: UpdateRestauranteDto = {
         nombre: 'Updated Restaurante',
         estrellas: 4,
-        fechasConsecucionEstrellas: new Date().toISOString(),
+        fechasConsecucionEstrellas: new Date('2023-01-01'),
       };
       const updatedRestaurante = { id: '1', ...updateRestauranteDto };
       jest.spyOn(repository, 'preload').mockResolvedValue(updatedRestaurante as any);
@@ -155,7 +167,7 @@ describe('RestaurantesService', () => {
 
   describe('remove', () => {
     it('should remove a restaurante', async () => {
-      const restaurante = { id: '1', nombre: 'Test Restaurante', estrellas: 5, fechasConsecucionEstrellas: new Date().toISOString() };
+      const restaurante = { id: '1', nombre: 'Test Restaurante', estrellas: 5, fechasConsecucionEstrellas: new Date('2023-01-01') };
       jest.spyOn(service, 'findOne').mockResolvedValue(restaurante as any);
       jest.spyOn(repository, 'remove').mockResolvedValue(restaurante as any);
 

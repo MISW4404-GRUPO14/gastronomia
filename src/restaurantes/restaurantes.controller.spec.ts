@@ -28,13 +28,13 @@ describe('RestaurantesController', () => {
   const mockCreateRestauranteDto: CreateRestauranteDto = {
     nombre: 'Restaurante El Gourmet',
     estrellas: 5,
-    fechasConsecucionEstrellas: '2023-01-01',
+    fechasConsecucionEstrellas: new Date('2023-01-01'),
   };
 
   const mockUpdateRestauranteDto: UpdateRestauranteDto = {
     nombre: 'Restaurante El Gourmet Actualizado',
     estrellas: 4,
-    fechasConsecucionEstrellas: '2023-02-01',
+    fechasConsecucionEstrellas: new Date('2023-01-01'),
   };
 
   const mockCultura: Cultura = {
