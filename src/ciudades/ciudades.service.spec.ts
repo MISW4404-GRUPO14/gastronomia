@@ -6,12 +6,14 @@ import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { BusinessLogicException } from '../shared/errors/business-errors';
 import { NotFoundException } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 describe('CiudadesService', () => {
   let service: CiudadesService;
   let ciudadRepository: Repository<Ciudad>;
   let ciudadRepositoryMock: jest.Mocked<Repository<Ciudad>>
   let restauranteRepository: Repository<Restaurante>;
+  let cacheManager: Cache;
 
   const mockCiudad: Ciudad = {
     id: '1',
@@ -69,6 +71,14 @@ describe('CiudadesService', () => {
             findBy: jest.fn(),
           }
         },
+        {
+          provide: CACHE_MANAGER,
+          useValue: {
+            get: jest.fn(),
+            set: jest.fn(),
+            del: jest.fn(),
+          },
+        }
       ],
     }).compile();
 
@@ -76,6 +86,7 @@ describe('CiudadesService', () => {
     ciudadRepository = module.get<Repository<Ciudad>>(getRepositoryToken(Ciudad));
     ciudadRepositoryMock = module.get(getRepositoryToken(Ciudad));
     restauranteRepository = module.get<Repository<Restaurante>>(getRepositoryToken(Restaurante));
+    cacheManager = module.get<Cache>(CACHE_MANAGER);
   });
 
   it('should be defined', () => {
@@ -273,7 +284,7 @@ describe('CiudadesService', () => {
     });
   });
 
-  describe('agregarProductosAReceta', () => {
+  describe('agregarRestaurantesACiudad', () => {
     it('debería agregar restaurantes a la ciudad correctamente', async () => {
       const ciudadMock = new Ciudad();
       ciudadMock.id = 'ciudadId';
