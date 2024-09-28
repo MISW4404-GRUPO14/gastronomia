@@ -208,13 +208,7 @@ export class CulturasService {
     return await this.culturaRepository.save(culture);
   }
 
-  //Método para eliminar un restaurante de una cultura
-  // async eliminarRestauranteDeCultura(culturaId: string, restauranteId: string){
-  //   const culture = await this.findOne(culturaId);
-  //   culture.restaurantes = culture.restaurantes.filter(restaurante => restaurante.id !== restauranteId);
-
-  //   return await this.culturaRepository.save(culture);
-  // }
+  
   async eliminarRestauranteDeCultura(culturaId: string, restauranteId: string) {
     const cultura = await this.obtenerRestaurantesDecultura(culturaId);
     

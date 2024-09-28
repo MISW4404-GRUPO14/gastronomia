@@ -1,5 +1,4 @@
 import { IsOptional, IsString, IsUUID, MinLength } from "class-validator";
-import { Receta } from "../../recetas/entities/receta.entity";
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()

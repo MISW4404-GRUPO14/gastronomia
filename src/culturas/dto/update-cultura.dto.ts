@@ -1,11 +1,7 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateCulturaDto } from './create-cultura.dto';
 import { Field, InputType } from '@nestjs/graphql';
 import { IsOptional, IsString, MinLength } from 'class-validator';
 
 @InputType()
-// export class UpdateCulturaDto extends PartialType(CreateCulturaDto) {}
-
 export class UpdateCulturaDto {
     @Field({ nullable: true }) 
     @IsOptional()
