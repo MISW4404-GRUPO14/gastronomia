@@ -30,16 +30,41 @@ type Receta {
   productos: [Producto!]!
 }
 
+type Pais {
+  id: String!
+  nombre: String!
+  culturas: [Cultura!]
+}
+
+type Restaurante {
+  id: String!
+  nombre: String!
+  estrellas: Float!
+  fechasConsecucionEstrellas: DateTime!
+  culturas: [Cultura!]
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Cultura {
   id: String!
   nombre: String!
   descripcion: String!
-  recetas: [Receta!]!
+  paises: [Pais!]
+  restaurantes: [Restaurante!]
+  recetas: [Receta!]
 }
 
 type Query {
+  culturas: [Cultura!]!
+  cultura(id: String!): Cultura!
   getRecetasByCultura(culturaId: String!): [Receta!]!
   getRecetaByCultura(culturaId: String!, recetaId: String!): Receta!
+  obtenerPaisesDeCultura(culturaId: String!): Cultura!
+  obtenerRestaurantesDeCultura(culturaId: String!): Cultura!
   recetas: [Receta!]!
   receta(id: String!): Receta!
   getProductosByReceta(recetaId: String!): [Producto!]!
@@ -52,9 +77,18 @@ type Query {
 }
 
 type Mutation {
+  createCultura(createCulturaDto: CreateCulturaDto!): Cultura!
+  updateCultura(id: String!, updateCulturaDto: UpdateCulturaDto!): Cultura!
+  removeCultura(id: String!): Boolean!
   agregarRecetasACultura(id: String!, recetasId: [String!]!): Cultura!
   updateRecetaEnCulturas(id: String!, recetasId: [String!]!): Cultura!
   removeRecetaFromCultura(culturaId: String!, recetaId: String!): Cultura!
+  agregarPaisesACultura(id: String!, paisesId: [String!]!): Cultura!
+  updatePaisesEnCulturas(id: String!, paisesId: [String!]!): Cultura!
+  removePaisesFromCultura(culturaId: String!, paisesId: String!): Cultura!
+  agregarRestaurantesACultura(id: String!, restaurantesId: [String!]!): Cultura!
+  updateRestaurantesEnCulturas(id: String!, restaurantesId: [String!]!): Cultura!
+  removeRestaurantesFromCultura(culturaId: String!, restauranteId: String!): Cultura!
   createReceta(receta: CreateRecetaDto!): Receta!
   updateReceta(id: String!, receta: CreateRecetaDto!): Receta!
   deleteReceta(id: String!): String!
@@ -70,6 +104,16 @@ type Mutation {
   agregarCategoriaAProducto(productoId: String!): Producto!
   actualizarCategoriaEnProductos(productoId: String!): Producto!
   eliminarCategoriaDeProducto(productoId: String!): String!
+}
+
+input CreateCulturaDto {
+  nombre: String!
+  descripcion: String!
+}
+
+input UpdateCulturaDto {
+  nombre: String
+  descripcion: String
 }
 
 input CreateRecetaDto {

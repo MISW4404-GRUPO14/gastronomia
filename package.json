@@ -32,7 +32,8 @@
     "test:restaurantesService": "jest src/restaurantes/restaurantes.service.spec.ts",
     "test:restaurantesController": "jest src/restaurantes/restaurantes.controller.spec.ts",
     "test:categoriasResolver": "jest src/categorias/categorias.resolver.spec.ts",
-    "test:productosResolver": "jest src/productos/Productos.resolver.spec.ts"
+    "test:productosResolver": "jest src/productos/Productos.resolver.spec.ts",
+    "test:culturasResolver": "jest src/culturas/culturas.resolver.spec.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^8.4.1",

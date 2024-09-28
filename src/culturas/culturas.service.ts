@@ -171,36 +171,66 @@ export class CulturasService {
 
   //Método para agregar restaurentes a una cultura
   async agregarRestaurantesACultura(culturaId: string, restaurantesIds: string[]) {
-    const culture = await this.findOne(culturaId);
+    const cultura = await this.findOne(culturaId);
+    if (!cultura.restaurantes) {
+        cultura.restaurantes = []; 
+    }
     const restaurantes = await this.restauranteRepository.findBy({ id: In(restaurantesIds) });
-    this.validateArrayRestaurantes(restaurantes, restaurantesIds)
-    culture.restaurantes.push(...restaurantes);
-    return await this.culturaRepository.save(culture);
-  }
+    this.validateArrayRestaurantes(restaurantes, restaurantesIds);
+    cultura.restaurantes.push(...restaurantes);    
+    return await this.culturaRepository.save(cultura);
+}
+
 
   //Método para obtener restaurantes de una cultura
+  // async obtenerRestaurantesDecultura(culturaId: string) {
+  //   const culture = await this.findOne(culturaId);
+  //   return culture
+  // }
   async obtenerRestaurantesDecultura(culturaId: string) {
-    const culture = await this.findOne(culturaId);
-    return culture
-  }
+    const cultura = await this.culturaRepository.findOne({
+        where: { id: culturaId },
+        relations: ['restaurantes'],
+    });
+    if (!cultura) {
+        throw new BusinessLogicException(`La cultura ingresada no existe`, HttpStatus.NOT_FOUND);
+    }
+    return cultura;
+}
+
 
   //Método para actualizar el listado de restaurantes de una cultura
   async actualizarRestaurantesEnCultura(culturaId: string, restaurantesIds: string[]){
     const culture = await this.findOne(culturaId);
     const nuevosRestaurantes =  await this.restauranteRepository.findBy({ id: In(restaurantesIds) });
-    // Validar que todos los restaurantes existan
     this.validateArrayRestaurantes(nuevosRestaurantes, restaurantesIds)
     culture.restaurantes = nuevosRestaurantes;
     return await this.culturaRepository.save(culture);
   }
 
   //Método para eliminar un restaurante de una cultura
-  async eliminarRestauranteDeCultura(culturaId: string, restauranteId: string){
-    const culture = await this.findOne(culturaId);
-    culture.restaurantes = culture.restaurantes.filter(restaurante => restaurante.id !== restauranteId);
+  // async eliminarRestauranteDeCultura(culturaId: string, restauranteId: string){
+  //   const culture = await this.findOne(culturaId);
+  //   culture.restaurantes = culture.restaurantes.filter(restaurante => restaurante.id !== restauranteId);
 
-    return await this.culturaRepository.save(culture);
+  //   return await this.culturaRepository.save(culture);
+  // }
+  async eliminarRestauranteDeCultura(culturaId: string, restauranteId: string) {
+    const cultura = await this.obtenerRestaurantesDecultura(culturaId);
+    
+    // Verificar si la propiedad restaurantes está definida
+    if (!cultura.restaurantes) {
+        cultura.restaurantes = [];
+    }
+
+    cultura.restaurantes = cultura.restaurantes.filter(restaurante => restaurante.id !== restauranteId);
+    return await this.culturaRepository.save(cultura);
   }
+
+
+
+
+
 
   validateArrayRestaurantes(restaurantes, restauranteIds){
     if (restaurantes.length !== restauranteIds.length) {

@@ -469,6 +469,7 @@ describe('CulturasService', () => {
   });
 
   describe('eliminarRestauranteDeCultura', () => {
+
     it('debería eliminar un restaurante de una cultura', async () => {
       const culturaMock = new Cultura();
       culturaMock.id = 'culturaId';
@@ -476,27 +477,39 @@ describe('CulturasService', () => {
       restauranteMock.id = 'restauranteId';
       culturaMock.restaurantes = [restauranteMock];
 
-      culturaRepository.findOneBy.mockResolvedValueOnce(culturaMock);
-      culturaRepository.save.mockResolvedValueOnce(culturaMock);
-
+      culturaRepository.findOne.mockResolvedValueOnce(culturaMock);
+  
+      culturaRepository.save.mockResolvedValueOnce({
+        ...culturaMock,
+        restaurantes: [] 
+      });
       const result = await culturaservice.eliminarRestauranteDeCultura('culturaId', 'restauranteId');
       expect(result.restaurantes).not.toContainEqual(restauranteMock);
     });
-
+  
     it('debería manejar la eliminación de un restaurante que no está en la cultura', async () => {
       const culturaMock = new Cultura();
       culturaMock.id = 'culturaId';
-      const restauranteMock = new Restaurante();
-      restauranteMock.id = 'restauranteId';
       culturaMock.restaurantes = []; 
-
-      culturaRepository.findOneBy.mockResolvedValueOnce(culturaMock);
+      culturaRepository.findOne.mockResolvedValueOnce(culturaMock);
       culturaRepository.save.mockResolvedValueOnce(culturaMock);
-
       const result = await culturaservice.eliminarRestauranteDeCultura('culturaId', 'restauranteId');
-      expect(result.restaurantes).toEqual([]); 
+      expect(result.restaurantes).toEqual([]);
+    });
+
+    it('debería lanzar una excepción si la cultura no existe', async () => {
+      culturaRepository.findOne.mockResolvedValueOnce(null);
+  
+      await expect(culturaservice.eliminarRestauranteDeCultura('culturaId', 'restauranteId'))
+        .rejects.toThrow(BusinessLogicException);
     });
   });
+  
+  
+  
+  
+  
+  
 
   describe('ObtenerRecetasDeCultura', () => {
     it('debería retornar todas las recetas de una cultura', async () => {
