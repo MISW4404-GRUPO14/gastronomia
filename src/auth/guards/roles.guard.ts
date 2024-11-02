@@ -4,18 +4,18 @@ import { Role } from '../../user/role.enum';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-    constructor(private reflector: Reflector) {}
+    constructor(private readonly reflector: Reflector) { }
 
     canActivate(context: ExecutionContext): boolean {
         const requiredRoles = this.reflector.get<Role[]>('roles', context.getHandler());
         if (!requiredRoles) {
-            return true; 
+            return true;
         }
 
         const request = context.switchToHttp().getRequest();
-        const user = request.user; 
+        const user = request.user;
 
-        console.log('User from request:', user); 
+        console.log('User from request:', user);
 
         if (!user?.roles) {
             throw new UnauthorizedException('Usuario o roles no definidos');

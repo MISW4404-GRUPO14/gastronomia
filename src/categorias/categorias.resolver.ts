@@ -7,7 +7,7 @@ import { UpdateCategoriaDto } from './dto/update-categoria.dto';
 
 @Resolver()
 export class CategoriasResolver {
-    constructor(private categoriasService: CategoriasService) {}
+    constructor(private readonly categoriasService: CategoriasService) { }
 
     @Query(() => [Categoria])
     categorias(): Promise<Categoria[]> {
@@ -21,7 +21,7 @@ export class CategoriasResolver {
 
 
     @Mutation(() => Categoria)
-    createCategoria(@Args('categoria') createCategoriaDto: CreateCategoriaDto ): Promise<Categoria> {
+    createCategoria(@Args('categoria') createCategoriaDto: CreateCategoriaDto): Promise<Categoria> {
         const categoria = plainToInstance(Categoria, createCategoriaDto);
         return this.categoriasService.create(categoria);
     }
