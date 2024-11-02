@@ -4,13 +4,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CulturasModule } from './culturas/culturas.module';
-import { RecetasModule } from './recetas/recetas.module';
-import { CategoriasModule } from './categorias/categorias.module';
-import { ProductosModule } from './productos/productos.module';
-import { RestaurantesModule } from './restaurantes/restaurantes.module';
-import { CiudadesModule } from './ciudades/ciudades.module';
-import { PaisesModule } from './paises/paises.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { redisStore } from 'cache-manager-redis-yet';
@@ -33,7 +26,7 @@ import { ApolloDriver } from '@nestjs/apollo';
     }),
     CacheModule.registerAsync({
       isGlobal: true,
-      useFactory: async () =>({
+      useFactory: async () => ({
         store: await redisStore({
           socket: {
             host: process.env.HOST,
@@ -46,17 +39,10 @@ import { ApolloDriver } from '@nestjs/apollo';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       driver: ApolloDriver
     }),
-    CulturasModule,
-    RecetasModule,
-    CategoriasModule,
-    ProductosModule,
-    RestaurantesModule,
-    CiudadesModule,
-    PaisesModule,
     UserModule,
     AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
