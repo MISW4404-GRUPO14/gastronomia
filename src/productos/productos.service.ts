@@ -13,33 +13,33 @@ import { Cache } from 'cache-manager';
 export class ProductosService {
   cacheKey: string = "productos";
 
-  constructor( 
+  constructor(
     @InjectRepository(Producto)
-    private productoRepository: Repository<Producto>,
-   
+    private readonly productoRepository: Repository<Producto>,
+
     @InjectRepository(Categoria)
     private readonly categoriaRepository: Repository<Categoria>,
-    
+
     @Inject(CACHE_MANAGER)
-       private  cacheManager: Cache
+       private  readonly cacheManager: Cache
 
   ){}
 
   async create(createProductoDto: CreateProductoDto) {
     const categoriaId = createProductoDto.categoria;
-    
+
     if (categoriaId) {
       const cate: Categoria = await this.categoriaRepository.findOne({where: {id: categoriaId}});
-        
+
       if (!cate){
         throw new BusinessLogicException("No existe una categoria con ese id", HttpStatus.BAD_REQUEST);
       }
     }
-    
+
     return this.productoRepository.save(createProductoDto);
   }
 
-  
+
 
   async findAll(): Promise<Producto[]> {
     try{
@@ -68,12 +68,12 @@ export class ProductosService {
     const existeProducto: Producto = await this.productoRepository.findOne({where:{id}});
     if (!existeProducto)
       throw new BusinessLogicException("No existe un producto con ese id", HttpStatus.NOT_FOUND);
-      
+
     const categoriaId = updateProductoDto.categoria;
-    
+
     if (categoriaId) {
       const cate: Categoria = await this.categoriaRepository.findOne({where: {id: categoriaId}});
-        
+
       if (!cate){
         throw new BusinessLogicException("La categoría no existe", HttpStatus.BAD_REQUEST);
       }
@@ -90,7 +90,7 @@ export class ProductosService {
     const producto: Producto = await this.productoRepository.findOne({where:{id}});
     if (!producto)
       throw new BusinessLogicException("No existe un producto con ese id", HttpStatus.NOT_FOUND);
-   
+
     await this.productoRepository.remove(producto);
   }
 
@@ -117,11 +117,11 @@ export class ProductosService {
   async actualizarCategoriaEnProductos(productoId: string, categoriaId: string){
     const producto = await this.findOne(productoId);
 
-    
+
     if (!producto){
       throw new BusinessLogicException("El producto no existe con ese id", HttpStatus.BAD_REQUEST);
     }
-    
+
     const categoriaExiste: Categoria = await this.categoriaRepository.findOne({where: {id: categoriaId}});
     if (!categoriaExiste){
       throw new BusinessLogicException("La categoría no existe", HttpStatus.BAD_REQUEST);

@@ -15,7 +15,7 @@ export class RecetasService {
   cacheKey: string = "recetas";
   private readonly logger = new Logger('RecetasService')
 
-  constructor( 
+  constructor(
     @InjectRepository(Receta)
     private readonly recetaRepository: Repository<Receta>,
 
@@ -23,7 +23,7 @@ export class RecetasService {
     private readonly productoRepository: Repository<Producto>,
 
     @Inject(CACHE_MANAGER)
-       private  cacheManager: Cache
+       private readonly cacheManager: Cache
   ){}
 
   async create(createRecetaDto: CreateRecetaDto) {
@@ -55,7 +55,7 @@ export class RecetasService {
   }
 
   async findOne(id:string) {
-   
+
     const recipe = await this.recetaRepository.findOne(
       {
         where: { id: id },
@@ -66,7 +66,7 @@ export class RecetasService {
       throw new BusinessLogicException(`The recipe with the given id was not found`, HttpStatus.NOT_FOUND);
       }
     return recipe;
-    
+
   }
 
   async update(id: string, updateRecetaDto: UpdateRecetaDto) {
@@ -76,9 +76,9 @@ export class RecetasService {
       ...updateRecetaDto
     })
     if ( !recipe ) throw new BusinessLogicException(`The recipe with the given id ${id} was not found`, HttpStatus.NOT_FOUND);
-    try{  
+    try{
       await this.recetaRepository.save( recipe );
-      return recipe; 
+      return recipe;
     } catch(error){
       this.logger.error(error)
       throw new BusinessLogicException('Failed to update recipe due to a server error.', HttpStatus.INTERNAL_SERVER_ERROR)
