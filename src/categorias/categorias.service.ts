@@ -12,12 +12,12 @@ import { Cache } from 'cache-manager';
 export class CategoriasService {
   cacheKey: string = "categorias";
 
-  constructor( 
+  constructor(
     @InjectRepository(Categoria)
-    private categoriaRepository: Repository<Categoria>,
+    private readonly categoriaRepository: Repository<Categoria>,
 
     @Inject(CACHE_MANAGER)
-       private  cacheManager: Cache
+       private readonly cacheManager: Cache
   ){}
   create(createCategoriaDto: CreateCategoriaDto) {
     return this.categoriaRepository.save(createCategoriaDto);
@@ -44,7 +44,7 @@ export class CategoriasService {
     if (!categoria)
       throw new BusinessLogicException("No existe una categoria con ese id", HttpStatus.NOT_FOUND);
 
-    return categoria;  
+    return categoria;
   }
 
   async update(id: string, updateCategoriaDto: UpdateCategoriaDto) {
@@ -54,20 +54,20 @@ export class CategoriasService {
     existeCategoria.nombre = updateCategoriaDto.nombre || existeCategoria.nombre;
     existeCategoria.descripcion = updateCategoriaDto.descripcion || existeCategoria.descripcion;
 
-    return await this.categoriaRepository.save(existeCategoria);  
+    return await this.categoriaRepository.save(existeCategoria);
   }
 
   async remove(id: string) {
     const categoria: Categoria = await this.categoriaRepository.findOne({
-      where: { id },  relations: ["productos"], 
+      where: { id },  relations: ["productos"],
     })
 
     if (!categoria)
       throw new BusinessLogicException("No existe una categoria con ese id", HttpStatus.NOT_FOUND);
-    
-    if (categoria.productos.length > 0) 
+
+    if (categoria.productos.length > 0)
       throw new BusinessLogicException("La categoria se encuentra asociada con un producto", HttpStatus.BAD_REQUEST);
-    
+
     await this.categoriaRepository.remove(categoria);
   }
 }

@@ -8,7 +8,7 @@ import { Producto } from '../productos/entities/producto.entity';
 
 @Resolver()
 export class RecetasResolver {
-    constructor( private recetasService: RecetasService){}
+    constructor( private readonly recetasService: RecetasService){}
 
     @Query(() => [Receta])
     recetas() {

@@ -7,7 +7,7 @@ import { CreateCiudadDto } from './dto/create-ciudad.dto';
 @Resolver()
 export class CiudadesResolver {
 
-    constructor( private ciudadesService: CiudadesService){}
+    constructor( private readonly ciudadesService: CiudadesService){}
 
     @Query(() => [Ciudad])
     ciudades() {

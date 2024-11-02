@@ -23,7 +23,7 @@ export class CiudadesService {
     private readonly restauranteRepository: Repository<Restaurante>,
 
     @Inject(CACHE_MANAGER)
-    private cacheManager: Cache
+    private readonly cacheManager: Cache
   ) { }
 
   async create(createCiudadDto: CreateCiudadDto) {

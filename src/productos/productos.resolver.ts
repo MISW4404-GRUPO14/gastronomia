@@ -7,7 +7,7 @@ import { UpdateProductoDto } from './dto/update-producto.dto';
 
 @Resolver()
 export class ProductosResolver {
-    constructor(private productosService: ProductosService) {}
+    constructor(private readonly productosService: ProductosService) {}
 
     @Query(() => [Producto])
     productos(): Promise<Producto[]> {
@@ -38,7 +38,7 @@ export class ProductosResolver {
     }
 
     //Asociaciones de categoria producto
-    
+
     @Query(() => Producto)
     categoriaDeProducto(@Args('id') id: string): Promise<Producto> {
         return this.productosService.obtenerCategoriaDeProducto(id);
@@ -59,6 +59,6 @@ export class ProductosResolver {
         this.productosService.eliminarCategoriaDeProducto(productoId);
         return productoId;
     }
-    
+
 
 }
