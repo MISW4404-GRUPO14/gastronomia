@@ -52,7 +52,7 @@ export class CiudadesService {
   }
 
   async findOne(id: string) {
-    var ciudad = await this.ciudadRepository.findOne(
+    const ciudad = await this.ciudadRepository.findOne(
       {
         where: { id: id }
       }

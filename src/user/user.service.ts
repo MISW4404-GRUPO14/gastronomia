@@ -3,7 +3,7 @@ import { User } from './user/user';
 
 @Injectable()
 export class UserService {
-    private users: User[] = [
+    private readonly users: User[] = [
         new User(1, "admin", "admin", ["admin"]),
         new User(2, "user", "admin", ["user"]),
         new User(3, "userReader", "admin", ["reader"]),

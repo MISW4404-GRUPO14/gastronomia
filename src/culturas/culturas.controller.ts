@@ -84,7 +84,7 @@ export class CulturasController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() agregarPaisesDto: AgregarPaisesDto
   ) {
-    var paisIds = agregarPaisesDto.paisIds;
+    const paisIds = agregarPaisesDto.paisIds;
     return this.culturasService.actualizarPaisesEnCultura(id, paisIds);
   }
 

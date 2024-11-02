@@ -21,7 +21,7 @@ export class CulturasService {
 
   constructor(
     @InjectRepository(Cultura)
-    private culturaRepository: Repository<Cultura>,
+    private readonly culturaRepository: Repository<Cultura>,
 
     @InjectRepository(Pais)
     private readonly paisRepository: Repository<Pais>,
@@ -36,7 +36,7 @@ export class CulturasService {
     private readonly recetaRepository: Repository<Receta>,
 
     @Inject(CACHE_MANAGER)
-    private cacheManager: Cache
+    private readonly cacheManager: Cache
   ) { }
 
   async create(createCulturaDto: CreateCulturaDto) {

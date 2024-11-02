@@ -12,30 +12,30 @@ export class PaisesService {
 
   constructor(
     @InjectRepository(Pais)
-    private paisRepository: Repository<Pais>,
+    private readonly paisRepository: Repository<Pais>,
 
     @InjectRepository(Cultura)
-    private culturaRepository: Repository<Cultura>
-  ){}
+    private readonly culturaRepository: Repository<Cultura>
+  ) { }
   async create(createPaisDto: CreatePaisDto) {
-    try{
+    try {
       const pais = this.paisRepository.create(createPaisDto);
-      await this.paisRepository.save( pais );
+      await this.paisRepository.save(pais);
       return pais
-    } catch(error){
-      throw new BusinessLogicException(error, HttpStatus.INTERNAL_SERVER_ERROR )
+    } catch (error) {
+      throw new BusinessLogicException(error, HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
 
   async findAll() {
     try {
-      const paises = await this.paisRepository.find(); 
+      const paises = await this.paisRepository.find();
       return paises;
     } catch (error) {
       throw new BusinessLogicException('Error al obtener países debido a un error del servidor', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  
+
 
   async findOne(id: string) {
     const pais = await this.paisRepository.findOne(
@@ -43,9 +43,9 @@ export class PaisesService {
         where: { id: id }
       }
     );
-    if(!pais){
+    if (!pais) {
       throw new BusinessLogicException(`El país con el ID proporcionado no fue encontrado`, HttpStatus.NOT_FOUND);
-      }
+    }
     return pais;
   }
 
@@ -63,7 +63,7 @@ export class PaisesService {
     } catch (error) {
       throw new BusinessLogicException('Error al actualizar el país debido a un error del servidor', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-  }  
+  }
 
   async remove(id: string) {
     try {
@@ -75,7 +75,7 @@ export class PaisesService {
     }
   }
 
-//-----------------------------Cultura de un pais---------------------------------------------------//
+  //-----------------------------Cultura de un pais---------------------------------------------------//
 
   //Método para agregar cultura a un pais
   async agregarCulturaAPaises(paisId: string, culturaIds: string[]) {
@@ -83,12 +83,12 @@ export class PaisesService {
     if (!Array.isArray(country.culturas)) {
       country.culturas = [];
     }
-  
+
     const culturas = await this.culturaRepository.find({
       where: { id: In(culturaIds) }
-    });    
-    this.validateArrayCulturas(culturas, culturaIds);  
-    country.culturas = [...new Set([...country.culturas, ...culturas])];  
+    });
+    this.validateArrayCulturas(culturas, culturaIds);
+    country.culturas = [...new Set([...country.culturas, ...culturas])];
     return await this.paisRepository.save(country);
   }
 
@@ -102,8 +102,8 @@ export class PaisesService {
   }
 
   //Método para actualizar el listado de culturas de un pais
-  async actualizarCulturasDePais(paisId: string, culturaIds: string[]){
-    const pais = await this.findOne(paisId); 
+  async actualizarCulturasDePais(paisId: string, culturaIds: string[]) {
+    const pais = await this.findOne(paisId);
     const culturas = await this.culturaRepository.findBy({ id: In(culturaIds) });
     if (culturas.length !== culturaIds.length) {
       throw new BusinessLogicException(
@@ -114,12 +114,12 @@ export class PaisesService {
     pais.culturas = culturas;
     return await this.paisRepository.save(pais);
   }
-  
+
   //Método para eliminar una cultura de un pais
   async eliminarCulturaDePais(paisId: string, culturaId: string): Promise<Pais> {
     const pais = await this.paisRepository.findOne({
       where: { id: paisId },
-      relations: ['culturas'], 
+      relations: ['culturas'],
     });
     if (!pais) {
       throw new NotFoundException(`The country with the given id ${paisId} was not found`);
@@ -134,12 +134,12 @@ export class PaisesService {
     pais.culturas = pais.culturas.filter(cultura => cultura.id !== culturaId);
     return await this.paisRepository.save(pais);
   }
-  
-  
-  validateArrayCulturas(culturas, culturaIds){
+
+
+  validateArrayCulturas(culturas, culturaIds) {
     if (culturas.length !== culturaIds.length) {
       throw new BusinessLogicException(`Alguno de los paises no existe`, HttpStatus.NOT_FOUND);
     }
   }
-  
+
 }
