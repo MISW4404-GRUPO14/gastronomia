@@ -86,7 +86,7 @@ export class CulturasService {
     }
 
     try {
-      this.culturaRepository.save(cultura);
+      await this.culturaRepository.save(cultura);
       return cultura;
     } catch (error) {
       this.logger.error(`Failed to update culture with id ${id}:`, error);
